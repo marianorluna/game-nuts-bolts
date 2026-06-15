@@ -1,0 +1,32 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  background: #2d1b4e;
+  color: white;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+.pt-safe {
+  /* min 14px en browsers sin notch; en iPhone con notch usa el inset real */
+  padding-top: max(14px, env(safe-area-inset-top, 14px));
+}
+
+.pb-safe,
+.pt-safe + footer {
+  padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
+}

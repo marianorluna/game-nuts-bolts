@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Nuts &amp; Bolts</string>
+    <string name="title_activity_main">Nuts &amp; Bolts</string>
+    <string name="package_name">com.nutsandbolts.puzzle</string>
+    <string name="custom_url_scheme">com.nutsandbolts.puzzle</string>
+</resources>

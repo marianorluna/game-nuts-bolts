@@ -1,0 +1,37 @@
+{
+  "name": "nuts-and-bolts",
+  "private": true,
+  "version": "1.0.0",
+  "versionCode": 1,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "sync:version": "npx tsx scripts/sync-android-version.ts",
+    "cap:sync": "npm run sync:version && npm run build && npx cap sync",
+    "cap:android": "npm run cap:sync && npx cap open android",
+    "validate:levels": "npx tsx scripts/validate-levels.ts",
+    "bake:levels": "npx tsx scripts/bake-levels.ts"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.2.0",
+    "@capacitor/core": "^7.2.0",
+    "@capawesome/capacitor-app-update": "^7.2.0",
+    "framer-motion": "^12.12.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.2.0",
+    "@tailwindcss/vite": "^4.1.8",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "@vitejs/plugin-react": "^4.5.0",
+    "tailwindcss": "^4.1.8",
+    "tsx": "^4.22.4",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}
