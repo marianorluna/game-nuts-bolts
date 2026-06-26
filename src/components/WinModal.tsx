@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
+import { getStarThresholds } from '../domain/gameEngine'
 import { getLevelById, MAX_LEVEL_ID } from '../domain/levels'
 import { DIFFICULTY_LABELS } from '../domain/types'
 import { soundService } from '../services/soundService'
@@ -9,14 +10,16 @@ interface WinModalProps {
   levelId: number
   moves: number
   onNext: () => void
+  onReplay: () => void
   onHome: () => void
 }
 
-export function WinModal({ levelId, moves, onNext, onHome }: WinModalProps) {
+export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalProps) {
   const getLevelStars = useGameStore((s) => s.getLevelStars)
   const level = getLevelById(levelId)
   const stars = getLevelStars(levelId)
   const hasNext = levelId < MAX_LEVEL_ID
+  const threeStarTarget = level ? getStarThresholds(level.minMoves).threeStars : null
 
   useEffect(() => {
     const timers = [1, 2, 3]
@@ -71,7 +74,13 @@ export function WinModal({ levelId, moves, onNext, onHome }: WinModalProps) {
           </div>
 
           <p className="mb-6 text-purple-100">
-            Movimientos: <span className="font-bold text-white">{moves}</span>
+            Usaste{' '}
+            <span className="font-bold text-white">{moves} movimientos</span>
+            {threeStarTarget !== null && stars < 3 && (
+              <span className="block mt-2 text-sm text-amber-300/90">
+                Para 3 estrellas necesitabas un máximo de {threeStarTarget} movimientos.
+              </span>
+            )}
           </p>
 
           <div className="flex flex-col gap-3">
@@ -79,15 +88,22 @@ export function WinModal({ levelId, moves, onNext, onHome }: WinModalProps) {
               <button
                 type="button"
                 onClick={onNext}
-                className="rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-3 font-bold text-white shadow-lg transition active:scale-95"
+                className="rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-3 font-bold text-white shadow-lg transition hover:brightness-110 hover:shadow-xl active:scale-95"
               >
                 Siguiente nivel
               </button>
             )}
             <button
               type="button"
+              onClick={onReplay}
+              className="rounded-xl border border-white/20 py-3 font-semibold text-white transition hover:border-white/40 hover:bg-white/10 active:scale-95"
+            >
+              Volver a jugar
+            </button>
+            <button
+              type="button"
               onClick={onHome}
-              className="rounded-xl border border-white/20 py-3 font-semibold text-white transition active:scale-95"
+              className="rounded-xl py-3 font-semibold text-purple-200 transition hover:bg-white/5 hover:text-white active:scale-95"
             >
               Volver al menú
             </button>

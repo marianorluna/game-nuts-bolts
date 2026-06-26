@@ -16,7 +16,7 @@ export default function App() {
   }
 
   return (
-    <div className="mx-auto min-h-dvh max-w-md bg-gradient-to-b from-[#3d2a6b] to-[#2d1b4e]">
+    <div className="min-h-dvh w-full bg-gradient-to-b from-[#3d2a6b] to-[#2d1b4e]">
       {screen === 'home' ? <HomeScreen /> : <LevelScreen />}
 
       {update?.available && update.info && update.currentVersion && update.availableVersion && (

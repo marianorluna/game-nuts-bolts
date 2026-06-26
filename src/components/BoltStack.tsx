@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import type { Bolt } from '../domain/types'
-import { NUT_H, NutPiece } from './NutPiece'
+import { NUT_H, NUT_LIFT_CLEARANCE, NutPiece } from './NutPiece'
 
 interface BoltStackProps {
   bolt: Bolt
@@ -67,14 +67,20 @@ export function BoltStack({
       aria-label={`Bulón ${index + 1}`}
     >
       {/* ── Zona de tuercas con vástago detrás ── */}
-      <div style={{ position: 'relative', width: 68, height: nutsAreaH }}>
+      <div
+        style={{
+          position: 'relative',
+          width: 68,
+          height: nutsAreaH + NUT_LIFT_CLEARANCE,
+        }}
+      >
 
         {/* Vástago roscado (z=0, detrás de las tuercas).
             Sobrepasa 6px hacia abajo para empalmar con la arandela. */}
         <div
           style={{
             position: 'absolute',
-            top: 0,
+            top: NUT_LIFT_CLEARANCE,
             bottom: -6,
             left: '50%',
             transform: 'translateX(-50%)',
@@ -89,7 +95,7 @@ export function BoltStack({
         <div
           style={{
             position: 'absolute',
-            top: SHAFT_TOP_OVERHANG,
+            top: NUT_LIFT_CLEARANCE + SHAFT_TOP_OVERHANG,
             left: 0,
             right: 0,
             height: nutsStackH,

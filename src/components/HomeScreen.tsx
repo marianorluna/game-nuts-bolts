@@ -49,27 +49,27 @@ export function HomeScreen() {
     : `Jugar Nivel ${progress.unlockedLevel}`
 
   return (
-    <div className="flex min-h-dvh flex-col px-4 pb-8 pt-safe">
-      <header className="relative py-6 text-center">
+    <div className="flex min-h-dvh flex-col px-4 pb-8 pt-safe sm:px-6 md:px-8">
+      <header className="relative py-6 text-center md:py-8">
         <button
           type="button"
           onClick={() => setSettingsOpen(true)}
-          className="absolute right-0 top-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-xl text-white"
+          className="absolute right-0 top-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-xl text-white md:h-14 md:w-14 md:text-2xl"
           aria-label="Configuración"
         >
           {soundEnabled ? '⚙️' : '🔇'}
         </button>
-        <div className="mb-2 text-5xl">🔩</div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white">
+        <div className="mb-2 text-5xl md:text-6xl">🔩</div>
+        <h1 className="text-3xl font-extrabold tracking-tight text-white md:text-4xl">
           Nuts & Bolts
         </h1>
-        <p className="mt-1 text-sm text-purple-200">
+        <p className="mt-1 text-sm text-purple-200 md:text-base">
           Ordena las tuercas por color
         </p>
       </header>
 
       {allCompleted && (
-        <p className="mx-auto mb-3 max-w-xs text-center text-sm font-medium text-amber-200">
+        <p className="mx-auto mb-3 max-w-xs text-center text-sm font-medium text-amber-200 sm:max-w-md md:text-base">
           ¡Completaste los {totalLevels} niveles! 🎉
         </p>
       )}
@@ -77,18 +77,18 @@ export function HomeScreen() {
       <button
         type="button"
         onClick={() => startLevel(getContinueLevel())}
-        className="mx-auto mb-8 w-full max-w-xs rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 py-4 text-lg font-bold text-white shadow-lg transition active:scale-95"
+        className="mx-auto mb-8 w-full max-w-sm rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 py-4 text-lg font-bold text-white shadow-lg transition active:scale-95 sm:max-w-md md:max-w-lg md:py-5 md:text-xl"
       >
         {continueLabel}
       </button>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex w-full flex-col gap-6 md:gap-8">
         {sections.map((section) => (
           <section key={section.label}>
-            <h2 className="mb-3 text-xs font-bold tracking-widest text-purple-300">
+            <h2 className="mb-3 text-xs font-bold tracking-widest text-purple-300 md:text-sm">
               {section.label}
             </h2>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5 gap-2 sm:grid-cols-8 md:grid-cols-10 md:gap-3">
               {section.levels.map((level) => {
                 const unlocked = isLevelUnlocked(level.id)
                 const stars = getLevelStars(level.id)
@@ -102,6 +102,7 @@ export function HomeScreen() {
                     className={`
                       relative flex aspect-square flex-col items-center justify-center
                       rounded-xl text-sm font-bold transition active:scale-95
+                      md:text-base
                       ${
                         unlocked
                           ? 'bg-white/15 text-white hover:bg-white/25'

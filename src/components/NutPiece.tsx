@@ -13,6 +13,12 @@ const HEX = 'polygon(18% 0%, 82% 0%, 100% 50%, 82% 100%, 18% 100%, 0% 50%)'
 
 export const NUT_H = 42
 
+/** Espacio reservado encima del stack para la tuerca superior elevada e inclinada. */
+export const NUT_LIFT_Y = 22
+export const NUT_LIFT_SCALE = 1.12
+export const NUT_LIFT_ROTATE = 22
+export const NUT_LIFT_CLEARANCE = 52
+
 export function NutPiece({ color, isSelected = false, isTop = false }: NutPieceProps) {
   const s = NUT_STYLES[color]
 
@@ -22,9 +28,9 @@ export function NutPiece({ color, isSelected = false, isTop = false }: NutPieceP
       // Al montar (nut llega a un nuevo bulón) simula enroscado: rota de +25° a 0°
       initial={{ rotate: 25, scale: 0.82, opacity: 0.6 }}
       animate={{
-        y: isSelected && isTop ? -22 : 0,
-        rotate: isSelected && isTop ? -22 : 0,
-        scale: isSelected && isTop ? 1.12 : 1,
+        y: isSelected && isTop ? -NUT_LIFT_Y : 0,
+        rotate: isSelected && isTop ? -NUT_LIFT_ROTATE : 0,
+        scale: isSelected && isTop ? NUT_LIFT_SCALE : 1,
         opacity: 1,
       }}
       transition={{ type: 'spring', stiffness: 380, damping: 24 }}
