@@ -9,6 +9,15 @@ export type NutColor =
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
 
+/** Ver docs/MECHANICS_REGISTRY.md */
+export type MechanicId =
+  | 'multiNut'
+  | 'lockedBolt'
+  | 'variableCapacity'
+  | 'fixedColorBolt'
+
+export type ThemeId = 'workshop' | 'garage' | 'factory'
+
 export type Bolt = NutColor[]
 
 export interface LevelDefinition {
@@ -20,6 +29,9 @@ export interface LevelDefinition {
   minMoves: number
   /** Alias de minMoves; conservado por compatibilidad. */
   parMoves: number
+  stageId?: string
+  isChallenge?: boolean
+  mechanics?: MechanicId[]
 }
 
 export interface MoveRecord {

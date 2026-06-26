@@ -10,6 +10,7 @@ import { SettingsModal } from './SettingsModal'
 import { BackArrowIcon, UndoArrowIcon, LevelHomeIcon } from './icons/GameIcons'
 import { getStarThresholds } from '../domain/gameEngine'
 import { MAX_LEVEL_ID } from '../domain/levels'
+import { getStageForLevel } from '../domain/content/campaignStructure'
 import { DIFFICULTY_LABELS, MAX_UNDOS } from '../domain/types'
 import {
   hasSeenMovesCoachMark,
@@ -66,6 +67,7 @@ export function LevelScreen() {
 
   const maxUndos = MAX_UNDOS[level.difficulty]
   const undosRemaining = maxUndos - session.undosUsed
+  const stage = getStageForLevel(level.id)
   const canUndo =
     session.history.length > 0 && !session.isWon && undosRemaining > 0
   const { threeStars } = getStarThresholds(level.minMoves)
@@ -85,7 +87,7 @@ export function LevelScreen() {
 
         <div className="text-center">
           <p className="text-sm font-black tracking-[0.22em] text-amber-300 uppercase md:text-base">
-            {DIFFICULTY_LABELS[level.difficulty]}
+            {stage?.name ?? DIFFICULTY_LABELS[level.difficulty]}
           </p>
           <h1
             className="text-4xl font-black text-white md:text-5xl"

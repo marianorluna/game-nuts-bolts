@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import { getStarThresholds } from '../domain/gameEngine'
 import { getLevelById, MAX_LEVEL_ID } from '../domain/levels'
+import { getMilestoneForLevel } from '../domain/content/campaignStructure'
 import { DIFFICULTY_LABELS } from '../domain/types'
 import { soundService } from '../services/soundService'
 
@@ -19,6 +20,7 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
   const level = getLevelById(levelId)
   const stars = getLevelStars(levelId)
   const hasNext = levelId < MAX_LEVEL_ID
+  const milestone = getMilestoneForLevel(levelId)
   const threeStarTarget = level ? getStarThresholds(level.minMoves).threeStars : null
 
   useEffect(() => {
@@ -50,9 +52,14 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
             transition={{ delay: 0.15, type: 'spring' }}
             className="mb-2 text-5xl"
           >
-            🎉
+            {milestone?.emoji ?? '🎉'}
           </motion.div>
-          <h2 className="mb-1 text-2xl font-bold text-white">¡Nivel completado!</h2>
+          <h2 className="mb-1 text-2xl font-bold text-white">
+            {milestone?.title ?? '¡Nivel completado!'}
+          </h2>
+          {milestone && (
+            <p className="mb-3 text-sm text-amber-200">{milestone.message}</p>
+          )}
           {level && (
             <p className="mb-4 text-sm text-purple-200">
               {DIFFICULTY_LABELS[level.difficulty]} · Nivel {levelId}

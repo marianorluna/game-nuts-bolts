@@ -16,8 +16,8 @@ export interface AuthorConfig {
 /** Personaliza tus datos de autor aquí */
 export const AUTHOR: AuthorConfig = {
   name: 'Mariano Luna',
-  role: 'Developer',
-  bio: 'Desarrollo soluciones para problemas reales. Soy apasionado por la tecnología y el desarrollo de software. Este juego es un proyecto personal para aprender game design mobile.',
+  role: 'Software Developer',
+  bio: 'Desarrollo software y disfruto explorar ideas en formato mobile. Nuts & Bolts nació como un puzzle de lógica y color, pensado para partidas cortas.',
   avatar: '👩‍💻',
   links: [
     {

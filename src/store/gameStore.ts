@@ -8,6 +8,7 @@ import {
   moveNuts,
   undoMove,
 } from '../domain/gameEngine'
+import { DEV_UNLOCK_ALL_LEVELS } from '../config/dev'
 import { getLevelById } from '../domain/levels'
 import type { GameSession, GameSettings, PlayerProgress } from '../domain/types'
 import { MAX_UNDOS } from '../domain/types'
@@ -204,6 +205,7 @@ export const useGameStore = create<GameStore>()(
       },
 
       isLevelUnlocked: (levelId) => {
+        if (DEV_UNLOCK_ALL_LEVELS) return true
         return levelId <= get().progress.unlockedLevel
       },
     }),

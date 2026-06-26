@@ -25,7 +25,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "orange",
         "orange"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 2,
@@ -50,7 +52,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "blue",
         "blue"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 3,
@@ -81,7 +85,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "blue",
         "blue"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 4,
@@ -112,7 +118,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "pink",
         "pink"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 5,
@@ -141,7 +149,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "orange"
       ],
       []
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 6,
@@ -176,7 +186,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "pink",
         "green"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 7,
@@ -211,7 +223,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
       ],
       [],
       []
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 8,
@@ -246,7 +260,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "orange",
         "orange"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 9,
@@ -287,7 +303,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "blue",
         "pink"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 10,
@@ -328,7 +346,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "green",
         "orange"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 11,
@@ -363,7 +383,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "green",
         "orange"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 12,
@@ -398,7 +420,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "yellow",
         "orange"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 13,
@@ -439,7 +463,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "orange"
       ],
       []
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 14,
@@ -480,7 +506,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "pink"
       ],
       []
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 15,
@@ -521,7 +549,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "orange",
         "orange"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 16,
@@ -562,7 +592,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "blue",
         "blue"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 17,
@@ -609,7 +641,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "green",
         "red"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 18,
@@ -656,7 +690,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "blue",
         "green"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 19,
@@ -703,7 +739,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "red",
         "orange"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 20,
@@ -750,7 +788,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "green",
         "yellow"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": true
   },
   {
     "id": 21,
@@ -797,7 +837,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "green",
         "orange"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 22,
@@ -844,7 +886,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "blue",
         "orange"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 23,
@@ -897,7 +941,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "pink",
         "purple"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 24,
@@ -943,7 +989,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "orange",
         "pink"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 25,
@@ -996,7 +1044,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "purple",
         "pink"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 26,
@@ -1048,7 +1098,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "orange"
       ],
       []
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 27,
@@ -1100,7 +1152,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "yellow",
         "purple"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 28,
@@ -1152,7 +1206,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "purple",
         "green"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 29,
@@ -1204,7 +1260,9 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "pink",
         "blue"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
   },
   {
     "id": 30,
@@ -1256,6 +1314,1610 @@ export const BAKED_LEVELS: LevelDefinition[] = [
         "yellow",
         "blue"
       ]
-    ]
+    ],
+    "stageId": "stage-1-fundamentos",
+    "isChallenge": false
+  },
+  {
+    "id": 31,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 21,
+    "parMoves": 21,
+    "bolts": [
+      [
+        "yellow",
+        "pink",
+        "pink",
+        "green"
+      ],
+      [],
+      [
+        "pink",
+        "yellow",
+        "blue",
+        "green"
+      ],
+      [
+        "orange",
+        "blue",
+        "orange",
+        "orange"
+      ],
+      [
+        "orange",
+        "red",
+        "red",
+        "red"
+      ],
+      [],
+      [
+        "yellow",
+        "blue",
+        "blue",
+        "yellow"
+      ],
+      [
+        "red",
+        "green",
+        "pink",
+        "green"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 32,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 23,
+    "parMoves": 23,
+    "bolts": [
+      [
+        "pink",
+        "orange",
+        "green",
+        "green"
+      ],
+      [
+        "orange",
+        "purple",
+        "purple",
+        "pink"
+      ],
+      [
+        "blue",
+        "pink",
+        "blue",
+        "yellow"
+      ],
+      [],
+      [],
+      [
+        "pink",
+        "green",
+        "yellow",
+        "purple"
+      ],
+      [
+        "yellow",
+        "orange",
+        "blue",
+        "yellow"
+      ],
+      [
+        "orange",
+        "green",
+        "purple",
+        "blue"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 33,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 30,
+    "parMoves": 30,
+    "bolts": [
+      [
+        "orange",
+        "pink",
+        "yellow",
+        "yellow"
+      ],
+      [
+        "blue",
+        "pink",
+        "red",
+        "red"
+      ],
+      [
+        "purple",
+        "yellow",
+        "purple",
+        "blue"
+      ],
+      [
+        "orange",
+        "purple",
+        "green",
+        "red"
+      ],
+      [],
+      [
+        "yellow",
+        "orange",
+        "blue",
+        "green"
+      ],
+      [
+        "purple",
+        "pink",
+        "orange",
+        "red"
+      ],
+      [
+        "green",
+        "green",
+        "blue",
+        "pink"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 34,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 34,
+    "parMoves": 34,
+    "bolts": [
+      [
+        "blue",
+        "red",
+        "blue",
+        "red"
+      ],
+      [
+        "yellow",
+        "pink",
+        "pink",
+        "blue"
+      ],
+      [
+        "orange",
+        "purple",
+        "pink",
+        "yellow"
+      ],
+      [],
+      [
+        "red",
+        "green",
+        "green",
+        "purple"
+      ],
+      [
+        "green",
+        "yellow",
+        "orange",
+        "red"
+      ],
+      [
+        "orange",
+        "purple",
+        "green",
+        "yellow"
+      ],
+      [
+        "purple",
+        "blue",
+        "pink",
+        "orange"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 35,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 36,
+    "parMoves": 36,
+    "bolts": [
+      [
+        "pink",
+        "orange",
+        "blue",
+        "orange"
+      ],
+      [],
+      [
+        "blue",
+        "red",
+        "green",
+        "yellow"
+      ],
+      [
+        "blue",
+        "red",
+        "purple",
+        "pink"
+      ],
+      [
+        "orange",
+        "yellow",
+        "red",
+        "green"
+      ],
+      [
+        "pink",
+        "pink",
+        "yellow",
+        "purple"
+      ],
+      [
+        "purple",
+        "orange",
+        "green",
+        "red"
+      ],
+      [
+        "yellow",
+        "purple",
+        "blue",
+        "green"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 36,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 32,
+    "parMoves": 32,
+    "bolts": [
+      [
+        "blue",
+        "pink",
+        "green",
+        "green"
+      ],
+      [],
+      [
+        "yellow",
+        "pink",
+        "blue",
+        "purple"
+      ],
+      [
+        "yellow",
+        "purple",
+        "yellow",
+        "yellow"
+      ],
+      [
+        "orange",
+        "purple",
+        "pink",
+        "red"
+      ],
+      [
+        "green",
+        "pink",
+        "blue",
+        "red"
+      ],
+      [
+        "purple",
+        "blue",
+        "orange",
+        "red"
+      ],
+      [
+        "green",
+        "orange",
+        "red",
+        "orange"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 37,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 35,
+    "parMoves": 35,
+    "bolts": [
+      [
+        "orange",
+        "blue",
+        "red",
+        "yellow"
+      ],
+      [
+        "orange",
+        "purple",
+        "orange",
+        "pink"
+      ],
+      [
+        "purple",
+        "yellow",
+        "pink",
+        "purple"
+      ],
+      [
+        "yellow",
+        "purple",
+        "pink",
+        "blue"
+      ],
+      [],
+      [
+        "blue",
+        "green",
+        "blue",
+        "green"
+      ],
+      [
+        "green",
+        "red",
+        "green",
+        "red"
+      ],
+      [
+        "orange",
+        "pink",
+        "yellow",
+        "red"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 38,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 28,
+    "parMoves": 28,
+    "bolts": [
+      [
+        "orange",
+        "pink",
+        "yellow",
+        "purple"
+      ],
+      [
+        "red",
+        "orange",
+        "orange",
+        "green"
+      ],
+      [
+        "red",
+        "purple",
+        "orange",
+        "purple"
+      ],
+      [
+        "purple",
+        "blue",
+        "blue",
+        "blue"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "red",
+        "yellow"
+      ],
+      [],
+      [
+        "green",
+        "pink",
+        "green",
+        "blue"
+      ],
+      [
+        "pink",
+        "green",
+        "red",
+        "pink"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 39,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 34,
+    "parMoves": 34,
+    "bolts": [
+      [
+        "green",
+        "pink",
+        "green",
+        "pink"
+      ],
+      [
+        "yellow",
+        "red",
+        "blue",
+        "blue"
+      ],
+      [
+        "purple",
+        "blue",
+        "orange",
+        "orange"
+      ],
+      [
+        "green",
+        "pink",
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "purple",
+        "red",
+        "purple"
+      ],
+      [
+        "yellow",
+        "purple",
+        "orange",
+        "green"
+      ],
+      [
+        "red",
+        "blue",
+        "yellow",
+        "pink"
+      ],
+      []
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 40,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 34,
+    "parMoves": 34,
+    "bolts": [
+      [
+        "orange",
+        "pink",
+        "pink",
+        "purple"
+      ],
+      [
+        "blue",
+        "yellow",
+        "blue",
+        "pink"
+      ],
+      [],
+      [
+        "yellow",
+        "pink",
+        "orange",
+        "green"
+      ],
+      [
+        "red",
+        "green",
+        "green",
+        "purple"
+      ],
+      [
+        "red",
+        "red",
+        "yellow",
+        "orange"
+      ],
+      [
+        "yellow",
+        "blue",
+        "green",
+        "red"
+      ],
+      [
+        "purple",
+        "orange",
+        "blue",
+        "purple"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": true
+  },
+  {
+    "id": 41,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 37,
+    "parMoves": 37,
+    "bolts": [
+      [
+        "blue",
+        "red",
+        "pink",
+        "purple"
+      ],
+      [],
+      [
+        "pink",
+        "blue",
+        "red",
+        "orange"
+      ],
+      [
+        "green",
+        "yellow",
+        "orange",
+        "green"
+      ],
+      [
+        "red",
+        "yellow",
+        "red",
+        "blue"
+      ],
+      [
+        "yellow",
+        "purple",
+        "purple",
+        "purple"
+      ],
+      [
+        "pink",
+        "green",
+        "yellow",
+        "pink"
+      ],
+      [
+        "orange",
+        "blue",
+        "orange",
+        "green"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 42,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 28,
+    "parMoves": 28,
+    "bolts": [
+      [
+        "blue",
+        "orange",
+        "pink",
+        "green"
+      ],
+      [
+        "yellow",
+        "purple",
+        "yellow",
+        "yellow"
+      ],
+      [],
+      [
+        "green",
+        "yellow",
+        "purple",
+        "pink"
+      ],
+      [
+        "red",
+        "green",
+        "pink",
+        "blue"
+      ],
+      [
+        "purple",
+        "purple",
+        "blue",
+        "red"
+      ],
+      [
+        "orange",
+        "orange",
+        "orange",
+        "pink"
+      ],
+      [
+        "blue",
+        "red",
+        "red",
+        "green"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 43,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 30,
+    "parMoves": 30,
+    "bolts": [
+      [
+        "green",
+        "yellow",
+        "orange",
+        "pink"
+      ],
+      [
+        "orange",
+        "green",
+        "green",
+        "pink"
+      ],
+      [
+        "green",
+        "blue",
+        "pink",
+        "purple"
+      ],
+      [
+        "yellow",
+        "red",
+        "purple",
+        "yellow"
+      ],
+      [
+        "blue",
+        "blue",
+        "yellow",
+        "pink"
+      ],
+      [
+        "purple",
+        "orange",
+        "blue",
+        "red"
+      ],
+      [
+        "red",
+        "purple",
+        "red",
+        "orange"
+      ],
+      []
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 44,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 37,
+    "parMoves": 37,
+    "bolts": [
+      [],
+      [
+        "orange",
+        "pink",
+        "blue",
+        "purple"
+      ],
+      [
+        "blue",
+        "purple",
+        "red",
+        "pink"
+      ],
+      [
+        "purple",
+        "blue",
+        "orange",
+        "purple"
+      ],
+      [
+        "pink",
+        "yellow",
+        "blue",
+        "orange"
+      ],
+      [
+        "green",
+        "yellow",
+        "green",
+        "red"
+      ],
+      [
+        "orange",
+        "yellow",
+        "yellow",
+        "red"
+      ],
+      [
+        "pink",
+        "red",
+        "green",
+        "green"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 45,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 31,
+    "parMoves": 31,
+    "bolts": [
+      [
+        "blue",
+        "red",
+        "pink",
+        "red"
+      ],
+      [
+        "purple",
+        "blue",
+        "yellow",
+        "orange"
+      ],
+      [
+        "pink",
+        "purple",
+        "red",
+        "blue"
+      ],
+      [
+        "red",
+        "yellow",
+        "green",
+        "purple"
+      ],
+      [
+        "orange",
+        "pink",
+        "pink",
+        "blue"
+      ],
+      [
+        "green",
+        "orange",
+        "yellow",
+        "yellow"
+      ],
+      [],
+      [
+        "green",
+        "green",
+        "purple",
+        "orange"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 46,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 34,
+    "parMoves": 34,
+    "bolts": [
+      [
+        "pink",
+        "yellow",
+        "orange",
+        "orange"
+      ],
+      [
+        "purple",
+        "pink",
+        "pink",
+        "red"
+      ],
+      [
+        "purple",
+        "orange",
+        "yellow",
+        "green"
+      ],
+      [
+        "blue",
+        "yellow",
+        "purple",
+        "green"
+      ],
+      [
+        "purple",
+        "pink",
+        "green",
+        "blue"
+      ],
+      [],
+      [
+        "orange",
+        "blue",
+        "yellow",
+        "red"
+      ],
+      [
+        "green",
+        "red",
+        "red",
+        "blue"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 47,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 36,
+    "parMoves": 36,
+    "bolts": [
+      [
+        "blue",
+        "pink",
+        "blue",
+        "pink"
+      ],
+      [
+        "purple",
+        "orange",
+        "yellow",
+        "red"
+      ],
+      [],
+      [
+        "orange",
+        "yellow",
+        "green",
+        "yellow"
+      ],
+      [
+        "red",
+        "green",
+        "red",
+        "orange"
+      ],
+      [
+        "green",
+        "orange",
+        "purple",
+        "purple"
+      ],
+      [
+        "yellow",
+        "pink",
+        "blue",
+        "red"
+      ],
+      [
+        "blue",
+        "pink",
+        "green",
+        "purple"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 48,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 35,
+    "parMoves": 35,
+    "bolts": [
+      [
+        "pink",
+        "purple",
+        "green",
+        "yellow"
+      ],
+      [
+        "red",
+        "blue",
+        "red",
+        "red"
+      ],
+      [
+        "purple",
+        "orange",
+        "yellow",
+        "blue"
+      ],
+      [
+        "orange",
+        "yellow",
+        "red",
+        "orange"
+      ],
+      [
+        "blue",
+        "orange",
+        "purple",
+        "pink"
+      ],
+      [
+        "yellow",
+        "green",
+        "pink",
+        "purple"
+      ],
+      [
+        "green",
+        "pink",
+        "green",
+        "blue"
+      ],
+      []
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 49,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 23,
+    "parMoves": 23,
+    "bolts": [
+      [
+        "pink",
+        "red",
+        "green",
+        "red"
+      ],
+      [
+        "red",
+        "blue",
+        "orange",
+        "red"
+      ],
+      [
+        "blue",
+        "green",
+        "yellow",
+        "green"
+      ],
+      [
+        "orange",
+        "pink",
+        "pink",
+        "orange"
+      ],
+      [],
+      [],
+      [
+        "pink",
+        "green",
+        "yellow",
+        "yellow"
+      ],
+      [
+        "yellow",
+        "blue",
+        "blue",
+        "orange"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 50,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 23,
+    "parMoves": 23,
+    "bolts": [
+      [],
+      [
+        "purple",
+        "green",
+        "pink",
+        "purple"
+      ],
+      [
+        "orange",
+        "blue",
+        "orange",
+        "purple"
+      ],
+      [
+        "blue",
+        "yellow",
+        "orange",
+        "pink"
+      ],
+      [
+        "yellow",
+        "green",
+        "purple",
+        "pink"
+      ],
+      [
+        "blue",
+        "orange",
+        "pink",
+        "green"
+      ],
+      [],
+      [
+        "yellow",
+        "blue",
+        "green",
+        "yellow"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 51,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 24,
+    "parMoves": 24,
+    "bolts": [
+      [
+        "purple",
+        "yellow",
+        "yellow",
+        "green"
+      ],
+      [
+        "green",
+        "blue",
+        "pink",
+        "orange"
+      ],
+      [
+        "blue",
+        "blue",
+        "orange",
+        "orange"
+      ],
+      [
+        "pink",
+        "green",
+        "yellow",
+        "green"
+      ],
+      [
+        "yellow",
+        "red",
+        "pink",
+        "pink"
+      ],
+      [],
+      [
+        "red",
+        "orange",
+        "purple",
+        "red"
+      ],
+      [],
+      [
+        "purple",
+        "red",
+        "blue",
+        "purple"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 52,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 25,
+    "parMoves": 25,
+    "bolts": [
+      [],
+      [
+        "green",
+        "purple",
+        "yellow",
+        "red"
+      ],
+      [
+        "green",
+        "purple",
+        "purple",
+        "purple"
+      ],
+      [],
+      [
+        "yellow",
+        "red",
+        "blue",
+        "red"
+      ],
+      [
+        "green",
+        "yellow",
+        "orange",
+        "orange"
+      ],
+      [
+        "pink",
+        "green",
+        "pink",
+        "red"
+      ],
+      [
+        "blue",
+        "blue",
+        "pink",
+        "yellow"
+      ],
+      [
+        "blue",
+        "orange",
+        "pink",
+        "orange"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 53,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 34,
+    "parMoves": 34,
+    "bolts": [
+      [
+        "purple",
+        "pink",
+        "red",
+        "purple"
+      ],
+      [
+        "orange",
+        "blue",
+        "green",
+        "orange"
+      ],
+      [
+        "green",
+        "yellow",
+        "purple",
+        "orange"
+      ],
+      [
+        "blue",
+        "red",
+        "green",
+        "blue"
+      ],
+      [],
+      [
+        "yellow",
+        "yellow",
+        "pink",
+        "orange"
+      ],
+      [
+        "red",
+        "green",
+        "blue",
+        "red"
+      ],
+      [
+        "pink",
+        "purple",
+        "yellow",
+        "pink"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 54,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 31,
+    "parMoves": 31,
+    "bolts": [
+      [
+        "green",
+        "pink",
+        "purple",
+        "purple"
+      ],
+      [
+        "red",
+        "purple",
+        "green",
+        "orange"
+      ],
+      [
+        "green",
+        "red",
+        "orange",
+        "orange"
+      ],
+      [
+        "pink",
+        "yellow",
+        "blue",
+        "pink"
+      ],
+      [
+        "yellow",
+        "purple",
+        "blue",
+        "red"
+      ],
+      [],
+      [
+        "blue",
+        "blue",
+        "yellow",
+        "yellow"
+      ],
+      [
+        "orange",
+        "pink",
+        "green",
+        "red"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 55,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 32,
+    "parMoves": 32,
+    "bolts": [
+      [
+        "purple",
+        "green",
+        "blue",
+        "pink"
+      ],
+      [
+        "orange",
+        "red",
+        "red",
+        "pink"
+      ],
+      [
+        "pink",
+        "yellow",
+        "orange",
+        "pink"
+      ],
+      [
+        "blue",
+        "blue",
+        "red",
+        "purple"
+      ],
+      [],
+      [
+        "green",
+        "red",
+        "yellow",
+        "purple"
+      ],
+      [
+        "yellow",
+        "green",
+        "purple",
+        "blue"
+      ],
+      [
+        "yellow",
+        "orange",
+        "green",
+        "orange"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 56,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 35,
+    "parMoves": 35,
+    "bolts": [
+      [
+        "green",
+        "orange",
+        "green",
+        "pink"
+      ],
+      [
+        "purple",
+        "red",
+        "red",
+        "purple"
+      ],
+      [
+        "blue",
+        "pink",
+        "red",
+        "yellow"
+      ],
+      [
+        "blue",
+        "green",
+        "pink",
+        "orange"
+      ],
+      [],
+      [
+        "purple",
+        "pink",
+        "blue",
+        "blue"
+      ],
+      [
+        "red",
+        "orange",
+        "yellow",
+        "yellow"
+      ],
+      [
+        "orange",
+        "purple",
+        "yellow",
+        "green"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 57,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 34,
+    "parMoves": 34,
+    "bolts": [
+      [
+        "red",
+        "green",
+        "green",
+        "green"
+      ],
+      [
+        "purple",
+        "yellow",
+        "purple",
+        "orange"
+      ],
+      [
+        "green",
+        "yellow",
+        "pink",
+        "blue"
+      ],
+      [
+        "red",
+        "pink",
+        "purple",
+        "orange"
+      ],
+      [
+        "blue",
+        "pink",
+        "blue",
+        "red"
+      ],
+      [
+        "yellow",
+        "blue",
+        "orange",
+        "pink"
+      ],
+      [
+        "purple",
+        "red",
+        "orange",
+        "yellow"
+      ],
+      []
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 58,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 34,
+    "parMoves": 34,
+    "bolts": [
+      [
+        "pink",
+        "purple",
+        "orange",
+        "red"
+      ],
+      [
+        "blue",
+        "pink",
+        "yellow",
+        "yellow"
+      ],
+      [],
+      [
+        "yellow",
+        "blue",
+        "orange",
+        "red"
+      ],
+      [
+        "red",
+        "orange",
+        "orange",
+        "green"
+      ],
+      [
+        "green",
+        "yellow",
+        "green",
+        "red"
+      ],
+      [
+        "blue",
+        "purple",
+        "pink",
+        "purple"
+      ],
+      [
+        "purple",
+        "green",
+        "blue",
+        "pink"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 59,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 35,
+    "parMoves": 35,
+    "bolts": [
+      [
+        "purple",
+        "orange",
+        "pink",
+        "purple"
+      ],
+      [
+        "red",
+        "pink",
+        "red",
+        "purple"
+      ],
+      [
+        "red",
+        "pink",
+        "yellow",
+        "orange"
+      ],
+      [
+        "green",
+        "purple",
+        "yellow",
+        "blue"
+      ],
+      [],
+      [
+        "orange",
+        "yellow",
+        "orange",
+        "green"
+      ],
+      [
+        "blue",
+        "pink",
+        "blue",
+        "yellow"
+      ],
+      [
+        "green",
+        "blue",
+        "green",
+        "red"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": false
+  },
+  {
+    "id": 60,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 35,
+    "parMoves": 35,
+    "bolts": [
+      [],
+      [
+        "purple",
+        "pink",
+        "blue",
+        "blue"
+      ],
+      [
+        "green",
+        "red",
+        "green",
+        "red"
+      ],
+      [
+        "orange",
+        "blue",
+        "yellow",
+        "yellow"
+      ],
+      [
+        "orange",
+        "red",
+        "orange",
+        "pink"
+      ],
+      [
+        "purple",
+        "yellow",
+        "red",
+        "purple"
+      ],
+      [
+        "yellow",
+        "green",
+        "green",
+        "blue"
+      ],
+      [
+        "pink",
+        "orange",
+        "purple",
+        "pink"
+      ]
+    ],
+    "stageId": "stage-2-presion",
+    "isChallenge": true
   }
 ] as LevelDefinition[]

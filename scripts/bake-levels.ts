@@ -1,12 +1,11 @@
-import { writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { enrichLevelMetadata } from '../src/domain/content/campaignStructure'
 import {
   generateLevelBatch,
   LEVEL_SPECS,
 } from '../src/domain/levelGenerator'
 import {
-  countCompleteBolts,
-  countSplitColors,
   getMinSolutionMoves,
 } from '../src/domain/levelValidator'
 import type { LevelDefinition } from '../src/domain/types'
@@ -17,18 +16,104 @@ const MAX_STATES: Record<string, number> = {
   hard: 5_000_000,
 }
 
-console.log('Horneando niveles (scramble + criterios de calidad)...')
+function serializeBolts(bolts: LevelDefinition['bolts']): string {
+  return bolts.map((b) => b.join(',')).join('|')
+}
 
-const generated = generateLevelBatch(LEVEL_SPECS)
+function parseFromArg(): number {
+  const fromFlag = process.argv.find((arg) => arg.startsWith('--from='))
+  if (fromFlag) {
+    const value = Number.parseInt(fromFlag.split('=')[1] ?? '', 10)
+    if (!Number.isNaN(value) && value >= 1) return value
+  }
+  return 1
+}
 
-const levels: LevelDefinition[] = generated.map((level) => {
+function loadFrozenLevels(fromId: number): LevelDefinition[] {
+  if (fromId <= 1) return []
+
+  const bakedPath = resolve('src/domain/levels/bakedLevels.ts')
+  const source = readFileSync(bakedPath, 'utf8')
+  const match = source.match(
+    /export const BAKED_LEVELS: LevelDefinition\[\] = (\[[\s\S]*\]) as LevelDefinition\[\]/,
+  )
+  if (!match) {
+    throw new Error('No se pudo leer BAKED_LEVELS del archivo hornado existente')
+  }
+
+  const existing = JSON.parse(match[1]) as LevelDefinition[]
+  const frozen = existing.filter((level) => level.id < fromId)
+
+  if (frozen.length !== fromId - 1) {
+    throw new Error(
+      `Se esperaban ${fromId - 1} niveles congelados (ids < ${fromId}), encontrados ${frozen.length}`,
+    )
+  }
+
+  for (let id = 1; id < fromId; id += 1) {
+    if (frozen[id - 1]?.id !== id) {
+      throw new Error(`Hueco o desorden en niveles congelados cerca del id ${id}`)
+    }
+  }
+
+  return frozen
+}
+
+function verifyFrozenUnchanged(
+  before: LevelDefinition[],
+  after: LevelDefinition[],
+): void {
+  for (const level of before) {
+    const next = after.find((l) => l.id === level.id)
+    if (!next) {
+      throw new Error(`Nivel congelado ${level.id} desapareció del output`)
+    }
+    if (serializeBolts(level.bolts) !== serializeBolts(next.bolts)) {
+      throw new Error(`Layout del nivel ${level.id} cambió — abortando hornado`)
+    }
+    if (level.minMoves !== next.minMoves) {
+      throw new Error(`minMoves del nivel ${level.id} cambió — abortando hornado`)
+    }
+  }
+}
+
+const fromId = parseFromArg()
+const frozenLevels = loadFrozenLevels(fromId)
+const specsToBake = LEVEL_SPECS.filter((spec) => spec.id >= fromId)
+
+if (specsToBake.length === 0) {
+  console.log(`No hay specs con id >= ${fromId}. Nada que hornear.`)
+  process.exit(0)
+}
+
+console.log(
+  `Horneando niveles ${specsToBake[0]?.id}–${specsToBake[specsToBake.length - 1]?.id}` +
+    (frozenLevels.length > 0 ? ` (preservando 1–${fromId - 1})` : '') +
+    '...',
+)
+
+const usedLayouts = new Set(frozenLevels.map((level) => serializeBolts(level.bolts)))
+const generated: LevelDefinition[] = []
+
+for (const spec of specsToBake) {
+  process.stdout.write(`  Generando nivel ${spec.id}...`)
+  const [level] = generateLevelBatch([spec], usedLayouts)
   const maxStates = MAX_STATES[level.difficulty] ?? 2_000_000
   const minMoves = getMinSolutionMoves(level.bolts, level.capacity, maxStates)
   if (minMoves === null) {
     throw new Error(`Nivel ${level.id}: no se pudo calcular minMoves`)
   }
-  return { ...level, minMoves, parMoves: minMoves }
-})
+  const enriched = enrichLevelMetadata({ ...level, minMoves, parMoves: minMoves })
+  generated.push(enriched)
+  usedLayouts.add(serializeBolts(level.bolts))
+  console.log(` min ${minMoves}`)
+}
+
+const levels: LevelDefinition[] = [
+  ...frozenLevels.map(enrichLevelMetadata),
+  ...generated,
+]
+verifyFrozenUnchanged(frozenLevels, levels)
 
 const output = `import type { LevelDefinition } from '../types'
 
@@ -40,13 +125,3 @@ const outPath = resolve('src/domain/levels/bakedLevels.ts')
 writeFileSync(outPath, output, 'utf8')
 
 console.log(`✓ ${levels.length} niveles guardados en ${outPath}`)
-
-for (const level of levels) {
-  const maxStates = MAX_STATES[level.difficulty] ?? 2_000_000
-  const minMoves = getMinSolutionMoves(level.bolts, level.capacity, maxStates)
-  const split = countSplitColors(level.bolts)
-  const complete = countCompleteBolts(level.bolts, level.capacity)
-  console.log(
-    `  Nivel ${level.id}: min ${minMoves} movs, ${split} colores repartidos, ${complete} bulones completos`,
-  )
-}

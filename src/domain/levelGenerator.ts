@@ -238,8 +238,9 @@ export function generateLevel(
 
 export function generateLevelBatch(
   specs: GenerateLevelParams[],
+  initialLayouts: Set<string> = new Set(),
 ): LevelDefinition[] {
-  const usedLayouts = new Set<string>()
+  const usedLayouts = new Set(initialLayouts)
   return specs.map((spec) => {
     const level = generateLevel(spec, usedLayouts)
     usedLayouts.add(serializeBolts(level.bolts))
@@ -290,4 +291,36 @@ export const LEVEL_SPECS: GenerateLevelParams[] = [
   { id: 28, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 31, seed: 3008, scrambleMethod: 'random',  quality: q(19, 6, 0) },
   { id: 29, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 32, seed: 3009, scrambleMethod: 'random',  quality: q(20, 6, 0) },
   { id: 30, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 34, seed: 3010, scrambleMethod: 'random',  quality: q(22, 6, 0) },
+
+  // Etapa 2 — El garaje apretado (31–60): escalado paramétrico, patrón ola
+  { id: 31, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 22, seed: 4001, scrambleMethod: 'random',  quality: q(20, 5, 0) },
+  { id: 32, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'purple'],           capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 23, seed: 4002, scrambleMethod: 'random',  quality: q(21, 5, 0) },
+  { id: 33, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 24, seed: 4003, scrambleMethod: 'random',  quality: q(22, 6, 0) },
+  { id: 34, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 25, seed: 4004, scrambleMethod: 'random',  quality: q(23, 6, 0) },
+  { id: 35, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 26, seed: 4005, scrambleMethod: 'random',  quality: q(24, 6, 0) },
+  { id: 36, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 27, seed: 4006, scrambleMethod: 'random',  quality: q(24, 6, 0) },
+  { id: 37, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 28, seed: 4007, scrambleMethod: 'random',  quality: q(25, 6, 0) },
+  { id: 38, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 29, seed: 4008, scrambleMethod: 'random',  quality: q(26, 6, 0) },
+  { id: 39, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 30, seed: 4009, scrambleMethod: 'random',  quality: q(26, 6, 0) },
+  { id: 40, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 32, seed: 4010, scrambleMethod: 'random',  quality: q(28, 6, 0) },
+  { id: 41, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 31, seed: 4011, scrambleMethod: 'random',  quality: q(27, 6, 0) },
+  { id: 42, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 32, seed: 4012, scrambleMethod: 'random',  quality: q(28, 6, 0) },
+  { id: 43, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 33, seed: 4013, scrambleMethod: 'random',  quality: q(28, 6, 0) },
+  { id: 44, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 34, seed: 4014, scrambleMethod: 'random',  quality: q(29, 6, 0) },
+  { id: 45, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 35, seed: 4015, scrambleMethod: 'random',  quality: q(30, 6, 0) },
+  { id: 46, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 36, seed: 4016, scrambleMethod: 'random',  quality: q(31, 6, 0) },
+  { id: 47, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 37, seed: 4017, scrambleMethod: 'random',  quality: q(32, 6, 0) },
+  { id: 48, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 38, seed: 4018, scrambleMethod: 'random',  quality: q(33, 6, 0) },
+  { id: 49, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 26, seed: 4019, scrambleMethod: 'random',  quality: q(22, 5, 0) },
+  { id: 50, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'purple'],           capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 27, seed: 4020, scrambleMethod: 'random',  quality: q(23, 5, 0) },
+  { id: 51, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 28, seed: 4021, scrambleMethod: 'random',  quality: q(24, 5, 0) },
+  { id: 52, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 29, seed: 4022, scrambleMethod: 'random',  quality: q(25, 5, 0) },
+  { id: 53, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 34, seed: 4023, scrambleMethod: 'random',  quality: q(28, 6, 0) },
+  { id: 54, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 35, seed: 4024, scrambleMethod: 'random',  quality: q(29, 6, 0) },
+  { id: 55, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 36, seed: 4025, scrambleMethod: 'random',  quality: q(30, 6, 0) },
+  { id: 56, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 38, seed: 4026, scrambleMethod: 'random',  quality: q(32, 6, 0) },
+  { id: 57, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 39, seed: 4027, scrambleMethod: 'random',  quality: q(33, 6, 0) },
+  { id: 58, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 40, seed: 4028, scrambleMethod: 'random',  quality: q(34, 6, 0) },
+  { id: 59, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 41, seed: 4029, scrambleMethod: 'random',  quality: q(35, 6, 0) },
+  { id: 60, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 44, seed: 4030, scrambleMethod: 'random',  quality: q(34, 6, 0) },
 ]
