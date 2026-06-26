@@ -6,6 +6,7 @@ import { GameBoard } from './GameBoard'
 import { WinModal } from './WinModal'
 import { MovesInfoModal } from './MovesInfoModal'
 import { MovesCoachMark } from './MovesCoachMark'
+import { MultiNutCoachMark } from './MultiNutCoachMark'
 import { SettingsModal } from './SettingsModal'
 import { BackArrowIcon, UndoArrowIcon, LevelHomeIcon } from './icons/GameIcons'
 import { getStarThresholds } from '../domain/gameEngine'
@@ -16,6 +17,15 @@ import {
   hasSeenMovesCoachMark,
   markMovesCoachMarkSeen,
 } from '../services/onboardingService'
+import {
+  hasSeenMultiNutCoachMark,
+  markMultiNutCoachMarkSeen,
+} from '../services/multiNutOnboardingService'
+import { EndOfContentModal } from './EndOfContentModal'
+import {
+  hasSeenEndOfContentModal,
+  markEndOfContentModalSeen,
+} from '../services/endOfContentService'
 
 export function LevelScreen() {
   const boardAreaRef = useRef<HTMLDivElement>(null)
@@ -23,13 +33,23 @@ export function LevelScreen() {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [movesInfoOpen, setMovesInfoOpen] = useState(false)
   const [coachMarkVisible, setCoachMarkVisible] = useState(false)
+  const [multiNutCoachVisible, setMultiNutCoachVisible] = useState(false)
+  const [endOfContentOpen, setEndOfContentOpen] = useState(false)
+  const pendingWinAction = useRef<(() => void) | null>(null)
   const soundEnabled = useGameStore((s) => s.settings.soundEnabled)
   const { session, level, selectBolt, undo, resetLevel, startLevel, setScreen } =
     useGameLogic()
 
   useEffect(() => {
+    if (!level) return
+    if (level.id === 61 && !hasSeenMultiNutCoachMark()) {
+      setMultiNutCoachVisible(true)
+      setCoachMarkVisible(false)
+      return
+    }
+    setMultiNutCoachVisible(false)
     setCoachMarkVisible(!hasSeenMovesCoachMark())
-  }, [])
+  }, [level?.id])
 
   useEffect(() => {
     const node = boardAreaRef.current
@@ -53,6 +73,11 @@ export function LevelScreen() {
     }
   }, [])
 
+  const dismissMultiNutCoach = () => {
+    markMultiNutCoachMarkSeen()
+    setMultiNutCoachVisible(false)
+  }
+
   const dismissCoachMark = () => {
     markMovesCoachMarkSeen()
     setCoachMarkVisible(false)
@@ -61,6 +86,22 @@ export function LevelScreen() {
   const openMovesInfo = () => {
     dismissCoachMark()
     setMovesInfoOpen(true)
+  }
+
+  const dismissEndOfContent = () => {
+    markEndOfContentModalSeen()
+    setEndOfContentOpen(false)
+    pendingWinAction.current?.()
+    pendingWinAction.current = null
+  }
+
+  const runWinAction = (action: () => void) => {
+    if (session?.levelId === MAX_LEVEL_ID && !hasSeenEndOfContentModal()) {
+      pendingWinAction.current = action
+      setEndOfContentOpen(true)
+      return
+    }
+    action()
   }
 
   if (!session || !level) return null
@@ -75,42 +116,49 @@ export function LevelScreen() {
 
   return (
     <div className="flex h-dvh max-h-dvh flex-col overflow-hidden">
-      <header className="flex shrink-0 items-center justify-between px-4 py-3 pt-safe sm:px-6 md:px-8">
-        <button
-          type="button"
-          onClick={() => setScreen('home')}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-white transition active:scale-95 hover:bg-white/25 md:h-14 md:w-14"
-          aria-label="Volver"
-        >
-          <BackArrowIcon className="h-6 w-6 md:h-7 md:w-7" />
-        </button>
+      <div className="shrink-0 px-4 pt-safe sm:px-6 md:px-8">
+        <header className="relative py-4 text-center md:py-5">
+          <button
+            type="button"
+            onClick={() => setScreen('campaign')}
+            className="absolute left-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12"
+            aria-label="Volver"
+          >
+            <BackArrowIcon className="h-6 w-6 md:h-7 md:w-7" />
+          </button>
 
-        <div className="text-center">
-          <p className="text-sm font-black tracking-[0.22em] text-amber-300 uppercase md:text-base">
-            {stage?.name ?? DIFFICULTY_LABELS[level.difficulty]}
-          </p>
+          <button
+            type="button"
+            onClick={resetLevel}
+            className="absolute right-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12"
+            aria-label="Volver al inicio del nivel"
+          >
+            <LevelHomeIcon className="h-6 w-6 md:h-7 md:w-7" />
+          </button>
+
+          <div className="mb-1 flex min-h-9 items-center justify-center md:min-h-11">
+            <p className="text-sm font-black tracking-[0.22em] text-amber-300 uppercase md:text-base">
+              {stage?.name ?? DIFFICULTY_LABELS[level.difficulty]}
+            </p>
+          </div>
           <h1
-            className="text-4xl font-black text-white md:text-5xl"
+            className="text-3xl font-black text-white md:text-4xl"
             style={{ textShadow: '0 2px 10px rgba(0,0,0,0.45)' }}
           >
             Nivel {level.id}
           </h1>
-        </div>
-
-        <button
-          type="button"
-          onClick={resetLevel}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-white transition active:scale-95 hover:bg-white/25 md:h-14 md:w-14"
-          aria-label="Volver al inicio del nivel"
-        >
-          <LevelHomeIcon className="h-6 w-6 md:h-7 md:w-7" />
-        </button>
-      </header>
+        </header>
+      </div>
 
       <div
         ref={boardAreaRef}
-        className="flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden py-4 md:py-6"
+        className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden py-4 md:py-6"
       >
+        {multiNutCoachVisible && (
+          <div className="absolute inset-x-4 top-4 z-30 flex justify-center">
+            <MultiNutCoachMark onDismiss={dismissMultiNutCoach} />
+          </div>
+        )}
         <GameBoard
           session={session}
           onSelectBolt={selectBolt}
@@ -186,18 +234,22 @@ export function LevelScreen() {
         <WinModal
           levelId={session.levelId}
           moves={session.moves}
-          onNext={() => {
-            const nextId = session.levelId + 1
-            if (nextId <= MAX_LEVEL_ID) {
-              startLevel(nextId)
-            } else {
-              setScreen('home')
-            }
-          }}
-          onReplay={resetLevel}
-          onHome={() => setScreen('home')}
+          onNext={() =>
+            runWinAction(() => {
+              const nextId = session.levelId + 1
+              if (nextId <= MAX_LEVEL_ID) {
+                startLevel(nextId)
+              } else {
+                setScreen('campaign')
+              }
+            })
+          }
+          onReplay={() => runWinAction(resetLevel)}
+          onHome={() => runWinAction(() => setScreen('campaign'))}
         />
       )}
+
+      <EndOfContentModal open={endOfContentOpen} onClose={dismissEndOfContent} />
     </div>
   )
 }

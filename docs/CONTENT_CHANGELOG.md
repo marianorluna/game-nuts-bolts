@@ -57,7 +57,32 @@ Entradas más recientes arriba. Cada fase o release de contenido debe añadir un
 
 ---
 
-## [Unreleased] — Fase 2 (planificada)
+## [Fase 2] — 2026-06-26 — Niveles 61–100 + mecánicas nuevas
+
+### Añadido
+
+- 40 niveles nuevos (ids 61–100), Etapa 3 «La línea de montaje»
+- Mecánica **multiNut** (movimiento en bloque) en niveles 61–100
+- Mecánica **lockedBolt** (bulones bloqueados) en niveles 81–100
+- `BoltConfig`, `GamePlayContext` en motor y sesión
+- BFS extendido con reglas de mecánicas en `levelValidator.ts`
+- Tutoriales hand-crafted 81–84 (`handCraftedLevels.ts`)
+- UI: candado en bulones, coach mark nivel 61, hitos 80 y 100
+- Tema visual `factory` para etapa 3
+
+### Compatibilidad
+
+- Niveles 1–60 congelados (layouts y minMoves intactos)
+- Saves sin migración; `unlockedLevel: 61` desbloquea nivel 61
+
+### Validación
+
+- `npm run validate:levels` — 100/100 niveles solubles con sus reglas
+- Script `scripts/test-handcrafted.ts` para tutoriales 81–84
+
+---
+
+## [Unreleased] — Sección 2 (planificada)
 
 ### Objetivo
 

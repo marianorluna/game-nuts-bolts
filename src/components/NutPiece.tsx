@@ -4,8 +4,10 @@ import { NUT_ICONS, NUT_STYLES } from '../domain/types'
 
 interface NutPieceProps {
   color: NutColor
-  isSelected?: boolean
-  isTop?: boolean
+  /** Tuerca incluida en el bloque que se moverá (multiNut o cima en clásico). */
+  isInMovableBlock?: boolean
+  /** Índice en el stack; las tuercas superiores quedan por delante al inclinarse. */
+  stackLayer?: number
 }
 
 // Hexágono horizontal (ancho > alto): simula tuerca vista levemente de arriba
@@ -19,7 +21,11 @@ export const NUT_LIFT_SCALE = 1.12
 export const NUT_LIFT_ROTATE = 22
 export const NUT_LIFT_CLEARANCE = 52
 
-export function NutPiece({ color, isSelected = false, isTop = false }: NutPieceProps) {
+export function NutPiece({
+  color,
+  isInMovableBlock = false,
+  stackLayer = 0,
+}: NutPieceProps) {
   const s = NUT_STYLES[color]
 
   return (
@@ -28,9 +34,9 @@ export function NutPiece({ color, isSelected = false, isTop = false }: NutPieceP
       // Al montar (nut llega a un nuevo bulón) simula enroscado: rota de +25° a 0°
       initial={{ rotate: 25, scale: 0.82, opacity: 0.6 }}
       animate={{
-        y: isSelected && isTop ? -NUT_LIFT_Y : 0,
-        rotate: isSelected && isTop ? -NUT_LIFT_ROTATE : 0,
-        scale: isSelected && isTop ? NUT_LIFT_SCALE : 1,
+        y: isInMovableBlock ? -NUT_LIFT_Y : 0,
+        rotate: isInMovableBlock ? -NUT_LIFT_ROTATE : 0,
+        scale: isInMovableBlock ? NUT_LIFT_SCALE : 1,
         opacity: 1,
       }}
       transition={{ type: 'spring', stiffness: 380, damping: 24 }}
@@ -38,7 +44,8 @@ export function NutPiece({ color, isSelected = false, isTop = false }: NutPieceP
         position: 'relative',
         width: 64,
         height: NUT_H,
-        filter: isSelected && isTop
+        zIndex: isInMovableBlock ? stackLayer + 1 : undefined,
+        filter: isInMovableBlock
           ? `brightness(1.2) drop-shadow(0 0 12px ${s.glowColor}) drop-shadow(0 0 4px rgba(255,255,255,0.5))`
           : 'drop-shadow(0 3px 5px rgba(0,0,0,0.55))',
         transition: 'filter 0.18s ease',

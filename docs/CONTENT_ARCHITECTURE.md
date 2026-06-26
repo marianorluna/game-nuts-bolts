@@ -37,11 +37,13 @@ flowchart TB
 
 ---
 
-## Estado actual (v1.1.0 — Fase 1)
+## Estado actual (v1.2.0 — Fase 2)
 
 | Métrica              | Valor                                                            |
 | -------------------- | ---------------------------------------------------------------- |
-| Niveles publicados   | **60** (ids 1–60)                                                |
+| Niveles publicados   | **100** (ids 1–100)                                              |
+| Sección 1            | **Completa**                                                     |
+| Mecánicas activas    | clásico, multiNut (61+), lockedBolt (81+)                        |
 | Organización en UI   | Por etapas (Caja de herramientas / El garaje apretado)           |
 | Progreso del jugador | `unlockedLevel` lineal en `localStorage` (`nuts-bolts-progress`) |
 | Fuente de niveles    | `src/domain/levels/bakedLevels.ts`                               |
@@ -101,7 +103,7 @@ Primer arco: del primer día en el taller hasta dominar el banco principal.
 | ----- | ----------------------- | ------- | -------------------- | -------------------- | ---------- | -------------------------------- | -------------------- |
 | 1     | `stage-1-fundamentos`   | 1–30    | Caja de herramientas | Puzzle clásico       | `workshop` | 1 tuerca/movimiento              | **Publicada**        |
 | 2     | `stage-2-presion`       | 31–60   | El garaje apretado   | Escalado paramétrico | `garage`   | Más colores, 1 vacío             | **Publicada**        |
-| 3     | `stage-3-nuevas-reglas` | 61–100  | La línea de montaje  | Mecánicas nuevas     | `factory`  | multiNut (61+), lockedBolt (81+) | Planificada (Fase 2) |
+| 3     | `stage-3-nuevas-reglas` | 61–100  | La línea de montaje  | Mecánicas nuevas     | `factory`  | multiNut (61+), lockedBolt (81+) | **Publicada**        |
 
 #### Blurbs (menú principal)
 
@@ -121,7 +123,7 @@ Niveles con `isChallenge: true` — layout más exigente + celebración UI.
 | 40    | Prueba de torque       | Reto Etapa 2              |
 | 60    | Cierre del garaje      | Cierre Etapa 2            |
 | 80    | Control de calidad     | Reto Etapa 3 (Fase 2)     |
-| 100   | Graduación de aprendiz | Cierre Sección 1 (Fase 2) |
+| 100   | Graduación de aprendiz | Cierre Sección 1          |
 
 #### Curva de dificultad (patrón ola)
 

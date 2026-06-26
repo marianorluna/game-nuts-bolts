@@ -5,6 +5,7 @@ import {
   generateLevelBatch,
   LEVEL_SPECS,
 } from '../src/domain/levelGenerator'
+import { getPlayContext } from '../src/domain/gameEngine'
 import {
   getMinSolutionMoves,
 } from '../src/domain/levelValidator'
@@ -99,11 +100,22 @@ for (const spec of specsToBake) {
   process.stdout.write(`  Generando nivel ${spec.id}...`)
   const [level] = generateLevelBatch([spec], usedLayouts)
   const maxStates = MAX_STATES[level.difficulty] ?? 2_000_000
-  const minMoves = getMinSolutionMoves(level.bolts, level.capacity, maxStates)
+  const enrichedBase = enrichLevelMetadata({
+    ...level,
+    minMoves: 0,
+    parMoves: level.parMoves,
+  })
+  const ctx = getPlayContext(enrichedBase)
+  const minMoves = getMinSolutionMoves(
+    level.bolts,
+    level.capacity,
+    maxStates,
+    ctx,
+  )
   if (minMoves === null) {
-    throw new Error(`Nivel ${level.id}: no se pudo calcular minMoves`)
+    throw new Error(`Nivel ${level.id}: sin solución con las reglas del nivel`)
   }
-  const enriched = enrichLevelMetadata({ ...level, minMoves, parMoves: minMoves })
+  const enriched = { ...enrichedBase, minMoves, parMoves: minMoves }
   generated.push(enriched)
   usedLayouts.add(serializeBolts(level.bolts))
   console.log(` min ${minMoves}`)

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AUTHOR } from '../config/author'
 import { APP_VERSION } from '../config/version'
+import { AppLogo } from './AppLogo'
 
 interface SplashScreenProps {
   onComplete: () => void
@@ -55,18 +56,17 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
           </div>
 
           <motion.div
-            initial={{ scale: 0.4, opacity: 0, rotate: -20 }}
+            initial={{ scale: 0.4, opacity: 0, rotate: -12 }}
             animate={{ scale: 1, opacity: 1, rotate: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 18, delay: 0.1 }}
-            className="relative mb-6 text-7xl"
+            className="relative mb-6"
           >
-            <motion.span
-              animate={{ rotate: [0, -8, 8, 0] }}
+            <motion.div
+              animate={{ rotate: [0, -4, 4, 0] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="inline-block"
             >
-              🔩
-            </motion.span>
+              <AppLogo size="lg" />
+            </motion.div>
           </motion.div>
 
           <motion.h1

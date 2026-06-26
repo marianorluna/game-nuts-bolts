@@ -1,4 +1,5 @@
 import { ALL_LEVELS } from '../src/domain/levels'
+import { getPlayContext } from '../src/domain/gameEngine'
 import { LEVEL_SPECS } from '../src/domain/levelGenerator'
 import {
   countCompleteBolts,
@@ -48,7 +49,8 @@ for (const level of ALL_LEVELS) {
   }
 
   const maxStates = MAX_STATES[level.difficulty] ?? 2_000_000
-  const solvable = isLevelSolvable(level.bolts, level.capacity, maxStates)
+  const ctx = getPlayContext(level)
+  const solvable = isLevelSolvable(level.bolts, level.capacity, maxStates, ctx)
   if (!solvable) {
     console.error(`Level ${level.id} (${level.difficulty}): NOT SOLVABLE`)
     failed += 1
@@ -62,6 +64,7 @@ for (const level of ALL_LEVELS) {
       level.capacity,
       spec.quality,
       maxStates,
+      ctx,
     )
     if (!quality.ok) {
       console.error(
@@ -72,7 +75,7 @@ for (const level of ALL_LEVELS) {
     }
   }
 
-  const minMoves = getMinSolutionMoves(level.bolts, level.capacity, maxStates)
+  const minMoves = getMinSolutionMoves(level.bolts, level.capacity, maxStates, ctx)
   if (minMoves === null) {
     console.error(`Level ${level.id} (${level.difficulty}): MIN MOVES UNKNOWN`)
     failed += 1

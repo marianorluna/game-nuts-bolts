@@ -1,5 +1,9 @@
-import type { Bolt, LevelDefinition, NutColor } from './types'
-import { canMove, cloneBolts, getTopColor, moveNuts } from './gameEngine'
+import type { Bolt, BoltConfig, LevelDefinition, MechanicId, NutColor } from './types'
+import { buildBoltConfigs, canMove, cloneBolts, getTopColor, moveNuts } from './gameEngine'
+import type { GamePlayContext } from './types'
+import {
+  getHandCraftedLevel,
+} from './handCraftedLevels'
 import {
   meetsLevelQualityForGeneration,
   type LevelQualityCriteria,
@@ -175,6 +179,33 @@ export interface GenerateLevelParams {
   seed: number
   scrambleMethod: ScrambleMethod
   quality: LevelQualityCriteria
+  mechanics?: MechanicId[]
+  boltConfigs?: BoltConfig[]
+  handCraftedId?: number
+  lockedBolt?: { boltIndex: number; unlockWhenColor: NutColor }
+}
+
+function playContextFromSpec(
+  spec: GenerateLevelParams,
+  boltCount: number,
+): GamePlayContext {
+  const multiNut = spec.mechanics?.includes('multiNut') ?? false
+  let boltConfigs: BoltConfig[] = spec.boltConfigs
+    ? [...spec.boltConfigs]
+    : Array.from({ length: boltCount }, () => ({}))
+
+  if (spec.lockedBolt) {
+    boltConfigs = buildBoltConfigs(boltCount, [spec.lockedBolt])
+    if (spec.boltConfigs?.length) {
+      spec.boltConfigs.forEach((config, index) => {
+        if (config.locked || config.unlockWhenColor) {
+          boltConfigs[index] = { ...config }
+        }
+      })
+    }
+  }
+
+  return { multiNut, boltConfigs }
 }
 
 const MAX_GENERATION_ATTEMPTS = 3_000
@@ -199,12 +230,56 @@ export function generateLevel(
   params: GenerateLevelParams,
   usedLayouts: Set<string> = new Set(),
 ): LevelDefinition {
+  const maxStates = SOLVABILITY_LIMIT[params.difficulty]
+
+  if (params.handCraftedId !== undefined) {
+    const crafted = getHandCraftedLevel(params.handCraftedId)
+    if (!crafted) {
+      throw new Error(`Nivel hand-crafted ${params.handCraftedId} no encontrado`)
+    }
+    const ctx = playContextFromSpec(
+      {
+        ...params,
+        mechanics: params.mechanics ?? ['multiNut', 'lockedBolt'],
+        boltConfigs: crafted.boltConfigs,
+      },
+      crafted.bolts.length,
+    )
+    const layoutKey = serializeBolts(crafted.bolts)
+    if (usedLayouts.has(layoutKey)) {
+      throw new Error(`Layout duplicado en nivel hand-crafted ${params.id}`)
+    }
+    const quality = meetsLevelQualityForGeneration(
+      crafted.bolts,
+      crafted.capacity,
+      params.quality,
+      maxStates,
+      ctx,
+    )
+    if (!quality.ok) {
+      throw new Error(
+        `Nivel hand-crafted ${params.id} no cumple calidad: ${quality.reason}`,
+      )
+    }
+    return {
+      id: params.id,
+      difficulty: crafted.difficulty,
+      capacity: crafted.capacity,
+      minMoves: 0,
+      parMoves: params.parMoves,
+      bolts: crafted.bolts,
+      mechanics: params.mechanics ?? ['multiNut', 'lockedBolt'],
+      boltConfigs: ctx.boltConfigs,
+    }
+  }
+
   const solved = createSolvedBolts(
     params.colors,
     params.capacity,
     params.emptyBolts,
   )
-  const maxStates = SOLVABILITY_LIMIT[params.difficulty]
+  const solvedBoltCount = solved.length
+  const ctx = playContextFromSpec(params, solvedBoltCount)
 
   for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt += 1) {
     const seed = params.seed + attempt * 17
@@ -218,6 +293,7 @@ export function generateLevel(
       params.capacity,
       params.quality,
       maxStates,
+      ctx,
     )
     if (!quality.ok) continue
 
@@ -228,6 +304,8 @@ export function generateLevel(
       minMoves: 0,
       parMoves: params.parMoves,
       bolts,
+      mechanics: params.mechanics,
+      boltConfigs: ctx.boltConfigs.length > 0 ? ctx.boltConfigs : undefined,
     }
   }
 
@@ -323,4 +401,48 @@ export const LEVEL_SPECS: GenerateLevelParams[] = [
   { id: 58, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 40, seed: 4028, scrambleMethod: 'random',  quality: q(34, 6, 0) },
   { id: 59, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 41, seed: 4029, scrambleMethod: 'random',  quality: q(35, 6, 0) },
   { id: 60, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 44, seed: 4030, scrambleMethod: 'random',  quality: q(34, 6, 0) },
+
+  // Etapa 3 — Nuevas reglas (61–100): multiNut (61–80), + lockedBolt (81–100)
+  { id: 61, difficulty: 'easy',   colors: ['orange', 'blue', 'pink'],                                      capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 10, seed: 5001, scrambleMethod: 'random',  quality: q(8, 2, 0),   mechanics: ['multiNut'] },
+  { id: 62, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green'],                             capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 12, seed: 5002, scrambleMethod: 'random',  quality: q(9, 3, 0),   mechanics: ['multiNut'] },
+  { id: 63, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green'],                             capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 14, seed: 5003, scrambleMethod: 'random',  quality: q(10, 3, 0),  mechanics: ['multiNut'] },
+  { id: 64, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'yellow'],                          capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 16, seed: 5004, scrambleMethod: 'random',  quality: q(11, 3, 0),  mechanics: ['multiNut'] },
+  { id: 65, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow'],                 capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 18, seed: 5005, scrambleMethod: 'random',  quality: q(12, 4, 0),  mechanics: ['multiNut'] },
+  { id: 66, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow'],                   capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 20, seed: 5006, scrambleMethod: 'random',  quality: q(14, 4, 0),  mechanics: ['multiNut'] },
+  { id: 67, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 22, seed: 5007, scrambleMethod: 'random',  quality: q(15, 5, 0),  mechanics: ['multiNut'] },
+  { id: 68, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 24, seed: 5008, scrambleMethod: 'random',  quality: q(16, 5, 0),  mechanics: ['multiNut'] },
+  { id: 69, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 26, seed: 5009, scrambleMethod: 'random',  quality: q(17, 5, 0),  mechanics: ['multiNut'] },
+  { id: 70, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'purple'],         capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 28, seed: 5010, scrambleMethod: 'random',  quality: q(18, 5, 0),  mechanics: ['multiNut'] },
+  { id: 71, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 30, seed: 5011, scrambleMethod: 'random',  quality: q(19, 5, 0),  mechanics: ['multiNut'] },
+  { id: 72, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 32, seed: 5012, scrambleMethod: 'random',  quality: q(20, 6, 0),  mechanics: ['multiNut'] },
+  { id: 73, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 34, seed: 5013, scrambleMethod: 'random',  quality: q(21, 6, 0),  mechanics: ['multiNut'] },
+  { id: 74, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 36, seed: 5014, scrambleMethod: 'random',  quality: q(22, 6, 0),  mechanics: ['multiNut'] },
+  { id: 75, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 38, seed: 5015, scrambleMethod: 'random',  quality: q(23, 6, 0),  mechanics: ['multiNut'] },
+  { id: 76, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 40, seed: 5016, scrambleMethod: 'random',  quality: q(22, 6, 0),  mechanics: ['multiNut'] },
+  { id: 77, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 42, seed: 5017, scrambleMethod: 'random',  quality: q(23, 6, 0),  mechanics: ['multiNut'] },
+  { id: 78, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 44, seed: 5018, scrambleMethod: 'random',  quality: q(22, 6, 0),  mechanics: ['multiNut'] },
+  { id: 79, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 46, seed: 5019, scrambleMethod: 'random',  quality: q(23, 6, 0),  mechanics: ['multiNut'] },
+  { id: 80, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 50, seed: 5020, scrambleMethod: 'random',  quality: q(24, 6, 0),  mechanics: ['multiNut'] },
+
+  { id: 81, difficulty: 'easy',   colors: ['orange', 'blue', 'pink'],                                      capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 12, seed: 5081, scrambleMethod: 'random',  quality: q(6, 2, 0),   handCraftedId: 81 },
+  { id: 82, difficulty: 'easy',   colors: ['orange', 'blue', 'green', 'yellow'],                           capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 14, seed: 5082, scrambleMethod: 'random',  quality: q(6, 2, 0),   handCraftedId: 82 },
+  { id: 83, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'red', 'purple'],                     capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 18, seed: 5083, scrambleMethod: 'random',  quality: q(8, 3, 0),   handCraftedId: 83 },
+  { id: 84, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green'],                             capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 20, seed: 5084, scrambleMethod: 'random',  quality: q(6, 2, 0),   handCraftedId: 84 },
+
+  { id: 85, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 28, seed: 5085, scrambleMethod: 'random',  quality: q(14, 5, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 6, unlockWhenColor: 'orange' } },
+  { id: 86, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 30, seed: 5086, scrambleMethod: 'random',  quality: q(14, 5, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 6, unlockWhenColor: 'blue' } },
+  { id: 87, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'purple'],         capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 32, seed: 5087, scrambleMethod: 'random',  quality: q(15, 5, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 6, unlockWhenColor: 'pink' } },
+  { id: 88, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 34, seed: 5088, scrambleMethod: 'random',  quality: q(15, 5, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 6, unlockWhenColor: 'green' } },
+  { id: 89, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 36, seed: 5089, scrambleMethod: 'random',  quality: q(16, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'orange' } },
+  { id: 90, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 38, seed: 5090, scrambleMethod: 'random',  quality: q(16, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'blue' } },
+  { id: 91, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 40, seed: 5091, scrambleMethod: 'random',  quality: q(17, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'pink' } },
+  { id: 92, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 26, seed: 5092, scrambleMethod: 'random',  quality: q(12, 5, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 6, unlockWhenColor: 'yellow' } },
+  { id: 93, difficulty: 'easy',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red'],            capacity: 4, emptyBolts: 2, shuffleMoves: 0,   parMoves: 28, seed: 5093, scrambleMethod: 'random',  quality: q(12, 5, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 6, unlockWhenColor: 'red' } },
+  { id: 94, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 34, seed: 5094, scrambleMethod: 'random',  quality: q(16, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'green' } },
+  { id: 95, difficulty: 'medium', colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 36, seed: 5095, scrambleMethod: 'random',  quality: q(17, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'yellow' } },
+  { id: 96, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 40, seed: 5096, scrambleMethod: 'random',  quality: q(18, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'red' } },
+  { id: 97, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 42, seed: 5097, scrambleMethod: 'random',  quality: q(18, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'purple' } },
+  { id: 98, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 44, seed: 5098, scrambleMethod: 'random',  quality: q(19, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'orange' } },
+  { id: 99, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 46, seed: 5099, scrambleMethod: 'random',  quality: q(19, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'blue' } },
+  { id: 100, difficulty: 'hard',  colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 52, seed: 5100, scrambleMethod: 'random',  quality: q(20, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'pink' } },
 ]

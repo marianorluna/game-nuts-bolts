@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { getMovableCount } from '../domain/gameEngine'
 import type { Bolt } from '../domain/types'
 import { NUT_H, NUT_LIFT_CLEARANCE, NutPiece } from './NutPiece'
 
@@ -8,6 +9,8 @@ interface BoltStackProps {
   index: number
   isSelected: boolean
   isShaking: boolean
+  isLocked?: boolean
+  multiNut?: boolean
   onSelect: (index: number) => void
 }
 
@@ -18,11 +21,15 @@ const SHAFT_W = 18 // vástago más grueso
 const SHAFT_GRADIENT =
   'linear-gradient(to right, #3e5060 0%, #7a8e9e 18%, #d4e4ee 46%, #b0c4d0 68%, #5a6e7e 88%, #3e5060 100%)'
 
+const SHAFT_GRADIENT_LOCKED =
+  'linear-gradient(to right, #b8b8b8 0%, #d0d0d0 18%, #ececec 46%, #dcdcdc 68%, #c4c4c4 88%, #b8b8b8 100%)'
+
 // Patrón de rosca (estrías horizontales)
 const SHAFT_THREAD =
   'repeating-linear-gradient(0deg, transparent 0px, transparent 3.5px, rgba(0,0,0,0.16) 3.5px, rgba(0,0,0,0.16) 5px)'
 
-const shaftBg = `${SHAFT_THREAD}, ${SHAFT_GRADIENT}`
+const SHAFT_THREAD_LOCKED =
+  'repeating-linear-gradient(0deg, transparent 0px, transparent 3.5px, rgba(0,0,0,0.07) 3.5px, rgba(0,0,0,0.07) 5px)'
 
 export function BoltStack({
   bolt,
@@ -30,11 +37,19 @@ export function BoltStack({
   index,
   isSelected,
   isShaking,
+  isLocked = false,
+  multiNut = false,
   onSelect,
 }: BoltStackProps) {
   const emptySlots = capacity - bolt.length
   const nutsStackH = capacity * NUT_H
   const nutsAreaH = nutsStackH + SHAFT_TOP_OVERHANG
+  const movableCount = isSelected ? getMovableCount(bolt, multiNut) : 0
+  const movableFromIndex = bolt.length - movableCount
+  const shaftBg = isLocked
+    ? `${SHAFT_THREAD_LOCKED}, ${SHAFT_GRADIENT_LOCKED}`
+    : `${SHAFT_THREAD}, ${SHAFT_GRADIENT}`
+  const lockCenterY = NUT_LIFT_CLEARANCE + SHAFT_TOP_OVERHANG + nutsStackH / 2
 
   return (
     <motion.button
@@ -56,7 +71,8 @@ export function BoltStack({
         background: 'transparent',
         border: 'none',
         padding: 0,
-        cursor: 'pointer',
+        cursor: isLocked ? 'not-allowed' : 'pointer',
+        opacity: isLocked ? 0.92 : 1,
         touchAction: 'manipulation',
         WebkitTapHighlightColor: 'transparent',
         // Eleva el bulón seleccionado para que la tuerca levantada
@@ -64,7 +80,7 @@ export function BoltStack({
         position: 'relative',
         zIndex: isSelected ? 100 : 1,
       }}
-      aria-label={`Bulón ${index + 1}`}
+      aria-label={`Bulón ${index + 1}${isLocked ? ', bloqueado' : ''}`}
     >
       {/* ── Zona de tuercas con vástago detrás ── */}
       <div
@@ -91,6 +107,16 @@ export function BoltStack({
           }}
         />
 
+        {isLocked && (
+          <div
+            className="pointer-events-none absolute left-1/2 z-[2] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center text-[4rem] leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.35)]"
+            style={{ top: lockCenterY }}
+            aria-hidden="true"
+          >
+            🔒
+          </div>
+        )}
+
         {/* Tuercas apiladas (z=1, encima del vástago) */}
         <div
           style={{
@@ -114,12 +140,14 @@ export function BoltStack({
           {/* Tuercas: top nut primero (arriba visual), bottom nut al final (abajo visual) */}
           {[...bolt].reverse().map((color, revIndex) => {
             const nutIndex = bolt.length - 1 - revIndex
+            const isInMovableBlock =
+              isSelected && nutIndex >= movableFromIndex
             return (
               <NutPiece
                 key={`${index}-${nutIndex}-${color}`}
                 color={color}
-                isSelected={isSelected}
-                isTop={nutIndex === bolt.length - 1}
+                isInMovableBlock={isInMovableBlock}
+                stackLayer={nutIndex}
               />
             )
           })}
@@ -132,9 +160,12 @@ export function BoltStack({
           width: 54,
           height: 12,
           borderRadius: '4px',
-          background:
-            'linear-gradient(180deg, #c8d6e2 0%, #8898a8 52%, #546070 100%)',
-          boxShadow: '0 3px 7px rgba(0,0,0,0.5)',
+          background: isLocked
+            ? 'linear-gradient(180deg, #e4e4e4 0%, #c8c8c8 52%, #a8a8a8 100%)'
+            : 'linear-gradient(180deg, #c8d6e2 0%, #8898a8 52%, #546070 100%)',
+          boxShadow: isLocked
+            ? '0 2px 5px rgba(0,0,0,0.25)'
+            : '0 3px 7px rgba(0,0,0,0.5)',
           position: 'relative',
           zIndex: 3,
         }}
@@ -146,10 +177,12 @@ export function BoltStack({
           width: 44,
           height: 22,
           borderRadius: '3px 3px 12px 12px',
-          background:
-            'linear-gradient(180deg, #7a8c9e 0%, #506070 52%, #384858 100%)',
-          boxShadow:
-            '0 6px 12px rgba(0,0,0,0.55), inset 0 1px 2px rgba(255,255,255,0.12)',
+          background: isLocked
+            ? 'linear-gradient(180deg, #d4d4d4 0%, #b8b8b8 52%, #989898 100%)'
+            : 'linear-gradient(180deg, #7a8c9e 0%, #506070 52%, #384858 100%)',
+          boxShadow: isLocked
+            ? '0 4px 8px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.2)'
+            : '0 6px 12px rgba(0,0,0,0.55), inset 0 1px 2px rgba(255,255,255,0.12)',
           position: 'relative',
           zIndex: 3,
         }}

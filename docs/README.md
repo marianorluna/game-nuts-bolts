@@ -15,7 +15,8 @@
 - **Roadmap:** 100 niveles (Sección 1, Campaña 1) — ver changelog
 - **Fase 0:** documentación base ✅
 - **Fase 1:** 60 niveles publicados + UI por etapas ✅
-- **Fase 2:** pendiente — niveles 61–100 + mecánicas nuevas
+- **Fase 2:** 100 niveles + multiNut + lockedBolt ✅
+- **Sección 2:** pendiente — niveles 101–200
 
 ## Publicación
 

@@ -4,24 +4,38 @@ import {
   calculateStars,
   canMove,
   createSessionFromLevel,
+  isBoltUsable,
   isSolved,
   moveNuts,
   undoMove,
 } from '../domain/gameEngine'
 import { DEV_UNLOCK_ALL_LEVELS } from '../config/dev'
+import {
+  CAMPAIGN_1_TALLER,
+  getStageForLevel,
+  isStageComplete,
+  isStageUnlocked,
+  isStageUnlockedForLevel,
+  SECTION_1_FUNDAMENTOS,
+} from '../domain/content/campaignStructure'
 import { getLevelById } from '../domain/levels'
 import type { GameSession, GameSettings, PlayerProgress } from '../domain/types'
 import { MAX_UNDOS } from '../domain/types'
 import { soundService } from '../services/soundService'
 
-type Screen = 'home' | 'game'
+type Screen = 'home' | 'campaign' | 'game'
 
 interface GameStore {
   screen: Screen
   session: GameSession | null
   progress: PlayerProgress
   settings: GameSettings
+  homeStageId: string
+  selectedCampaignId: string | null
   setScreen: (screen: Screen) => void
+  openCampaign: (campaignId: string) => void
+  goHome: () => void
+  setHomeStageId: (stageId: string) => void
   startLevel: (levelId: number) => void
   selectBolt: (boltIndex: number) => void
   undo: () => void
@@ -48,10 +62,21 @@ export const useGameStore = create<GameStore>()(
       session: null,
       progress: defaultProgress,
       settings: defaultSettings,
+      homeStageId: SECTION_1_FUNDAMENTOS.stages[0]!.id,
+      selectedCampaignId: CAMPAIGN_1_TALLER.id,
 
       setScreen: (screen) => set({ screen }),
 
+      openCampaign: (campaignId) => {
+        set({ selectedCampaignId: campaignId, screen: 'campaign' })
+      },
+
+      goHome: () => set({ screen: 'home', session: null }),
+
+      setHomeStageId: (stageId) => set({ homeStageId: stageId }),
+
       startLevel: (levelId) => {
+        if (!get().isLevelUnlocked(levelId)) return
         const level = getLevelById(levelId)
         if (!level) return
         set({
@@ -71,6 +96,12 @@ export const useGameStore = create<GameStore>()(
 
         if (selectedBoltIndex === null) {
           if (bolts[boltIndex].length === 0) return
+          const { playContext, capacity: cap, bolts: currentBolts } = session
+          if (!isBoltUsable(boltIndex, currentBolts, cap, playContext)) {
+            soundService.play('error')
+            set({ session: { ...session, shakeBoltIndex: boltIndex } })
+            return
+          }
           soundService.play('select')
           set({
             session: { ...session, selectedBoltIndex: boltIndex },
@@ -86,7 +117,7 @@ export const useGameStore = create<GameStore>()(
           return
         }
 
-        if (!canMove(bolts, selectedBoltIndex, boltIndex, capacity)) {
+        if (!canMove(bolts, selectedBoltIndex, boltIndex, capacity, session.playContext)) {
           soundService.play('error')
           set({
             session: { ...session, shakeBoltIndex: boltIndex },
@@ -99,6 +130,7 @@ export const useGameStore = create<GameStore>()(
           selectedBoltIndex,
           boltIndex,
           capacity,
+          session.playContext,
         )
         if (!result) return
 
@@ -109,6 +141,7 @@ export const useGameStore = create<GameStore>()(
         const won = isSolved(result.bolts, capacity)
 
         let nextProgress = progress
+        let nextHomeStageId = get().homeStageId
         if (won) {
           soundService.play('win')
           const stars = calculateStars(nextMoves, level.minMoves)
@@ -133,10 +166,27 @@ export const useGameStore = create<GameStore>()(
               },
             },
           }
+
+          const isCompleted = (id: number) =>
+            nextProgress.levels[id]?.completed ?? false
+          const completedStage = getStageForLevel(session.levelId)
+          if (completedStage && isStageComplete(completedStage, isCompleted)) {
+            const stageIndex = SECTION_1_FUNDAMENTOS.stages.findIndex(
+              (s) => s.id === completedStage.id,
+            )
+            const nextStage = SECTION_1_FUNDAMENTOS.stages[stageIndex + 1]
+            if (
+              nextStage &&
+              isStageUnlocked(stageIndex + 1, SECTION_1_FUNDAMENTOS, isCompleted)
+            ) {
+              nextHomeStageId = nextStage.id
+            }
+          }
         }
 
         set({
           progress: nextProgress,
+          homeStageId: nextHomeStageId,
           session: {
             ...session,
             bolts: result.bolts,
@@ -206,7 +256,14 @@ export const useGameStore = create<GameStore>()(
 
       isLevelUnlocked: (levelId) => {
         if (DEV_UNLOCK_ALL_LEVELS) return true
-        return levelId <= get().progress.unlockedLevel
+        const { progress } = get()
+        if (levelId > progress.unlockedLevel) return false
+        const isCompleted = (id: number) => progress.levels[id]?.completed ?? false
+        return isStageUnlockedForLevel(
+          levelId,
+          SECTION_1_FUNDAMENTOS,
+          isCompleted,
+        )
       },
     }),
     {
@@ -214,6 +271,7 @@ export const useGameStore = create<GameStore>()(
       partialize: (state) => ({
         progress: state.progress,
         settings: state.settings,
+        homeStageId: state.homeStageId,
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {

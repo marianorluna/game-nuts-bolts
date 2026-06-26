@@ -30,3 +30,112 @@ body,
 .pt-safe + footer {
   padding-bottom: max(8px, env(safe-area-inset-bottom, 8px));
 }
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.home-ambient-bg {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 18% 22%, rgba(251, 191, 36, 0.1) 0%, transparent 42%),
+    radial-gradient(ellipse at 82% 28%, rgba(34, 211, 238, 0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 88%, rgba(163, 230, 53, 0.07) 0%, transparent 38%),
+    radial-gradient(ellipse at 50% 45%, #4a3578 0%, #2d1b4e 72%);
+}
+
+.home-ambient-glows {
+  background:
+    radial-gradient(circle at 20% 55%, rgba(251, 191, 36, 0.06) 0%, transparent 28%),
+    radial-gradient(circle at 50% 55%, rgba(139, 92, 246, 0.05) 0%, transparent 30%),
+    radial-gradient(circle at 80% 55%, rgba(34, 211, 238, 0.06) 0%, transparent 28%);
+}
+
+.campaign-pattern-workshop {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 18px 18px;
+}
+
+.campaign-pattern-garage {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.campaign-pattern-factory {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.025) 0,
+    rgba(255, 255, 255, 0.025) 2px,
+    transparent 2px,
+    transparent 14px
+  );
+}
+
+@media (min-width: 768px), (orientation: landscape) {
+  .campaign-grid {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    margin-inline: auto;
+    padding-inline: 0;
+  }
+
+  .campaign-grid > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+  }
+
+  .campaign-grid--1 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .campaign-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .campaign-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .campaign-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .campaign-grid--5 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .campaign-grid--5 > :nth-child(-n + 3) {
+    grid-column: span 2 / span 2;
+  }
+
+  .campaign-grid--5 > :nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  .campaign-grid--5 > :nth-child(5) {
+    grid-column: 4 / span 2;
+  }
+
+  .campaign-grid--6 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

@@ -1,5 +1,11 @@
-import type { Bolt, NutColor } from './types'
-import { canMove, cloneBolts, isSolved, moveNuts } from './gameEngine'
+import type { Bolt, GamePlayContext, NutColor } from './types'
+import {
+  canMove,
+  CLASSIC_PLAY_CONTEXT,
+  cloneBolts,
+  isSolved,
+  moveNuts,
+} from './gameEngine'
 
 function serializeBolts(bolts: Bolt[]): string {
   return bolts.map((b) => b.join(',')).join('|')
@@ -36,15 +42,10 @@ export function validateLevelStructure(
   return { valid: true }
 }
 
-/** Mínimo de colores repartidas en 2+ bulones según cantidad de colores del nivel. */
 export function minSplitColorsForLevel(colorCount: number): number {
   return Math.max(1, Math.ceil(colorCount * 0.25))
 }
 
-/**
- * El nivel debe estar mezclado: no resuelto y con variación real en la
- * distribución (bulones multicolor, colores repartidos o bulones parciales).
- */
 export function isLevelScrambled(
   bolts: Bolt[],
   capacity: number,
@@ -77,15 +78,12 @@ export function isLevelScrambled(
   return splitColors >= 1 && hasPartialBolt
 }
 
-/**
- * ¿Existe solución en `maxMoves` movimientos o menos?
- * Más rápido que calcular el mínimo exacto cuando solo hay que rechazar niveles triviales.
- */
 export function hasSolutionWithin(
   bolts: Bolt[],
   capacity: number,
   maxMoves: number,
   maxStates = 2_000_000,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): boolean {
   if (maxMoves < 0) return false
   const start = cloneBolts(bolts)
@@ -104,9 +102,9 @@ export function hasSolutionWithin(
 
     for (let from = 0; from < current.length; from += 1) {
       for (let to = 0; to < current.length; to += 1) {
-        if (!canMove(current, from, to, capacity)) continue
+        if (!canMove(current, from, to, capacity, ctx)) continue
 
-        const result = moveNuts(current, from, to, capacity)
+        const result = moveNuts(current, from, to, capacity, ctx)
         if (!result) continue
 
         if (isSolved(result.bolts, capacity)) return true
@@ -127,6 +125,7 @@ export function isLevelSolvable(
   bolts: Bolt[],
   capacity: number,
   maxStates = 2_000_000,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): boolean {
   const start = cloneBolts(bolts)
   if (isSolved(start, capacity)) return true
@@ -140,9 +139,9 @@ export function isLevelSolvable(
 
     for (let from = 0; from < current.length; from += 1) {
       for (let to = 0; to < current.length; to += 1) {
-        if (!canMove(current, from, to, capacity)) continue
+        if (!canMove(current, from, to, capacity, ctx)) continue
 
-        const result = moveNuts(current, from, to, capacity)
+        const result = moveNuts(current, from, to, capacity, ctx)
         if (!result) continue
 
         if (isSolved(result.bolts, capacity)) return true
@@ -159,7 +158,6 @@ export function isLevelSolvable(
   return false
 }
 
-/** Colores que aparecen en 2 o más bulones (repartidos = más difícil). */
 export function countSplitColors(bolts: Bolt[]): number {
   const colors = new Set<NutColor>()
   for (const bolt of bolts) {
@@ -177,7 +175,6 @@ export function countSplitColors(bolts: Bolt[]): number {
   return splitColors
 }
 
-/** Bulones ya completos (un solo color lleno) — demasiados = nivel trivial. */
 export function countCompleteBolts(bolts: Bolt[], capacity: number): number {
   return bolts.filter(
     (bolt) =>
@@ -187,14 +184,11 @@ export function countCompleteBolts(bolts: Bolt[], capacity: number): number {
   ).length
 }
 
-/**
- * BFS: devuelve la longitud mínima de solución, o null si no se encuentra
- * dentro del límite de estados explorados.
- */
 export function getMinSolutionMoves(
   bolts: Bolt[],
   capacity: number,
   maxStates = 2_000_000,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): number | null {
   const start = cloneBolts(bolts)
   if (isSolved(start, capacity)) return 0
@@ -211,9 +205,9 @@ export function getMinSolutionMoves(
 
     for (let from = 0; from < current.length; from += 1) {
       for (let to = 0; to < current.length; to += 1) {
-        if (!canMove(current, from, to, capacity)) continue
+        if (!canMove(current, from, to, capacity, ctx)) continue
 
-        const result = moveNuts(current, from, to, capacity)
+        const result = moveNuts(current, from, to, capacity, ctx)
         if (!result) continue
 
         if (isSolved(result.bolts, capacity)) return depth + 1
@@ -241,6 +235,7 @@ export function meetsLevelQuality(
   capacity: number,
   criteria: LevelQualityCriteria,
   maxStates = 2_000_000,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): { ok: boolean; reason?: string } {
   if (!isLevelScrambled(bolts, capacity)) {
     return { ok: false, reason: 'not scrambled' }
@@ -265,7 +260,7 @@ export function meetsLevelQuality(
   const minMoves = criteria.minSolutionMoves
   if (
     minMoves > 1 &&
-    hasSolutionWithin(bolts, capacity, minMoves - 1, maxStates)
+    hasSolutionWithin(bolts, capacity, minMoves - 1, maxStates, ctx)
   ) {
     return {
       ok: false,
@@ -273,19 +268,19 @@ export function meetsLevelQuality(
     }
   }
 
-  if (getMinSolutionMoves(bolts, capacity, maxStates) === null) {
+  if (getMinSolutionMoves(bolts, capacity, maxStates, ctx) === null) {
     return { ok: false, reason: 'not solvable within limit' }
   }
 
   return { ok: true }
 }
 
-/** Versión rápida para generación: sin calcular el mínimo exacto. */
 export function meetsLevelQualityForGeneration(
   bolts: Bolt[],
   capacity: number,
   criteria: LevelQualityCriteria,
   maxStates = 2_000_000,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): { ok: boolean; reason?: string } {
   if (!isLevelScrambled(bolts, capacity)) {
     return { ok: false, reason: 'not scrambled' }
@@ -310,7 +305,7 @@ export function meetsLevelQualityForGeneration(
   const minMoves = criteria.minSolutionMoves
   if (
     minMoves > 1 &&
-    hasSolutionWithin(bolts, capacity, minMoves - 1, maxStates)
+    hasSolutionWithin(bolts, capacity, minMoves - 1, maxStates, ctx)
   ) {
     return {
       ok: false,
@@ -318,7 +313,7 @@ export function meetsLevelQualityForGeneration(
     }
   }
 
-  if (!isLevelSolvable(bolts, capacity, maxStates)) {
+  if (!isLevelSolvable(bolts, capacity, maxStates, ctx)) {
     return { ok: false, reason: 'not solvable within limit' }
   }
 

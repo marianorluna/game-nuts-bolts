@@ -2919,5 +2919,2466 @@ export const BAKED_LEVELS: LevelDefinition[] = [
     ],
     "stageId": "stage-2-presion",
     "isChallenge": true
+  },
+  {
+    "id": 61,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 9,
+    "parMoves": 9,
+    "bolts": [
+      [
+        "pink",
+        "blue",
+        "pink",
+        "pink"
+      ],
+      [
+        "orange",
+        "blue",
+        "blue",
+        "orange"
+      ],
+      [],
+      [],
+      [
+        "blue",
+        "orange",
+        "pink",
+        "orange"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 62,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 12,
+    "parMoves": 12,
+    "bolts": [
+      [],
+      [
+        "blue",
+        "blue",
+        "pink",
+        "pink"
+      ],
+      [
+        "green",
+        "orange",
+        "blue",
+        "orange"
+      ],
+      [
+        "green",
+        "orange",
+        "blue",
+        "pink"
+      ],
+      [
+        "green",
+        "pink",
+        "green",
+        "orange"
+      ],
+      []
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 63,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 11,
+    "parMoves": 11,
+    "bolts": [
+      [
+        "pink",
+        "blue",
+        "orange",
+        "orange"
+      ],
+      [],
+      [
+        "pink",
+        "orange",
+        "green",
+        "orange"
+      ],
+      [
+        "green",
+        "blue",
+        "blue",
+        "pink"
+      ],
+      [],
+      [
+        "green",
+        "green",
+        "blue",
+        "pink"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 64,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 11,
+    "parMoves": 11,
+    "bolts": [
+      [
+        "orange",
+        "yellow",
+        "yellow",
+        "blue"
+      ],
+      [],
+      [
+        "pink",
+        "orange",
+        "yellow",
+        "orange"
+      ],
+      [
+        "pink",
+        "pink",
+        "blue",
+        "pink"
+      ],
+      [
+        "blue",
+        "blue",
+        "yellow",
+        "orange"
+      ],
+      []
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 65,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 16,
+    "parMoves": 16,
+    "bolts": [
+      [
+        "green",
+        "green",
+        "blue",
+        "orange"
+      ],
+      [
+        "pink",
+        "yellow",
+        "blue",
+        "yellow"
+      ],
+      [
+        "yellow",
+        "pink",
+        "pink",
+        "yellow"
+      ],
+      [
+        "green",
+        "pink",
+        "green",
+        "orange"
+      ],
+      [],
+      [
+        "orange",
+        "blue",
+        "orange",
+        "blue"
+      ],
+      []
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 66,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 14,
+    "parMoves": 14,
+    "bolts": [
+      [
+        "green",
+        "orange",
+        "pink",
+        "pink"
+      ],
+      [
+        "yellow",
+        "orange",
+        "blue",
+        "yellow"
+      ],
+      [
+        "yellow",
+        "pink",
+        "blue",
+        "orange"
+      ],
+      [
+        "yellow",
+        "pink",
+        "green",
+        "green"
+      ],
+      [],
+      [
+        "orange",
+        "blue",
+        "blue",
+        "green"
+      ],
+      []
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 67,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 18,
+    "parMoves": 18,
+    "bolts": [
+      [],
+      [
+        "blue",
+        "red",
+        "orange",
+        "green"
+      ],
+      [
+        "yellow",
+        "pink",
+        "red",
+        "pink"
+      ],
+      [
+        "green",
+        "green",
+        "yellow",
+        "red"
+      ],
+      [
+        "green",
+        "red",
+        "yellow",
+        "blue"
+      ],
+      [],
+      [
+        "orange",
+        "orange",
+        "pink",
+        "blue"
+      ],
+      [
+        "pink",
+        "orange",
+        "blue",
+        "yellow"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 68,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 21,
+    "parMoves": 21,
+    "bolts": [
+      [
+        "pink",
+        "red",
+        "orange",
+        "green"
+      ],
+      [],
+      [
+        "red",
+        "green",
+        "yellow",
+        "orange"
+      ],
+      [
+        "yellow",
+        "red",
+        "pink",
+        "red"
+      ],
+      [
+        "pink",
+        "blue",
+        "green",
+        "orange"
+      ],
+      [
+        "green",
+        "pink",
+        "orange",
+        "blue"
+      ],
+      [
+        "yellow",
+        "blue",
+        "yellow",
+        "blue"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 69,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 18,
+    "parMoves": 18,
+    "bolts": [
+      [
+        "blue",
+        "yellow",
+        "green",
+        "red"
+      ],
+      [
+        "pink",
+        "pink",
+        "red",
+        "yellow"
+      ],
+      [
+        "yellow",
+        "blue",
+        "green",
+        "yellow"
+      ],
+      [
+        "green",
+        "red",
+        "orange",
+        "blue"
+      ],
+      [],
+      [
+        "orange",
+        "orange",
+        "pink",
+        "blue"
+      ],
+      [
+        "red",
+        "green",
+        "pink",
+        "orange"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 70,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 18,
+    "parMoves": 18,
+    "bolts": [
+      [
+        "purple",
+        "green",
+        "orange",
+        "blue"
+      ],
+      [
+        "purple",
+        "purple",
+        "green",
+        "yellow"
+      ],
+      [
+        "pink",
+        "purple",
+        "yellow",
+        "yellow"
+      ],
+      [
+        "pink",
+        "green",
+        "pink",
+        "blue"
+      ],
+      [
+        "orange",
+        "blue",
+        "orange",
+        "blue"
+      ],
+      [],
+      [
+        "yellow",
+        "green",
+        "pink",
+        "orange"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 71,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 19,
+    "parMoves": 19,
+    "bolts": [
+      [
+        "pink",
+        "red",
+        "green",
+        "orange"
+      ],
+      [
+        "yellow",
+        "pink",
+        "yellow",
+        "red"
+      ],
+      [
+        "orange",
+        "pink",
+        "orange",
+        "red"
+      ],
+      [],
+      [
+        "green",
+        "orange",
+        "blue",
+        "blue"
+      ],
+      [
+        "green",
+        "red",
+        "green",
+        "yellow"
+      ],
+      [
+        "yellow",
+        "pink",
+        "blue",
+        "blue"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 72,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 21,
+    "parMoves": 21,
+    "bolts": [
+      [
+        "pink",
+        "blue",
+        "orange",
+        "purple"
+      ],
+      [
+        "red",
+        "pink",
+        "purple",
+        "red"
+      ],
+      [
+        "yellow",
+        "pink",
+        "orange",
+        "red"
+      ],
+      [
+        "purple",
+        "green",
+        "orange",
+        "blue"
+      ],
+      [],
+      [
+        "blue",
+        "red",
+        "purple",
+        "green"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "pink",
+        "yellow"
+      ],
+      [
+        "orange",
+        "green",
+        "green",
+        "blue"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 73,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 21,
+    "parMoves": 21,
+    "bolts": [
+      [
+        "pink",
+        "red",
+        "orange",
+        "yellow"
+      ],
+      [],
+      [
+        "blue",
+        "purple",
+        "green",
+        "yellow"
+      ],
+      [
+        "green",
+        "orange",
+        "blue",
+        "pink"
+      ],
+      [
+        "red",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      [
+        "purple",
+        "green",
+        "blue",
+        "pink"
+      ],
+      [
+        "yellow",
+        "pink",
+        "red",
+        "red"
+      ],
+      [
+        "blue",
+        "purple",
+        "purple",
+        "orange"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 74,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 23,
+    "parMoves": 23,
+    "bolts": [
+      [
+        "yellow",
+        "orange",
+        "yellow",
+        "green"
+      ],
+      [
+        "red",
+        "purple",
+        "pink",
+        "green"
+      ],
+      [
+        "yellow",
+        "purple",
+        "pink",
+        "green"
+      ],
+      [],
+      [
+        "red",
+        "orange",
+        "purple",
+        "green"
+      ],
+      [
+        "blue",
+        "orange",
+        "blue",
+        "blue"
+      ],
+      [
+        "pink",
+        "red",
+        "red",
+        "purple"
+      ],
+      [
+        "yellow",
+        "pink",
+        "orange",
+        "blue"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 75,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 23,
+    "parMoves": 23,
+    "bolts": [
+      [],
+      [
+        "pink",
+        "green",
+        "green",
+        "yellow"
+      ],
+      [
+        "pink",
+        "blue",
+        "orange",
+        "purple"
+      ],
+      [
+        "purple",
+        "pink",
+        "purple",
+        "red"
+      ],
+      [
+        "blue",
+        "blue",
+        "yellow",
+        "green"
+      ],
+      [
+        "green",
+        "orange",
+        "pink",
+        "orange"
+      ],
+      [
+        "blue",
+        "red",
+        "purple",
+        "yellow"
+      ],
+      [
+        "red",
+        "orange",
+        "yellow",
+        "red"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 76,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 22,
+    "parMoves": 22,
+    "bolts": [
+      [
+        "blue",
+        "red",
+        "blue",
+        "pink"
+      ],
+      [
+        "blue",
+        "purple",
+        "yellow",
+        "purple"
+      ],
+      [],
+      [
+        "purple",
+        "pink",
+        "blue",
+        "green"
+      ],
+      [
+        "yellow",
+        "purple",
+        "red",
+        "red"
+      ],
+      [
+        "orange",
+        "yellow",
+        "pink",
+        "yellow"
+      ],
+      [
+        "red",
+        "green",
+        "orange",
+        "green"
+      ],
+      [
+        "orange",
+        "pink",
+        "orange",
+        "green"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 77,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 23,
+    "parMoves": 23,
+    "bolts": [
+      [
+        "orange",
+        "purple",
+        "red",
+        "green"
+      ],
+      [
+        "pink",
+        "orange",
+        "yellow",
+        "red"
+      ],
+      [
+        "yellow",
+        "orange",
+        "purple",
+        "green"
+      ],
+      [
+        "blue",
+        "pink",
+        "blue",
+        "green"
+      ],
+      [
+        "purple",
+        "yellow",
+        "red",
+        "pink"
+      ],
+      [
+        "orange",
+        "pink",
+        "red",
+        "blue"
+      ],
+      [
+        "blue",
+        "green",
+        "yellow",
+        "purple"
+      ],
+      []
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 78,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 22,
+    "parMoves": 22,
+    "bolts": [
+      [],
+      [
+        "pink",
+        "yellow",
+        "orange",
+        "green"
+      ],
+      [
+        "purple",
+        "blue",
+        "blue",
+        "yellow"
+      ],
+      [
+        "red",
+        "green",
+        "red",
+        "orange"
+      ],
+      [
+        "blue",
+        "purple",
+        "pink",
+        "green"
+      ],
+      [
+        "yellow",
+        "pink",
+        "purple",
+        "red"
+      ],
+      [
+        "orange",
+        "pink",
+        "yellow",
+        "red"
+      ],
+      [
+        "green",
+        "orange",
+        "purple",
+        "blue"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 79,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 23,
+    "parMoves": 23,
+    "bolts": [
+      [
+        "blue",
+        "yellow",
+        "orange",
+        "green"
+      ],
+      [
+        "red",
+        "green",
+        "green",
+        "pink"
+      ],
+      [
+        "orange",
+        "blue",
+        "yellow",
+        "pink"
+      ],
+      [
+        "red",
+        "yellow",
+        "blue",
+        "green"
+      ],
+      [
+        "purple",
+        "red",
+        "purple",
+        "pink"
+      ],
+      [
+        "orange",
+        "purple",
+        "red",
+        "orange"
+      ],
+      [],
+      [
+        "blue",
+        "yellow",
+        "purple",
+        "pink"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 80,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 24,
+    "parMoves": 24,
+    "bolts": [
+      [
+        "purple",
+        "green",
+        "pink",
+        "purple"
+      ],
+      [
+        "yellow",
+        "orange",
+        "blue",
+        "yellow"
+      ],
+      [
+        "red",
+        "yellow",
+        "blue",
+        "red"
+      ],
+      [],
+      [
+        "blue",
+        "purple",
+        "orange",
+        "green"
+      ],
+      [
+        "green",
+        "orange",
+        "purple",
+        "orange"
+      ],
+      [
+        "blue",
+        "red",
+        "pink",
+        "red"
+      ],
+      [
+        "green",
+        "pink",
+        "yellow",
+        "pink"
+      ]
+    ],
+    "mechanics": [
+      "multiNut"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": true
+  },
+  {
+    "id": 81,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 7,
+    "parMoves": 7,
+    "bolts": [
+      [
+        "blue",
+        "orange",
+        "blue",
+        "orange"
+      ],
+      [
+        "orange",
+        "blue",
+        "orange",
+        "blue"
+      ],
+      [],
+      []
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "orange"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 82,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 7,
+    "parMoves": 7,
+    "bolts": [
+      [
+        "pink",
+        "green",
+        "pink",
+        "green"
+      ],
+      [
+        "green",
+        "pink",
+        "green",
+        "pink"
+      ],
+      [],
+      []
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "green"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 83,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 10,
+    "parMoves": 10,
+    "bolts": [
+      [
+        "yellow",
+        "red",
+        "blue",
+        "yellow"
+      ],
+      [
+        "blue",
+        "red",
+        "yellow",
+        "blue"
+      ],
+      [
+        "red",
+        "blue",
+        "yellow",
+        "red"
+      ],
+      [],
+      []
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "blue"
+      },
+      {
+        "locked": true,
+        "unlockWhenColor": "red"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 84,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 7,
+    "parMoves": 7,
+    "bolts": [
+      [
+        "orange",
+        "purple",
+        "orange",
+        "purple"
+      ],
+      [
+        "purple",
+        "orange",
+        "purple",
+        "orange"
+      ],
+      [],
+      []
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "purple"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 85,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 18,
+    "parMoves": 18,
+    "bolts": [
+      [
+        "blue",
+        "pink",
+        "pink",
+        "orange"
+      ],
+      [
+        "green",
+        "orange",
+        "orange",
+        "blue"
+      ],
+      [],
+      [
+        "red",
+        "pink",
+        "green",
+        "blue"
+      ],
+      [
+        "yellow",
+        "red",
+        "yellow",
+        "orange"
+      ],
+      [
+        "green",
+        "yellow",
+        "green",
+        "blue"
+      ],
+      [
+        "pink",
+        "red",
+        "yellow",
+        "red"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "orange"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 86,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 19,
+    "parMoves": 19,
+    "bolts": [
+      [
+        "pink",
+        "orange",
+        "yellow",
+        "red"
+      ],
+      [
+        "orange",
+        "red",
+        "blue",
+        "yellow"
+      ],
+      [
+        "red",
+        "yellow",
+        "green",
+        "pink"
+      ],
+      [],
+      [
+        "pink",
+        "blue",
+        "red",
+        "blue"
+      ],
+      [
+        "green",
+        "yellow",
+        "green",
+        "blue"
+      ],
+      [
+        "green",
+        "pink",
+        "orange",
+        "orange"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "blue"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 87,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 15,
+    "parMoves": 15,
+    "bolts": [
+      [
+        "blue",
+        "orange",
+        "pink",
+        "purple"
+      ],
+      [
+        "purple",
+        "pink",
+        "pink",
+        "pink"
+      ],
+      [
+        "orange",
+        "green",
+        "purple",
+        "blue"
+      ],
+      [
+        "yellow",
+        "yellow",
+        "green",
+        "yellow"
+      ],
+      [
+        "green",
+        "orange",
+        "yellow",
+        "orange"
+      ],
+      [],
+      [
+        "green",
+        "blue",
+        "blue",
+        "purple"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "pink"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 88,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 17,
+    "parMoves": 17,
+    "bolts": [
+      [
+        "pink",
+        "orange",
+        "green",
+        "blue"
+      ],
+      [
+        "green",
+        "red",
+        "green",
+        "red"
+      ],
+      [],
+      [
+        "yellow",
+        "pink",
+        "green",
+        "orange"
+      ],
+      [
+        "blue",
+        "blue",
+        "pink",
+        "red"
+      ],
+      [
+        "blue",
+        "yellow",
+        "orange",
+        "pink"
+      ],
+      [
+        "orange",
+        "yellow",
+        "yellow",
+        "red"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "green"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 89,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 22,
+    "parMoves": 22,
+    "bolts": [
+      [
+        "red",
+        "pink",
+        "yellow",
+        "orange"
+      ],
+      [
+        "orange",
+        "orange",
+        "yellow",
+        "green"
+      ],
+      [
+        "green",
+        "red",
+        "orange",
+        "green"
+      ],
+      [
+        "blue",
+        "purple",
+        "pink",
+        "blue"
+      ],
+      [
+        "purple",
+        "yellow",
+        "red",
+        "green"
+      ],
+      [
+        "pink",
+        "purple",
+        "blue",
+        "pink"
+      ],
+      [],
+      [
+        "blue",
+        "red",
+        "purple",
+        "yellow"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "orange"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 90,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 22,
+    "parMoves": 22,
+    "bolts": [
+      [],
+      [
+        "pink",
+        "blue",
+        "orange",
+        "red"
+      ],
+      [
+        "yellow",
+        "blue",
+        "pink",
+        "red"
+      ],
+      [
+        "blue",
+        "pink",
+        "green",
+        "orange"
+      ],
+      [
+        "green",
+        "pink",
+        "red",
+        "yellow"
+      ],
+      [
+        "blue",
+        "orange",
+        "green",
+        "red"
+      ],
+      [
+        "yellow",
+        "purple",
+        "yellow",
+        "green"
+      ],
+      [
+        "purple",
+        "purple",
+        "orange",
+        "purple"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "blue"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 91,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 20,
+    "parMoves": 20,
+    "bolts": [
+      [],
+      [
+        "purple",
+        "blue",
+        "purple",
+        "yellow"
+      ],
+      [
+        "red",
+        "green",
+        "red",
+        "red"
+      ],
+      [
+        "purple",
+        "orange",
+        "purple",
+        "blue"
+      ],
+      [
+        "blue",
+        "yellow",
+        "pink",
+        "yellow"
+      ],
+      [
+        "pink",
+        "pink",
+        "yellow",
+        "pink"
+      ],
+      [
+        "orange",
+        "orange",
+        "green",
+        "blue"
+      ],
+      [
+        "green",
+        "red",
+        "orange",
+        "green"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "pink"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 92,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 17,
+    "parMoves": 17,
+    "bolts": [
+      [
+        "yellow",
+        "yellow",
+        "pink",
+        "blue"
+      ],
+      [
+        "pink",
+        "red",
+        "yellow",
+        "orange"
+      ],
+      [
+        "yellow",
+        "green",
+        "green",
+        "green"
+      ],
+      [
+        "red",
+        "blue",
+        "red",
+        "pink"
+      ],
+      [],
+      [],
+      [
+        "red",
+        "blue",
+        "orange",
+        "blue"
+      ],
+      [
+        "pink",
+        "orange",
+        "orange",
+        "green"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "yellow"
+      },
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 93,
+    "difficulty": "easy",
+    "capacity": 4,
+    "minMoves": 17,
+    "parMoves": 17,
+    "bolts": [
+      [
+        "yellow",
+        "blue",
+        "orange",
+        "yellow"
+      ],
+      [
+        "green",
+        "green",
+        "pink",
+        "blue"
+      ],
+      [
+        "green",
+        "yellow",
+        "pink",
+        "orange"
+      ],
+      [
+        "blue",
+        "yellow",
+        "red",
+        "red"
+      ],
+      [
+        "red",
+        "red",
+        "orange",
+        "pink"
+      ],
+      [],
+      [],
+      [
+        "green",
+        "blue",
+        "pink",
+        "orange"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "red"
+      },
+      {}
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 94,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 21,
+    "parMoves": 21,
+    "bolts": [
+      [
+        "blue",
+        "yellow",
+        "green",
+        "green"
+      ],
+      [
+        "yellow",
+        "pink",
+        "blue",
+        "yellow"
+      ],
+      [],
+      [
+        "orange",
+        "pink",
+        "purple",
+        "blue"
+      ],
+      [
+        "purple",
+        "green",
+        "green",
+        "red"
+      ],
+      [
+        "blue",
+        "red",
+        "yellow",
+        "purple"
+      ],
+      [
+        "red",
+        "orange",
+        "pink",
+        "red"
+      ],
+      [
+        "orange",
+        "pink",
+        "orange",
+        "purple"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "green"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 95,
+    "difficulty": "medium",
+    "capacity": 4,
+    "minMoves": 21,
+    "parMoves": 21,
+    "bolts": [
+      [
+        "green",
+        "yellow",
+        "green",
+        "blue"
+      ],
+      [
+        "pink",
+        "green",
+        "orange",
+        "orange"
+      ],
+      [
+        "purple",
+        "yellow",
+        "green",
+        "blue"
+      ],
+      [
+        "orange",
+        "red",
+        "purple",
+        "yellow"
+      ],
+      [],
+      [
+        "red",
+        "orange",
+        "red",
+        "yellow"
+      ],
+      [
+        "red",
+        "blue",
+        "purple",
+        "blue"
+      ],
+      [
+        "pink",
+        "pink",
+        "pink",
+        "purple"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "yellow"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 96,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 21,
+    "parMoves": 21,
+    "bolts": [
+      [
+        "orange",
+        "green",
+        "orange",
+        "blue"
+      ],
+      [
+        "yellow",
+        "blue",
+        "green",
+        "pink"
+      ],
+      [
+        "green",
+        "purple",
+        "pink",
+        "yellow"
+      ],
+      [
+        "blue",
+        "orange",
+        "yellow",
+        "red"
+      ],
+      [
+        "pink",
+        "red",
+        "green",
+        "yellow"
+      ],
+      [],
+      [
+        "red",
+        "blue",
+        "red",
+        "orange"
+      ],
+      [
+        "purple",
+        "pink",
+        "purple",
+        "purple"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "red"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 97,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 19,
+    "parMoves": 19,
+    "bolts": [
+      [],
+      [
+        "green",
+        "purple",
+        "yellow",
+        "yellow"
+      ],
+      [
+        "blue",
+        "blue",
+        "orange",
+        "pink"
+      ],
+      [
+        "orange",
+        "orange",
+        "green",
+        "yellow"
+      ],
+      [
+        "orange",
+        "purple",
+        "pink",
+        "pink"
+      ],
+      [
+        "purple",
+        "pink",
+        "yellow",
+        "purple"
+      ],
+      [
+        "red",
+        "red",
+        "green",
+        "red"
+      ],
+      [
+        "blue",
+        "red",
+        "green",
+        "blue"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "purple"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 98,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 19,
+    "parMoves": 19,
+    "bolts": [
+      [
+        "pink",
+        "blue",
+        "pink",
+        "yellow"
+      ],
+      [
+        "purple",
+        "orange",
+        "purple",
+        "purple"
+      ],
+      [
+        "yellow",
+        "red",
+        "green",
+        "red"
+      ],
+      [],
+      [
+        "pink",
+        "purple",
+        "red",
+        "orange"
+      ],
+      [
+        "yellow",
+        "green",
+        "yellow",
+        "green"
+      ],
+      [
+        "red",
+        "green",
+        "orange",
+        "orange"
+      ],
+      [
+        "blue",
+        "blue",
+        "blue",
+        "pink"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "orange"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 99,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 21,
+    "parMoves": 21,
+    "bolts": [
+      [
+        "purple",
+        "pink",
+        "red",
+        "green"
+      ],
+      [
+        "yellow",
+        "red",
+        "orange",
+        "pink"
+      ],
+      [],
+      [
+        "red",
+        "yellow",
+        "orange",
+        "purple"
+      ],
+      [
+        "yellow",
+        "blue",
+        "green",
+        "green"
+      ],
+      [
+        "orange",
+        "orange",
+        "red",
+        "blue"
+      ],
+      [
+        "blue",
+        "pink",
+        "blue",
+        "green"
+      ],
+      [
+        "purple",
+        "pink",
+        "purple",
+        "yellow"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "blue"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": false
+  },
+  {
+    "id": 100,
+    "difficulty": "hard",
+    "capacity": 4,
+    "minMoves": 20,
+    "parMoves": 20,
+    "bolts": [
+      [
+        "purple",
+        "yellow",
+        "yellow",
+        "orange"
+      ],
+      [
+        "blue",
+        "orange",
+        "purple",
+        "blue"
+      ],
+      [
+        "red",
+        "green",
+        "pink",
+        "pink"
+      ],
+      [
+        "green",
+        "purple",
+        "red",
+        "purple"
+      ],
+      [
+        "blue",
+        "orange",
+        "blue",
+        "red"
+      ],
+      [],
+      [
+        "green",
+        "pink",
+        "pink",
+        "green"
+      ],
+      [
+        "yellow",
+        "red",
+        "orange",
+        "yellow"
+      ]
+    ],
+    "mechanics": [
+      "multiNut",
+      "lockedBolt"
+    ],
+    "boltConfigs": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {
+        "locked": true,
+        "unlockWhenColor": "pink"
+      }
+    ],
+    "stageId": "stage-3-nuevas-reglas",
+    "isChallenge": true
   }
 ] as LevelDefinition[]

@@ -12,8 +12,8 @@ Actualizar este archivo **antes** de implementar una mecánica nueva y marcarla 
 | Mecánica | ID | Estado | Sección 1 | Introducción |
 |----------|-----|--------|-----------|--------------|
 | Puzzle clásico | `classic` | **activa** | 1–100 (base) | Nivel 1 |
-| Movimiento en bloque | `multiNut` | planificada | 61–100 | Etapa 3, niveles 61–64 |
-| Bulón bloqueado | `lockedBolt` | planificada | 81–100 | Etapa 3, niveles 81–84 |
+| Movimiento en bloque | `multiNut` | **activa** | 61–100 | Etapa 3, niveles 61–64 |
+| Bulón bloqueado | `lockedBolt` | **activa** | 81–100 | Etapa 3, niveles 81–84 |
 | Capacidad variable | `variableCapacity` | planificada | — | Sección 2 |
 | Bulón color fijo | `fixedColorBolt` | planificada | — | Sección 2 |
 | Tuerca oculta | `hiddenNut` | planificada | — | Sección 2–3 |
@@ -49,7 +49,7 @@ Actualizar este archivo **antes** de implementar una mecánica nueva y marcarla 
 
 ### multiNut — Movimiento en bloque
 
-- **Estado:** planificada (Fase 2)
+- **Estado:** activa
 - **Introducida en:** Etapa 3, niveles 61–64 (tutorial)
 - **Reglas:**
   - Si hay 2+ tuercas del mismo color en la cima, se mueven juntas como un bloque
@@ -65,8 +65,8 @@ Actualizar este archivo **antes** de implementar una mecánica nueva y marcarla 
 
 ### lockedBolt — Bulón bloqueado
 
-- **Estado:** planificada (Fase 2)
-- **Introducida en:** Etapa 3, niveles 81–84 (tutorial)
+- **Estado:** activa
+- **Introducida en:** Etapa 3, niveles 81–84 (tutorial hand-crafted)
 - **Reglas:**
   - Bulón con `locked: true` no puede ser origen ni destino
   - Se desbloquea cuando existe un bulón **completo** del color indicado en `unlockWhenColor`

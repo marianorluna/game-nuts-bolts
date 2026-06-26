@@ -20,6 +20,16 @@ export type ThemeId = 'workshop' | 'garage' | 'factory'
 
 export type Bolt = NutColor[]
 
+export interface BoltConfig {
+  locked?: boolean
+  unlockWhenColor?: NutColor
+}
+
+export interface GamePlayContext {
+  multiNut: boolean
+  boltConfigs: BoltConfig[]
+}
+
 export interface LevelDefinition {
   id: number
   difficulty: Difficulty
@@ -32,6 +42,7 @@ export interface LevelDefinition {
   stageId?: string
   isChallenge?: boolean
   mechanics?: MechanicId[]
+  boltConfigs?: BoltConfig[]
 }
 
 export interface MoveRecord {
@@ -50,6 +61,7 @@ export interface GameSession {
   selectedBoltIndex: number | null
   isWon: boolean
   shakeBoltIndex: number | null
+  playContext: GamePlayContext
 }
 
 export interface LevelProgress {
