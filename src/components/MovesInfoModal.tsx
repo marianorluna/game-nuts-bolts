@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { getStarThresholds } from '../domain/gameEngine'
+import { useTranslation } from '../i18n/useTranslation'
 
 interface MovesInfoModalProps {
   open: boolean
@@ -14,6 +15,7 @@ export function MovesInfoModal({
   minMoves,
   currentMoves,
 }: MovesInfoModalProps) {
+  const { t } = useTranslation()
   const { threeStars, twoStars } = getStarThresholds(minMoves)
 
   return (
@@ -35,12 +37,12 @@ export function MovesInfoModal({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Movimientos</h2>
+              <h2 className="text-xl font-bold text-white">{t('level.movesTitle')}</h2>
               <button
                 type="button"
                 onClick={onClose}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-lg text-white"
-                aria-label="Cerrar"
+                aria-label={t('common.close')}
               >
                 ✕
               </button>
@@ -54,20 +56,20 @@ export function MovesInfoModal({
 
             <div className="space-y-3 text-sm leading-relaxed text-purple-100">
               <p>
-                Para ganar{' '}
-                <span className="font-semibold text-amber-300">3 estrellas ⭐⭐⭐ </span>
-                debes completar el nivel con un{' '}
-                <span className="font-bold text-white">máximo de {threeStars} movimientos</span>.
+                {t('level.movesThreeStarsPrefix')}{' '}
+                <span className="font-semibold text-amber-300">
+                  {t('level.movesThreeStarsHighlight')}{' '}
+                </span>
+                {t('level.movesThreeStarsSuffix', { count: threeStars })}
               </p>
               <p>
-                Para{' '}
-                <span className="font-semibold text-amber-200">2 estrellas ⭐⭐ </span>
-                el máximo es de{' '}
-                <span className="font-bold text-white">{twoStars} movimientos</span>.
+                {t('level.movesTwoStarsPrefix')}{' '}
+                <span className="font-semibold text-amber-200">
+                  {t('level.movesTwoStarsHighlight')}{' '}
+                </span>
+                {t('level.movesTwoStarsSuffix', { count: twoStars })}
               </p>
-              <p className="text-purple-200">
-                Si usas más movimientos, igual puedes completar el nivel y ganar 1 estrella ⭐.
-              </p>
+              <p className="text-purple-200">{t('level.movesOneStar')}</p>
             </div>
 
             <button
@@ -75,7 +77,7 @@ export function MovesInfoModal({
               onClick={onClose}
               className="mt-6 w-full rounded-xl bg-white/15 py-3 font-semibold text-white transition active:scale-95"
             >
-              Entendido
+              {t('common.gotIt')}
             </button>
           </motion.div>
         </motion.div>

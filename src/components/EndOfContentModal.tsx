@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from '../i18n/useTranslation'
 
 interface EndOfContentModalProps {
   open: boolean
@@ -6,6 +7,8 @@ interface EndOfContentModalProps {
 }
 
 export function EndOfContentModal({ open, onClose }: EndOfContentModalProps) {
+  const { t } = useTranslation()
+
   return (
     <AnimatePresence>
       {open && (
@@ -24,19 +27,17 @@ export function EndOfContentModal({ open, onClose }: EndOfContentModalProps) {
           >
             <div className="mb-3 text-5xl">🔨</div>
             <h2 className="mb-2 text-2xl font-bold text-white">
-              ¡Llegaste al final del taller!
+              {t('endOfContent.title')}
             </h2>
             <p className="mb-6 text-sm leading-relaxed text-purple-100">
-              Completaste todos los niveles disponibles. Mientras preparamos más
-              encargos en el taller, podés volver a jugar los niveles que ya
-              hiciste y sumar estrellas.
+              {t('endOfContent.message')}
             </p>
             <button
               type="button"
               onClick={onClose}
               className="w-full rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-3 font-bold text-white shadow-lg transition hover:brightness-110 active:scale-95"
             >
-              Entendido
+              {t('common.gotIt')}
             </button>
           </motion.div>
         </motion.div>

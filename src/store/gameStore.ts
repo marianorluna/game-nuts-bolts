@@ -20,6 +20,7 @@ import {
 } from '../domain/content/campaignStructure'
 import { getLevelById } from '../domain/levels'
 import type { GameSession, GameSettings, PlayerProgress } from '../domain/types'
+import type { LocalePreference } from '../i18n/types'
 import { MAX_UNDOS } from '../domain/types'
 import { soundService } from '../services/soundService'
 
@@ -42,6 +43,7 @@ interface GameStore {
   resetLevel: () => void
   clearShake: () => void
   toggleSound: () => void
+  setLocalePreference: (locale: LocalePreference) => void
   getLevelStars: (levelId: number) => number
   isLevelUnlocked: (levelId: number) => boolean
 }
@@ -53,6 +55,7 @@ const defaultProgress: PlayerProgress = {
 
 const defaultSettings: GameSettings = {
   soundEnabled: true,
+  locale: 'auto',
 }
 
 export const useGameStore = create<GameStore>()(
@@ -247,7 +250,11 @@ export const useGameStore = create<GameStore>()(
       toggleSound: () => {
         const next = !get().settings.soundEnabled
         soundService.setEnabled(next)
-        set({ settings: { soundEnabled: next } })
+        set({ settings: { ...get().settings, soundEnabled: next } })
+      },
+
+      setLocalePreference: (locale) => {
+        set({ settings: { ...get().settings, locale } })
       },
 
       getLevelStars: (levelId) => {
@@ -276,6 +283,9 @@ export const useGameStore = create<GameStore>()(
       onRehydrateStorage: () => (state) => {
         if (state) {
           soundService.setEnabled(state.settings.soundEnabled)
+          if (!state.settings.locale) {
+            state.settings.locale = 'auto'
+          }
         }
       },
     },

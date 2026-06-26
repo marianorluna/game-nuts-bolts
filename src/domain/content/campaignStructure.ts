@@ -2,17 +2,11 @@ import type { LevelDefinition, MechanicId, ThemeId } from '../types'
 
 export interface MilestoneMeta {
   levelId: number
-  title: string
-  message: string
   emoji: string
 }
 
 export interface StageMeta {
   id: string
-  /** Nombre visible en UI (lore del taller). */
-  name: string
-  /** Una línea de contexto bajo el título de etapa en el menú. */
-  blurb: string
   levelFrom: number
   levelTo: number
   themeId: ThemeId
@@ -21,7 +15,6 @@ export interface StageMeta {
 
 export interface SectionMeta {
   id: string
-  name: string
   campaignId: string
   levelFrom: number
   levelTo: number
@@ -30,11 +23,8 @@ export interface SectionMeta {
 
 export interface CampaignMeta {
   id: string
-  name: string
   /** Emoji o símbolo representativo en la UI. */
   emoji: string
-  /** Una línea de contexto en la card de selección. */
-  tagline: string
   /** Paleta visual de la campaña en el menú. */
   themeId: ThemeId
   /** Si false, la campaña aparece bloqueada en el menú. */
@@ -110,8 +100,6 @@ export const THEME_BACKGROUNDS: Record<ThemeId, string> = {
 
 const STAGE_1: StageMeta = {
   id: 'stage-1-fundamentos',
-  name: 'Caja de herramientas',
-  blurb: 'Ordena la caja, que todo quede en su lugar.',
   levelFrom: 1,
   levelTo: 30,
   themeId: 'workshop',
@@ -120,8 +108,6 @@ const STAGE_1: StageMeta = {
 
 const STAGE_2: StageMeta = {
   id: 'stage-2-presion',
-  name: 'El garaje apretado',
-  blurb: 'El coche ocupa sitio. Queda poco espacio libre en el banco.',
   levelFrom: 31,
   levelTo: 60,
   themeId: 'garage',
@@ -130,8 +116,6 @@ const STAGE_2: StageMeta = {
 
 const STAGE_3: StageMeta = {
   id: 'stage-3-nuevas-reglas',
-  name: 'La línea de montaje',
-  blurb: 'Encargos grandes: cadenas de tuercas y bulones que hay que liberar.',
   levelFrom: 61,
   levelTo: 100,
   themeId: 'factory',
@@ -140,7 +124,6 @@ const STAGE_3: StageMeta = {
 
 export const SECTION_1_FUNDAMENTOS: SectionMeta = {
   id: 'section-1-fundamentos',
-  name: 'Aprendiz de banco',
   campaignId: 'campaign-1-taller',
   levelFrom: 1,
   levelTo: 100,
@@ -149,9 +132,7 @@ export const SECTION_1_FUNDAMENTOS: SectionMeta = {
 
 export const CAMPAIGN_1_TALLER: CampaignMeta = {
   id: 'campaign-1-taller',
-  name: 'El Taller',
   emoji: '🔧',
-  tagline: 'Aprende el oficio ordenando tuercas y bulones.',
   themeId: 'workshop',
   available: true,
   sections: [SECTION_1_FUNDAMENTOS],
@@ -159,9 +140,7 @@ export const CAMPAIGN_1_TALLER: CampaignMeta = {
 
 export const CAMPAIGN_2_OBRA: CampaignMeta = {
   id: 'campaign-2-obra',
-  name: 'La Obra',
   emoji: '🏗️',
-  tagline: 'Obra en construcción: más retos bajo presión.',
   themeId: 'garage',
   available: false,
   sections: [],
@@ -169,9 +148,7 @@ export const CAMPAIGN_2_OBRA: CampaignMeta = {
 
 export const CAMPAIGN_3_FABRICA: CampaignMeta = {
   id: 'campaign-3-fabrica',
-  name: 'La Fábrica',
   emoji: '🏭',
-  tagline: 'Planta industrial con reglas nuevas.',
   themeId: 'factory',
   available: false,
   sections: [],
@@ -204,52 +181,13 @@ export function getCampaignProgress(
 
 export const CHALLENGE_LEVEL_IDS = new Set([20, 40, 60, 80, 100])
 
-/** Nombre jugable de retos especiales (niveles con ⚡). */
-export const CHALLENGE_LABELS: Record<number, string> = {
-  20: 'Inspección de la caja',
-  40: 'Prueba de torque',
-  60: 'Cierre del garaje',
-  80: 'Control de calidad',
-  100: 'Graduación de aprendiz',
-}
-
 const MILESTONES: MilestoneMeta[] = [
-  {
-    levelId: 20,
-    title: '¡Inspección superada!',
-    message: 'La caja pasó el control. Sigue ordenando antes de cerrar el turno.',
-    emoji: '⚡',
-  },
-  {
-    levelId: 30,
-    title: '¡Caja ordenada!',
-    message: 'Completaste la caja de herramientas. Mañana toca el garaje apretado.',
-    emoji: '🏆',
-  },
-  {
-    levelId: 40,
-    title: '¡Prueba de torque!',
-    message: 'Aguantaste con un solo bulón libre. El garaje no perdona.',
-    emoji: '⚡',
-  },
-  {
-    levelId: 60,
-    title: '¡Garaje cerrado!',
-    message: 'El banco apretado ya no te intimida. La línea de montaje te espera.',
-    emoji: '🔩',
-  },
-  {
-    levelId: 80,
-    title: '¡Control de calidad!',
-    message: 'Dominas las cadenas de tuercas. Ahora toca liberar bulones bloqueados.',
-    emoji: '⚡',
-  },
-  {
-    levelId: 100,
-    title: '¡Graduación de aprendiz!',
-    message: 'Completaste la primera sección del taller. El banco es tuyo.',
-    emoji: '🏆',
-  },
+  { levelId: 20, emoji: '⚡' },
+  { levelId: 30, emoji: '🏆' },
+  { levelId: 40, emoji: '⚡' },
+  { levelId: 60, emoji: '🔩' },
+  { levelId: 80, emoji: '⚡' },
+  { levelId: 100, emoji: '🏆' },
 ]
 
 export function getStageForLevel(levelId: number): StageMeta | undefined {
@@ -282,10 +220,6 @@ export function getMilestoneForLevel(levelId: number): MilestoneMeta | undefined
 
 export function isChallengeLevel(levelId: number): boolean {
   return CHALLENGE_LEVEL_IDS.has(levelId)
-}
-
-export function getChallengeLabel(levelId: number): string | undefined {
-  return CHALLENGE_LABELS[levelId]
 }
 
 export function enrichLevelMetadata(level: LevelDefinition): LevelDefinition {

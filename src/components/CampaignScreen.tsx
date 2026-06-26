@@ -4,7 +4,6 @@ import { ALL_LEVELS } from '../domain/levels'
 import {
   CAMPAIGN_1_TALLER,
   countCompletedInRange,
-  getChallengeLabel,
   getDefaultHomeStageId,
   getLevelsByStage,
   getStageProgressStats,
@@ -12,6 +11,13 @@ import {
   SECTION_1_FUNDAMENTOS,
 } from '../domain/content/campaignStructure'
 import { DEV_UNLOCK_ALL_LEVELS } from '../config/dev'
+import {
+  getCampaignName,
+  getChallengeLabel,
+  getStageBlurb,
+  getStageName,
+} from '../i18n/campaignLabels'
+import { useTranslation } from '../i18n/useTranslation'
 import { BackArrowIcon, ChevronLeftIcon, ChevronRightIcon } from './icons/GameIcons'
 import { SettingsModal } from './SettingsModal'
 import { AppFooter } from './AppFooter'
@@ -23,6 +29,7 @@ import {
 } from '../services/endOfContentService'
 
 export function CampaignScreen() {
+  const { t } = useTranslation()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [endOfContentOpen, setEndOfContentOpen] = useState(false)
   const startLevel = useGameStore((s) => s.startLevel)
@@ -63,6 +70,10 @@ export function CampaignScreen() {
   const visibleStageIndex = unlockedStageIndices.includes(stageIndex)
     ? unlockedStageIndices.indexOf(stageIndex)
     : 0
+
+  const stageName = getStageName(t, stage.id)
+  const stageBlurb = getStageBlurb(t, stage.id)
+  const campaignName = getCampaignName(t, campaign.id)
 
   useEffect(() => {
     if (unlockedStageIndices.includes(stageIndex)) return
@@ -107,12 +118,13 @@ export function CampaignScreen() {
   }
 
   const hasImprovableStars = ALL_LEVELS.some((l) => getLevelStars(l.id) < 3)
+  const continueLevel = getContinueLevel()
 
   const continueLabel = allCompleted
     ? hasImprovableStars
-      ? 'Mejorar estrellas'
-      : '¡Seguir jugando!'
-    : `Jugar Nivel ${getContinueLevel()}`
+      ? t('campaign.improveStars')
+      : t('campaign.keepPlaying')
+    : t('campaign.playLevel', { level: continueLevel })
 
   const stageLevels = getLevelsByStage(ALL_LEVELS, stage)
   const { completed, total, percent } = getStageProgressStats(stage, isCompleted)
@@ -144,7 +156,7 @@ export function CampaignScreen() {
           type="button"
           onClick={goHome}
           className="absolute left-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12"
-          aria-label="Volver a campañas"
+          aria-label={t('campaign.backToCampaigns')}
         >
           <BackArrowIcon className="h-6 w-6 md:h-7 md:w-7" />
         </button>
@@ -152,13 +164,13 @@ export function CampaignScreen() {
           type="button"
           onClick={() => setSettingsOpen(true)}
           className="absolute right-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl text-white md:top-5 md:h-12 md:w-12 md:text-2xl"
-          aria-label="Configuración"
+          aria-label={t('common.settings')}
         >
           {soundEnabled ? '⚙️' : '🔇'}
         </button>
         <div className="mb-1 text-4xl md:text-5xl">{campaign.emoji}</div>
         <h1 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl">
-          {campaign.name}
+          {campaignName}
         </h1>
         <p className="mt-0.5 text-sm text-purple-200">
           {sectionCompleted}/{publishedCount}
@@ -168,13 +180,13 @@ export function CampaignScreen() {
       <main className="scrollbar-hidden flex min-h-0 flex-1 flex-col overflow-y-auto">
         {allCompleted && (
           <p className="mx-auto mb-2 max-w-xs text-center text-sm font-medium text-amber-200 sm:max-w-md">
-            ¡Completaste los {totalLevels} niveles publicados! 🎉
+            {t('campaign.allLevelsCompleted', { count: totalLevels })}
           </p>
         )}
 
         <button
           type="button"
-          onClick={() => startLevel(getContinueLevel())}
+          onClick={() => startLevel(continueLevel)}
           className="mx-auto mb-4 w-full max-w-sm shrink-0 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 py-3.5 text-lg font-bold text-white shadow-lg transition active:scale-95 sm:max-w-md md:max-w-lg md:py-4 md:text-xl"
         >
           {continueLabel}
@@ -186,7 +198,7 @@ export function CampaignScreen() {
             type="button"
             onClick={goToPrevStage}
             disabled={!canGoPrev}
-            aria-label="Etapa anterior"
+            aria-label={t('campaign.prevStage')}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition enabled:hover:bg-white/20 enabled:active:scale-95 disabled:opacity-30 md:h-11 md:w-11"
           >
             <ChevronLeftIcon className="h-5 w-5 md:h-6 md:w-6" />
@@ -195,14 +207,14 @@ export function CampaignScreen() {
           <div className="min-w-0 flex-1 text-center">
             <div className="mb-1 flex items-baseline justify-center gap-2">
               <h2 className="truncate text-xs font-bold tracking-widest text-purple-300 md:text-sm">
-                {stage.name.toUpperCase()}
+                {stageName.toUpperCase()}
               </h2>
               <span className="shrink-0 text-[10px] font-medium text-purple-300/70 md:text-xs">
                 {stage.levelFrom}–{stage.levelTo}
               </span>
             </div>
             <p className="text-[11px] leading-snug text-purple-200/80 md:text-xs">
-              {stage.blurb}
+              {stageBlurb}
             </p>
           </div>
 
@@ -210,7 +222,7 @@ export function CampaignScreen() {
             type="button"
             onClick={goToNextStage}
             disabled={!canGoNext}
-            aria-label="Etapa siguiente"
+            aria-label={t('campaign.nextStage')}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition enabled:hover:bg-white/20 enabled:active:scale-95 disabled:opacity-30 md:h-11 md:w-11"
           >
             <ChevronRightIcon className="h-5 w-5 md:h-6 md:w-6" />
@@ -219,12 +231,14 @@ export function CampaignScreen() {
 
         {unlockedStageIndices.length > 1 && (
           <div className="mb-3 flex justify-center gap-2">
-            {unlockedStageIndices.map((index) => (
+            {unlockedStageIndices.map((index) => {
+              const dotStage = section.stages[index]!
+              return (
               <button
-                key={section.stages[index]!.id}
+                key={dotStage.id}
                 type="button"
-                onClick={() => setHomeStageId(section.stages[index]!.id)}
-                aria-label={`Ir a ${section.stages[index]!.name}`}
+                onClick={() => setHomeStageId(dotStage.id)}
+                aria-label={t('campaign.goToStage', { name: getStageName(t, dotStage.id) })}
                 aria-current={index === stageIndex ? 'true' : undefined}
                 className={`h-2 rounded-full transition-all ${
                   index === stageIndex
@@ -232,7 +246,8 @@ export function CampaignScreen() {
                     : 'w-2 bg-white/25 hover:bg-white/40'
                 }`}
               />
-            ))}
+              )
+            })}
           </div>
         )}
 
@@ -256,7 +271,7 @@ export function CampaignScreen() {
             const unlocked = isLevelUnlocked(level.id)
             const stars = getLevelStars(level.id)
             const isChallenge = level.isChallenge ?? false
-            const challengeLabel = isChallenge ? getChallengeLabel(level.id) : undefined
+            const challengeLabel = isChallenge ? getChallengeLabel(t, level.id) : undefined
 
             return (
               <button
@@ -267,9 +282,9 @@ export function CampaignScreen() {
                 aria-label={
                   unlocked
                     ? isChallenge
-                      ? challengeLabel ?? `Reto nivel ${level.id}`
-                      : `Nivel ${level.id}`
-                    : `Nivel ${level.id} bloqueado`
+                      ? challengeLabel ?? t('campaign.challengeLevel', { level: level.id })
+                      : t('campaign.level', { level: level.id })
+                    : t('campaign.levelLocked', { level: level.id })
                 }
                 className={`
                   relative flex aspect-square flex-col items-center justify-center

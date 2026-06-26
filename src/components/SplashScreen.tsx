@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AUTHOR } from '../config/author'
 import { APP_VERSION } from '../config/version'
+import { useTranslation } from '../i18n/useTranslation'
 import { AppLogo } from './AppLogo'
 
 interface SplashScreenProps {
@@ -11,6 +12,7 @@ interface SplashScreenProps {
 const SPLASH_DURATION_MS = 2800
 
 export function SplashScreen({ onComplete }: SplashScreenProps) {
+  const { t } = useTranslation()
   const [ready, setReady] = useState(false)
   const [exiting, setExiting] = useState(false)
 
@@ -40,7 +42,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') dismiss()
           }}
-          aria-label="Pantalla de inicio. Toca para continuar."
+          aria-label={t('splash.ariaLabel')}
         >
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <motion.div
@@ -75,7 +77,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
             transition={{ delay: 0.25, duration: 0.5 }}
             className="text-center text-4xl font-extrabold tracking-tight text-white"
           >
-            Nuts & Bolts
+            {t('common.appName')}
           </motion.h1>
 
           <motion.p
@@ -84,7 +86,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
             transition={{ delay: 0.4, duration: 0.5 }}
             className="mt-2 text-center text-sm text-purple-200"
           >
-            Ordena las tuercas por color
+            {t('splash.tagline')}
           </motion.p>
 
           <motion.div
@@ -107,7 +109,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
             transition={{ duration: 0.4 }}
             className="mt-8 text-center"
           >
-            <p className="text-sm font-medium text-amber-300">Toca para continuar</p>
+            <p className="text-sm font-medium text-amber-300">{t('splash.tapToContinue')}</p>
           </motion.div>
 
           <motion.footer
@@ -117,9 +119,11 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
             className="absolute bottom-0 left-0 right-0 pb-safe px-6 py-6 text-center"
           >
             <p className="text-xs text-purple-300/80">
-              por <span className="font-semibold text-purple-200">{AUTHOR.name}</span>
+              {t('common.byAuthor', { name: AUTHOR.name })}
             </p>
-            <p className="mt-1 text-[10px] text-purple-400/60">v{APP_VERSION}</p>
+            <p className="mt-1 text-[10px] text-purple-400/60">
+              {t('common.versionShort', { version: APP_VERSION })}
+            </p>
           </motion.footer>
         </motion.div>
       )}

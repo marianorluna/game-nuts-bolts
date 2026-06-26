@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from '../i18n/useTranslation'
 
 interface MultiNutCoachMarkProps {
   onDismiss: () => void
@@ -9,6 +10,7 @@ const BUBBLE_PATH =
   'M14 0 H230 A14 14 0 0 1 244 14 V100 A14 14 0 0 1 230 114 H134 L122 128 L110 114 H14 A14 14 0 0 1 0 100 V14 A14 14 0 0 1 14 0 Z'
 
 export function MultiNutCoachMark({ onDismiss }: MultiNutCoachMarkProps) {
+  const { t } = useTranslation()
   const gradientId = useId()
   const glowFilterId = `${gradientId}-glow`
 
@@ -60,14 +62,14 @@ export function MultiNutCoachMark({ onDismiss }: MultiNutCoachMarkProps) {
 
       <div className="relative px-4 pb-5 pt-3 text-center">
         <p className="text-sm font-medium leading-snug text-amber-100">
-          Nueva regla: las tuercas del mismo color en la cima se mueven juntas.
+          {t('level.coachMultiNut')}
         </p>
         <button
           type="button"
           onClick={onDismiss}
           className="mt-3 w-full rounded-xl bg-white/15 py-2 text-xs font-semibold text-white transition active:scale-95"
         >
-          Entendido
+          {t('common.gotIt')}
         </button>
       </div>
     </motion.div>

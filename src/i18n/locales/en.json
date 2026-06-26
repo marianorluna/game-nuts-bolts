@@ -1,0 +1,166 @@
+{
+  "common": {
+    "appName": "Nuts & Bolts",
+    "close": "Close",
+    "gotIt": "Got it",
+    "settings": "Settings",
+    "byAuthor": "by {{name}}",
+    "versionShort": "v{{version}}"
+  },
+  "difficulty": {
+    "easy": "EASY",
+    "medium": "MEDIUM",
+    "hard": "HARD"
+  },
+  "splash": {
+    "ariaLabel": "Splash screen. Tap to continue.",
+    "tagline": "Sort the nuts by color",
+    "tapToContinue": "Tap to continue"
+  },
+  "home": {
+    "comingSoon": "Coming soon",
+    "enterCampaign": "Enter {{name}}",
+    "campaignLocked": "{{name}} — coming soon"
+  },
+  "campaign": {
+    "backToCampaigns": "Back to campaigns",
+    "allLevelsCompleted": "You completed all {{count}} published levels! 🎉",
+    "improveStars": "Improve stars",
+    "keepPlaying": "Keep playing!",
+    "playLevel": "Play Level {{level}}",
+    "prevStage": "Previous stage",
+    "nextStage": "Next stage",
+    "goToStage": "Go to {{name}}",
+    "challengeLevel": "Challenge level {{level}}",
+    "level": "Level {{level}}",
+    "levelLocked": "Level {{level}} locked",
+    "campaigns": {
+      "campaign-1-taller": {
+        "name": "The Workshop",
+        "tagline": "Learn the trade by sorting nuts and bolts."
+      },
+      "campaign-2-obra": {
+        "name": "The Build",
+        "tagline": "Under construction: more pressure-packed challenges."
+      },
+      "campaign-3-fabrica": {
+        "name": "The Factory",
+        "tagline": "Industrial plant with new rules."
+      }
+    },
+    "stages": {
+      "stage-1-fundamentos": {
+        "name": "Toolbox",
+        "blurb": "Sort the toolbox so everything is in its place."
+      },
+      "stage-2-presion": {
+        "name": "The tight garage",
+        "blurb": "The car takes up space. Not much room left on the bench."
+      },
+      "stage-3-nuevas-reglas": {
+        "name": "The assembly line",
+        "blurb": "Big jobs: nut chains and bolts you need to free up."
+      }
+    },
+    "challenges": {
+      "20": "Toolbox inspection",
+      "40": "Torque test",
+      "60": "Garage closing",
+      "80": "Quality control",
+      "100": "Apprentice graduation"
+    },
+    "milestones": {
+      "20": {
+        "title": "Inspection passed!",
+        "message": "The toolbox passed inspection. Keep sorting before clocking out."
+      },
+      "30": {
+        "title": "Toolbox sorted!",
+        "message": "You finished the toolbox. Tomorrow it's the tight garage."
+      },
+      "40": {
+        "title": "Torque test!",
+        "message": "You held on with only one free bolt. The garage shows no mercy."
+      },
+      "60": {
+        "title": "Garage closed!",
+        "message": "The tight bench no longer intimidates you. The assembly line awaits."
+      },
+      "80": {
+        "title": "Quality control!",
+        "message": "You master nut chains. Now it's time to free locked bolts."
+      },
+      "100": {
+        "title": "Apprentice graduation!",
+        "message": "You completed the workshop's first section. The bench is yours."
+      }
+    }
+  },
+  "level": {
+    "back": "Back",
+    "resetLevel": "Restart level",
+    "levelNumber": "Level {{level}}",
+    "undoRemaining": "Undo ({{count}} left)",
+    "movesAria": "{{moves}} moves. Tap to see how to earn stars.",
+    "bolt": "Bolt {{number}}",
+    "boltLocked": ", locked",
+    "movesTitle": "Moves",
+    "movesThreeStarsPrefix": "To earn",
+    "movesThreeStarsHighlight": "3 stars ⭐⭐⭐",
+    "movesThreeStarsSuffix": "complete the level in at most {{count}} moves.",
+    "movesTwoStarsPrefix": "For",
+    "movesTwoStarsHighlight": "2 stars ⭐⭐",
+    "movesTwoStarsSuffix": "the maximum is {{count}} moves.",
+    "movesOneStar": "If you use more moves, you can still finish the level and earn 1 star ⭐.",
+    "coachMoves": "Tap here to see how to earn stars based on your moves.",
+    "coachMultiNut": "New rule: same-color nuts on top move together."
+  },
+  "win": {
+    "completed": "Level complete!",
+    "difficultyLevel": "{{difficulty}} · Level {{level}}",
+    "movesUsed": "You used {{moves}} moves",
+    "threeStarHint": "For 3 stars you needed at most {{count}} moves.",
+    "nextLevel": "Next level",
+    "replay": "Play again",
+    "backToMenu": "Back to menu"
+  },
+  "endOfContent": {
+    "title": "You reached the end of the workshop!",
+    "message": "You completed all available levels. While we prepare more jobs in the workshop, you can replay levels you've already done and earn more stars."
+  },
+  "settings": {
+    "title": "Settings",
+    "sound": "Sounds",
+    "soundOn": "On",
+    "soundOff": "Off",
+    "credits": "Credits & Contact",
+    "creditsSubtitle": "Meet the developer",
+    "language": "Language",
+    "languageAuto": "Automatic",
+    "languageEs": "Español",
+    "languageEn": "English"
+  },
+  "credits": {
+    "title": "Credits",
+    "madeWith": "Made with 💜",
+    "contactMe": "CONTACT ME",
+    "appVersion": "Nuts & Bolts · v{{version}}",
+    "stack": "React · TypeScript · Tailwind · Framer Motion"
+  },
+  "author": {
+    "role": "Software Developer",
+    "bio": "I build software and enjoy exploring ideas in mobile form. Nuts & Bolts started as a logic and color puzzle, designed for short play sessions."
+  },
+  "update": {
+    "title": "New version available",
+    "prompt": "An update is available on the Play Store.",
+    "versionRange": "v{{current}} → v{{available}}",
+    "updateNow": "Update now",
+    "later": "Later",
+    "downloading": "Downloading update…",
+    "ready": "The update is ready. Restart to apply it.",
+    "restart": "Restart app",
+    "error": "Could not update automatically. You can update from the Play Store.",
+    "openStore": "Open Play Store"
+  }
+}

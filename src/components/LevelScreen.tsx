@@ -12,7 +12,9 @@ import { BackArrowIcon, UndoArrowIcon, LevelHomeIcon } from './icons/GameIcons'
 import { getStarThresholds } from '../domain/gameEngine'
 import { MAX_LEVEL_ID } from '../domain/levels'
 import { getStageForLevel } from '../domain/content/campaignStructure'
-import { DIFFICULTY_LABELS, MAX_UNDOS } from '../domain/types'
+import { getDifficultyLabel, getStageName } from '../i18n/campaignLabels'
+import { useTranslation } from '../i18n/useTranslation'
+import { MAX_UNDOS } from '../domain/types'
 import {
   hasSeenMovesCoachMark,
   markMovesCoachMarkSeen,
@@ -28,6 +30,7 @@ import {
 } from '../services/endOfContentService'
 
 export function LevelScreen() {
+  const { t } = useTranslation()
   const boardAreaRef = useRef<HTMLDivElement>(null)
   const [boardBounds, setBoardBounds] = useState<BoardBounds | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -113,6 +116,9 @@ export function LevelScreen() {
     session.history.length > 0 && !session.isWon && undosRemaining > 0
   const { threeStars } = getStarThresholds(level.minMoves)
   const onTrackForThreeStars = session.moves <= threeStars
+  const stageLabel = stage
+    ? getStageName(t, stage.id)
+    : getDifficultyLabel(t, level.difficulty)
 
   return (
     <div className="flex h-dvh max-h-dvh flex-col overflow-hidden">
@@ -122,7 +128,7 @@ export function LevelScreen() {
             type="button"
             onClick={() => setScreen('campaign')}
             className="absolute left-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12"
-            aria-label="Volver"
+            aria-label={t('level.back')}
           >
             <BackArrowIcon className="h-6 w-6 md:h-7 md:w-7" />
           </button>
@@ -131,21 +137,21 @@ export function LevelScreen() {
             type="button"
             onClick={resetLevel}
             className="absolute right-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12"
-            aria-label="Volver al inicio del nivel"
+            aria-label={t('level.resetLevel')}
           >
             <LevelHomeIcon className="h-6 w-6 md:h-7 md:w-7" />
           </button>
 
           <div className="mb-1 flex min-h-9 items-center justify-center md:min-h-11">
             <p className="text-sm font-black tracking-[0.22em] text-amber-300 uppercase md:text-base">
-              {stage?.name ?? DIFFICULTY_LABELS[level.difficulty]}
+              {stageLabel}
             </p>
           </div>
           <h1
             className="text-3xl font-black text-white md:text-4xl"
             style={{ textShadow: '0 2px 10px rgba(0,0,0,0.45)' }}
           >
-            Nivel {level.id}
+            {t('level.levelNumber', { level: level.id })}
           </h1>
         </header>
       </div>
@@ -176,7 +182,7 @@ export function LevelScreen() {
             onClick={undo}
             disabled={!canUndo}
             className="flex h-12 w-12 flex-col items-center justify-center rounded-full bg-white/15 text-white transition active:scale-95 hover:bg-white/25 disabled:opacity-30 md:h-14 md:w-14"
-            aria-label={`Deshacer (${undosRemaining} restantes)`}
+            aria-label={t('level.undoRemaining', { count: undosRemaining })}
           >
             <UndoArrowIcon className="h-5 w-5 md:h-6 md:w-6" />
             <span className="mt-0.5 text-[11px] font-bold leading-none md:text-xs">
@@ -192,7 +198,7 @@ export function LevelScreen() {
             type="button"
             onClick={openMovesInfo}
             className="relative min-h-12 min-w-[4.5rem] rounded-2xl bg-white/15 px-5 py-3 text-center transition active:scale-95 hover:bg-white/25 md:min-h-14 md:min-w-[5.5rem] md:px-6"
-            aria-label={`${session.moves} movimientos. Toca para ver cómo ganar estrellas.`}
+            aria-label={t('level.movesAria', { moves: session.moves })}
           >
             <span
               className="absolute top-1.5 right-2 text-[11px] font-bold leading-none text-purple-200 md:text-xs"
@@ -214,7 +220,7 @@ export function LevelScreen() {
             type="button"
             onClick={() => setSettingsOpen(true)}
             className="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:h-14 md:w-14 md:text-2xl"
-            aria-label="Configuración"
+            aria-label={t('common.settings')}
           >
             {soundEnabled ? '⚙️' : '🔇'}
           </button>

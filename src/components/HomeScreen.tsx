@@ -4,6 +4,7 @@ import {
   ALL_CAMPAIGNS,
   getCampaignProgress,
 } from '../domain/content/campaignStructure'
+import { useTranslation } from '../i18n/useTranslation'
 import { SettingsModal } from './SettingsModal'
 import { CreditsModal } from './CreditsModal'
 import { AppFooter } from './AppFooter'
@@ -12,6 +13,7 @@ import { AppLogo } from './AppLogo'
 import { getCampaignGridContainerClass } from './campaignGridLayout'
 
 export function HomeScreen() {
+  const { t } = useTranslation()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [creditsOpen, setCreditsOpen] = useState(false)
   const openCampaign = useGameStore((s) => s.openCampaign)
@@ -30,7 +32,7 @@ export function HomeScreen() {
           type="button"
           onClick={() => setSettingsOpen(true)}
           className="absolute right-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12 md:text-2xl"
-          aria-label="Configuración"
+          aria-label={t('common.settings')}
         >
           {soundEnabled ? '⚙️' : '🔇'}
         </button>
@@ -44,7 +46,7 @@ export function HomeScreen() {
               className="text-3xl font-extrabold leading-none tracking-tight text-white md:text-4xl"
               style={{ textShadow: '0 2px 12px rgba(0,0,0,0.35)' }}
             >
-              Nuts & Bolts
+              {t('common.appName')}
             </h1>
           </div>
         </div>

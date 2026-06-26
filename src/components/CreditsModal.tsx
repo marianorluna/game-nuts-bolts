@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { AUTHOR } from '../config/author'
 import { APP_VERSION } from '../config/version'
+import { useTranslation } from '../i18n/useTranslation'
 
 interface CreditsModalProps {
   open: boolean
@@ -8,6 +9,8 @@ interface CreditsModalProps {
 }
 
 export function CreditsModal({ open, onClose }: CreditsModalProps) {
+  const { t } = useTranslation()
+
   return (
     <AnimatePresence>
       {open && (
@@ -28,14 +31,14 @@ export function CreditsModal({ open, onClose }: CreditsModalProps) {
           >
             <div className="mb-6 flex items-start justify-between">
               <div>
-                <h2 className="text-xl font-bold text-white">Créditos</h2>
-                <p className="mt-1 text-sm text-purple-200">Hecho con 💜</p>
+                <h2 className="text-xl font-bold text-white">{t('credits.title')}</h2>
+                <p className="mt-1 text-sm text-purple-200">{t('credits.madeWith')}</p>
               </div>
               <button
                 type="button"
                 onClick={onClose}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-lg text-white"
-                aria-label="Cerrar"
+                aria-label={t('common.close')}
               >
                 ✕
               </button>
@@ -46,13 +49,13 @@ export function CreditsModal({ open, onClose }: CreditsModalProps) {
                 {AUTHOR.avatar}
               </div>
               <h3 className="text-lg font-bold text-white">{AUTHOR.name}</h3>
-              <p className="mt-1 text-sm font-medium text-amber-300">{AUTHOR.role}</p>
-              <p className="mt-3 text-sm leading-relaxed text-purple-200">{AUTHOR.bio}</p>
+              <p className="mt-1 text-sm font-medium text-amber-300">{t('author.role')}</p>
+              <p className="mt-3 text-sm leading-relaxed text-purple-200">{t('author.bio')}</p>
             </div>
 
             <div className="mb-6">
               <p className="mb-3 text-xs font-bold tracking-widest text-purple-300">
-                CONTÁCTAME
+                {t('credits.contactMe')}
               </p>
               <div className="grid grid-cols-2 gap-2">
                 {AUTHOR.links.map((link) => (
@@ -72,10 +75,10 @@ export function CreditsModal({ open, onClose }: CreditsModalProps) {
 
             <div className="rounded-xl bg-white/5 px-4 py-3 text-center">
               <p className="text-xs text-purple-300">
-                Nuts & Bolts · v{APP_VERSION}
+                {t('credits.appVersion', { version: APP_VERSION })}
               </p>
               <p className="mt-1 text-[10px] text-purple-400/70">
-                React · TypeScript · Tailwind · Framer Motion
+                {t('credits.stack')}
               </p>
             </div>
           </motion.div>

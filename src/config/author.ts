@@ -7,8 +7,6 @@ export interface AuthorLink {
 
 export interface AuthorConfig {
   name: string
-  role: string
-  bio: string
   avatar: string
   links: AuthorLink[]
 }
@@ -16,8 +14,6 @@ export interface AuthorConfig {
 /** Personaliza tus datos de autor aquí */
 export const AUTHOR: AuthorConfig = {
   name: 'Mariano Luna',
-  role: 'Software Developer',
-  bio: 'Desarrollo software y disfruto explorar ideas en formato mobile. Nuts & Bolts nació como un puzzle de lógica y color, pensado para partidas cortas.',
   avatar: '👩‍💻',
   links: [
     {

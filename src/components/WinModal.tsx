@@ -4,7 +4,12 @@ import { useGameStore } from '../store/gameStore'
 import { getStarThresholds } from '../domain/gameEngine'
 import { getLevelById, MAX_LEVEL_ID } from '../domain/levels'
 import { getMilestoneForLevel } from '../domain/content/campaignStructure'
-import { DIFFICULTY_LABELS } from '../domain/types'
+import {
+  getDifficultyLabel,
+  getMilestoneMessage,
+  getMilestoneTitle,
+} from '../i18n/campaignLabels'
+import { useTranslation } from '../i18n/useTranslation'
 import { soundService } from '../services/soundService'
 
 interface WinModalProps {
@@ -16,11 +21,14 @@ interface WinModalProps {
 }
 
 export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalProps) {
+  const { t } = useTranslation()
   const getLevelStars = useGameStore((s) => s.getLevelStars)
   const level = getLevelById(levelId)
   const stars = getLevelStars(levelId)
   const hasNext = levelId < MAX_LEVEL_ID
   const milestone = getMilestoneForLevel(levelId)
+  const milestoneTitle = milestone ? getMilestoneTitle(t, levelId) : undefined
+  const milestoneMessage = milestone ? getMilestoneMessage(t, levelId) : undefined
   const threeStarTarget = level ? getStarThresholds(level.minMoves).threeStars : null
 
   useEffect(() => {
@@ -55,14 +63,17 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
             {milestone?.emoji ?? '🎉'}
           </motion.div>
           <h2 className="mb-1 text-2xl font-bold text-white">
-            {milestone?.title ?? '¡Nivel completado!'}
+            {milestoneTitle ?? t('win.completed')}
           </h2>
-          {milestone && (
-            <p className="mb-3 text-sm text-amber-200">{milestone.message}</p>
+          {milestoneMessage && (
+            <p className="mb-3 text-sm text-amber-200">{milestoneMessage}</p>
           )}
           {level && (
             <p className="mb-4 text-sm text-purple-200">
-              {DIFFICULTY_LABELS[level.difficulty]} · Nivel {levelId}
+              {t('win.difficultyLevel', {
+                difficulty: getDifficultyLabel(t, level.difficulty),
+                level: levelId,
+              })}
             </p>
           )}
 
@@ -81,11 +92,10 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
           </div>
 
           <p className="mb-6 text-purple-100">
-            Usaste{' '}
-            <span className="font-bold text-white">{moves} movimientos</span>
+            {t('win.movesUsed', { moves })}
             {threeStarTarget !== null && stars < 3 && (
               <span className="block mt-2 text-sm text-amber-300/90">
-                Para 3 estrellas necesitabas un máximo de {threeStarTarget} movimientos.
+                {t('win.threeStarHint', { count: threeStarTarget })}
               </span>
             )}
           </p>
@@ -97,7 +107,7 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
                 onClick={onNext}
                 className="rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-3 font-bold text-white shadow-lg transition hover:brightness-110 hover:shadow-xl active:scale-95"
               >
-                Siguiente nivel
+                {t('win.nextLevel')}
               </button>
             )}
             <button
@@ -105,14 +115,14 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
               onClick={onReplay}
               className="rounded-xl border border-white/20 py-3 font-semibold text-white transition hover:border-white/40 hover:bg-white/10 active:scale-95"
             >
-              Volver a jugar
+              {t('win.replay')}
             </button>
             <button
               type="button"
               onClick={onHome}
               className="rounded-xl py-3 font-semibold text-purple-200 transition hover:bg-white/5 hover:text-white active:scale-95"
             >
-              Volver al menú
+              {t('win.backToMenu')}
             </button>
           </div>
         </motion.div>

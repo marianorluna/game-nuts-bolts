@@ -77,6 +77,7 @@ export interface PlayerProgress {
 
 export interface GameSettings {
   soundEnabled: boolean
+  locale: 'auto' | 'es' | 'en'
 }
 
 export const NUT_COLORS: NutColor[] = [
@@ -141,12 +142,6 @@ export const NUT_STYLES: Record<NutColor, NutStyle> = {
     edgeGradient: 'linear-gradient(180deg, #aa44ff 0%, #3a0077 100%)',
     glowColor: 'rgba(130,30,210,0.75)',
   },
-}
-
-export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
-  easy: 'FÁCIL',
-  medium: 'MEDIO',
-  hard: 'DIFÍCIL',
 }
 
 export const MAX_UNDOS: Record<Difficulty, number> = {

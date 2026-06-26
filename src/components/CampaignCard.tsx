@@ -1,5 +1,7 @@
 import type { CampaignMeta } from '../domain/content/campaignStructure'
 import { getCampaignCardTheme } from '../domain/content/campaignStructure'
+import { getCampaignName, getCampaignTagline } from '../i18n/campaignLabels'
+import { useTranslation } from '../i18n/useTranslation'
 
 interface CampaignCardProps {
   campaign: CampaignMeta
@@ -16,8 +18,11 @@ export function CampaignCard({
   progressPercent,
   onSelect,
 }: CampaignCardProps) {
+  const { t } = useTranslation()
   const theme = getCampaignCardTheme(campaign.themeId)
   const { available } = campaign
+  const campaignName = getCampaignName(t, campaign.id)
+  const campaignTagline = getCampaignTagline(t, campaign.id)
 
   return (
     <button
@@ -26,8 +31,8 @@ export function CampaignCard({
       onClick={onSelect}
       aria-label={
         available
-          ? `Entrar a ${campaign.name}`
-          : `${campaign.name} — próximamente`
+          ? t('home.enterCampaign', { name: campaignName })
+          : t('home.campaignLocked', { name: campaignName })
       }
       className={`
         group relative flex w-full max-w-md flex-col items-center justify-center
@@ -56,7 +61,7 @@ export function CampaignCard({
         <span
           className={`absolute right-2.5 top-2.5 z-10 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider md:text-[10px] ${theme.badgeClass}`}
         >
-          Próximamente
+          {t('home.comingSoon')}
         </span>
       )}
 
@@ -71,10 +76,10 @@ export function CampaignCard({
       </div>
 
       <h2 className={`relative z-10 mb-0.5 text-lg font-extrabold md:text-xl ${theme.titleText}`}>
-        {campaign.name}
+        {campaignName}
       </h2>
       <p className={`relative z-10 mb-2 w-full text-xs leading-snug md:text-sm ${theme.taglineText}`}>
-        {campaign.tagline}
+        {campaignTagline}
       </p>
 
       {available && total > 0 && (

@@ -1,6 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import { AUTHOR } from '../config/author'
+import { useTranslation } from '../i18n/useTranslation'
+import type { LocalePreference } from '../i18n/types'
 
 interface SettingsModalProps {
   open: boolean
@@ -8,7 +10,14 @@ interface SettingsModalProps {
   onOpenCredits?: () => void
 }
 
+const LOCALE_OPTIONS: { value: LocalePreference; labelKey: 'settings.languageAuto' | 'settings.languageEs' | 'settings.languageEn' }[] = [
+  { value: 'auto', labelKey: 'settings.languageAuto' },
+  { value: 'es', labelKey: 'settings.languageEs' },
+  { value: 'en', labelKey: 'settings.languageEn' },
+]
+
 export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalProps) {
+  const { t, localePreference, setLocalePreference } = useTranslation()
   const soundEnabled = useGameStore((s) => s.settings.soundEnabled)
   const toggleSound = useGameStore((s) => s.toggleSound)
 
@@ -31,12 +40,12 @@ export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalPro
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Configuración</h2>
+              <h2 className="text-xl font-bold text-white">{t('settings.title')}</h2>
               <button
                 type="button"
                 onClick={onClose}
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-lg text-white"
-                aria-label="Cerrar"
+                aria-label={t('common.close')}
               >
                 ✕
               </button>
@@ -50,9 +59,9 @@ export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalPro
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{soundEnabled ? '🔊' : '🔇'}</span>
                 <div className="text-left">
-                  <p className="font-semibold text-white">Sonidos</p>
+                  <p className="font-semibold text-white">{t('settings.sound')}</p>
                   <p className="text-sm text-purple-200">
-                    {soundEnabled ? 'Activados' : 'Desactivados'}
+                    {soundEnabled ? t('settings.soundOn') : t('settings.soundOff')}
                   </p>
                 </div>
               </div>
@@ -69,6 +78,26 @@ export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalPro
               </div>
             </button>
 
+            <div className="mt-3 rounded-xl bg-white/10 px-4 py-4">
+              <p className="mb-3 font-semibold text-white">{t('settings.language')}</p>
+              <div className="flex gap-2">
+                {LOCALE_OPTIONS.map(({ value, labelKey }) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setLocalePreference(value)}
+                    className={`flex-1 rounded-lg py-2 text-xs font-semibold transition active:scale-95 md:text-sm ${
+                      localePreference === value
+                        ? 'bg-amber-400 text-stone-900'
+                        : 'bg-white/10 text-white hover:bg-white/15'
+                    }`}
+                  >
+                    {t(labelKey)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {onOpenCredits && (
               <button
                 type="button"
@@ -77,8 +106,8 @@ export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalPro
               >
                 <span className="text-2xl">{AUTHOR.avatar}</span>
                 <div className="text-left">
-                  <p className="font-semibold text-white">Créditos & Contacto</p>
-                  <p className="text-sm text-purple-200">Conoce al desarrollador</p>
+                  <p className="font-semibold text-white">{t('settings.credits')}</p>
+                  <p className="text-sm text-purple-200">{t('settings.creditsSubtitle')}</p>
                 </div>
               </button>
             )}

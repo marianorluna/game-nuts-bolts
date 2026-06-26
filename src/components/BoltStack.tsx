@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { getMovableCount } from '../domain/gameEngine'
 import type { Bolt } from '../domain/types'
+import { useTranslation } from '../i18n/useTranslation'
 import { NUT_H, NUT_LIFT_CLEARANCE, NutPiece } from './NutPiece'
 
 interface BoltStackProps {
@@ -14,17 +15,15 @@ interface BoltStackProps {
   onSelect: (index: number) => void
 }
 
-const SHAFT_TOP_OVERHANG = 8 // vástago visible por encima del stack
-const SHAFT_W = 18 // vástago más grueso
+const SHAFT_TOP_OVERHANG = 8
+const SHAFT_W = 18
 
-// Gradiente metálico plateado del vástago
 const SHAFT_GRADIENT =
   'linear-gradient(to right, #3e5060 0%, #7a8e9e 18%, #d4e4ee 46%, #b0c4d0 68%, #5a6e7e 88%, #3e5060 100%)'
 
 const SHAFT_GRADIENT_LOCKED =
   'linear-gradient(to right, #b8b8b8 0%, #d0d0d0 18%, #ececec 46%, #dcdcdc 68%, #c4c4c4 88%, #b8b8b8 100%)'
 
-// Patrón de rosca (estrías horizontales)
 const SHAFT_THREAD =
   'repeating-linear-gradient(0deg, transparent 0px, transparent 3.5px, rgba(0,0,0,0.16) 3.5px, rgba(0,0,0,0.16) 5px)'
 
@@ -41,6 +40,7 @@ export function BoltStack({
   multiNut = false,
   onSelect,
 }: BoltStackProps) {
+  const { t } = useTranslation()
   const emptySlots = capacity - bolt.length
   const nutsStackH = capacity * NUT_H
   const nutsAreaH = nutsStackH + SHAFT_TOP_OVERHANG
@@ -50,6 +50,9 @@ export function BoltStack({
     ? `${SHAFT_THREAD_LOCKED}, ${SHAFT_GRADIENT_LOCKED}`
     : `${SHAFT_THREAD}, ${SHAFT_GRADIENT}`
   const lockCenterY = NUT_LIFT_CLEARANCE + SHAFT_TOP_OVERHANG + nutsStackH / 2
+  const boltLabel =
+    t('level.bolt', { number: index + 1 }) +
+    (isLocked ? t('level.boltLocked') : '')
 
   return (
     <motion.button
@@ -75,14 +78,11 @@ export function BoltStack({
         opacity: isLocked ? 0.92 : 1,
         touchAction: 'manipulation',
         WebkitTapHighlightColor: 'transparent',
-        // Eleva el bulón seleccionado para que la tuerca levantada
-        // nunca quede detrás de otros bulones ni de elementos adyacentes
         position: 'relative',
         zIndex: isSelected ? 100 : 1,
       }}
-      aria-label={`Bulón ${index + 1}${isLocked ? ', bloqueado' : ''}`}
+      aria-label={boltLabel}
     >
-      {/* ── Zona de tuercas con vástago detrás ── */}
       <div
         style={{
           position: 'relative',
@@ -90,9 +90,6 @@ export function BoltStack({
           height: nutsAreaH + NUT_LIFT_CLEARANCE,
         }}
       >
-
-        {/* Vástago roscado (z=0, detrás de las tuercas).
-            Sobrepasa 6px hacia abajo para empalmar con la arandela. */}
         <div
           style={{
             position: 'absolute',
@@ -117,7 +114,6 @@ export function BoltStack({
           </div>
         )}
 
-        {/* Tuercas apiladas (z=1, encima del vástago) */}
         <div
           style={{
             position: 'absolute',
@@ -132,12 +128,10 @@ export function BoltStack({
             zIndex: 1,
           }}
         >
-          {/* Slots vacíos: el vástago se ve a través de ellos */}
           {Array.from({ length: emptySlots }).map((_, i) => (
             <div key={`empty-${i}`} style={{ height: NUT_H, width: 64, flexShrink: 0 }} />
           ))}
 
-          {/* Tuercas: top nut primero (arriba visual), bottom nut al final (abajo visual) */}
           {[...bolt].reverse().map((color, revIndex) => {
             const nutIndex = bolt.length - 1 - revIndex
             const isInMovableBlock =
@@ -154,7 +148,6 @@ export function BoltStack({
         </div>
       </div>
 
-      {/* ── Arandela ancha (washer) — directamente bajo las tuercas ── */}
       <div
         style={{
           width: 54,
@@ -171,7 +164,6 @@ export function BoltStack({
         }}
       />
 
-      {/* ── Base / pie del bulón ── */}
       <div
         style={{
           width: 44,

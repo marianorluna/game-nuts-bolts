@@ -1,0 +1,166 @@
+{
+  "common": {
+    "appName": "Nuts & Bolts",
+    "close": "Cerrar",
+    "gotIt": "Entendido",
+    "settings": "Configuración",
+    "byAuthor": "por {{name}}",
+    "versionShort": "v{{version}}"
+  },
+  "difficulty": {
+    "easy": "FÁCIL",
+    "medium": "MEDIO",
+    "hard": "DIFÍCIL"
+  },
+  "splash": {
+    "ariaLabel": "Pantalla de inicio. Toca para continuar.",
+    "tagline": "Ordena las tuercas por color",
+    "tapToContinue": "Toca para continuar"
+  },
+  "home": {
+    "comingSoon": "Próximamente",
+    "enterCampaign": "Entrar a {{name}}",
+    "campaignLocked": "{{name}} — próximamente"
+  },
+  "campaign": {
+    "backToCampaigns": "Volver a campañas",
+    "allLevelsCompleted": "¡Completaste los {{count}} niveles publicados! 🎉",
+    "improveStars": "Mejorar estrellas",
+    "keepPlaying": "¡Seguir jugando!",
+    "playLevel": "Jugar Nivel {{level}}",
+    "prevStage": "Etapa anterior",
+    "nextStage": "Etapa siguiente",
+    "goToStage": "Ir a {{name}}",
+    "challengeLevel": "Reto nivel {{level}}",
+    "level": "Nivel {{level}}",
+    "levelLocked": "Nivel {{level}} bloqueado",
+    "campaigns": {
+      "campaign-1-taller": {
+        "name": "El Taller",
+        "tagline": "Aprende el oficio ordenando tuercas y bulones."
+      },
+      "campaign-2-obra": {
+        "name": "La Obra",
+        "tagline": "Obra en construcción: más retos bajo presión."
+      },
+      "campaign-3-fabrica": {
+        "name": "La Fábrica",
+        "tagline": "Planta industrial con reglas nuevas."
+      }
+    },
+    "stages": {
+      "stage-1-fundamentos": {
+        "name": "Caja de herramientas",
+        "blurb": "Ordena la caja, que todo quede en su lugar."
+      },
+      "stage-2-presion": {
+        "name": "El garaje apretado",
+        "blurb": "El coche ocupa sitio. Queda poco espacio libre en el banco."
+      },
+      "stage-3-nuevas-reglas": {
+        "name": "La línea de montaje",
+        "blurb": "Encargos grandes: cadenas de tuercas y bulones que hay que liberar."
+      }
+    },
+    "challenges": {
+      "20": "Inspección de la caja",
+      "40": "Prueba de torque",
+      "60": "Cierre del garaje",
+      "80": "Control de calidad",
+      "100": "Graduación de aprendiz"
+    },
+    "milestones": {
+      "20": {
+        "title": "¡Inspección superada!",
+        "message": "La caja pasó el control. Sigue ordenando antes de cerrar el turno."
+      },
+      "30": {
+        "title": "¡Caja ordenada!",
+        "message": "Completaste la caja de herramientas. Mañana toca el garaje apretado."
+      },
+      "40": {
+        "title": "¡Prueba de torque!",
+        "message": "Aguantaste con un solo bulón libre. El garaje no perdona."
+      },
+      "60": {
+        "title": "¡Garaje cerrado!",
+        "message": "El banco apretado ya no te intimida. La línea de montaje te espera."
+      },
+      "80": {
+        "title": "¡Control de calidad!",
+        "message": "Dominas las cadenas de tuercas. Ahora toca liberar bulones bloqueados."
+      },
+      "100": {
+        "title": "¡Graduación de aprendiz!",
+        "message": "Completaste la primera sección del taller. El banco es tuyo."
+      }
+    }
+  },
+  "level": {
+    "back": "Volver",
+    "resetLevel": "Volver al inicio del nivel",
+    "levelNumber": "Nivel {{level}}",
+    "undoRemaining": "Deshacer ({{count}} restantes)",
+    "movesAria": "{{moves}} movimientos. Toca para ver cómo ganar estrellas.",
+    "bolt": "Bulón {{number}}",
+    "boltLocked": ", bloqueado",
+    "movesTitle": "Movimientos",
+    "movesThreeStarsPrefix": "Para ganar",
+    "movesThreeStarsHighlight": "3 estrellas ⭐⭐⭐",
+    "movesThreeStarsSuffix": "debes completar el nivel con un máximo de {{count}} movimientos.",
+    "movesTwoStarsPrefix": "Para",
+    "movesTwoStarsHighlight": "2 estrellas ⭐⭐",
+    "movesTwoStarsSuffix": "el máximo es de {{count}} movimientos.",
+    "movesOneStar": "Si usas más movimientos, igual puedes completar el nivel y ganar 1 estrella ⭐.",
+    "coachMoves": "Toca aquí para ver cómo ganar estrellas según tus movimientos.",
+    "coachMultiNut": "Nueva regla: las tuercas del mismo color en la cima se mueven juntas."
+  },
+  "win": {
+    "completed": "¡Nivel completado!",
+    "difficultyLevel": "{{difficulty}} · Nivel {{level}}",
+    "movesUsed": "Usaste {{moves}} movimientos",
+    "threeStarHint": "Para 3 estrellas necesitabas un máximo de {{count}} movimientos.",
+    "nextLevel": "Siguiente nivel",
+    "replay": "Volver a jugar",
+    "backToMenu": "Volver al menú"
+  },
+  "endOfContent": {
+    "title": "¡Llegaste al final del taller!",
+    "message": "Completaste todos los niveles disponibles. Mientras preparamos más encargos en el taller, podés volver a jugar los niveles que ya hiciste y sumar estrellas."
+  },
+  "settings": {
+    "title": "Configuración",
+    "sound": "Sonidos",
+    "soundOn": "Activados",
+    "soundOff": "Desactivados",
+    "credits": "Créditos & Contacto",
+    "creditsSubtitle": "Conoce al desarrollador",
+    "language": "Idioma",
+    "languageAuto": "Automático",
+    "languageEs": "Español",
+    "languageEn": "English"
+  },
+  "credits": {
+    "title": "Créditos",
+    "madeWith": "Hecho con 💜",
+    "contactMe": "CONTÁCTAME",
+    "appVersion": "Nuts & Bolts · v{{version}}",
+    "stack": "React · TypeScript · Tailwind · Framer Motion"
+  },
+  "author": {
+    "role": "Desarrollador de software",
+    "bio": "Desarrollo software y disfruto explorar ideas en formato mobile. Nuts & Bolts nació como un puzzle de lógica y color, pensado para partidas cortas."
+  },
+  "update": {
+    "title": "Nueva versión disponible",
+    "prompt": "Hay una actualización en Play Store.",
+    "versionRange": "v{{current}} → v{{available}}",
+    "updateNow": "Actualizar ahora",
+    "later": "Más tarde",
+    "downloading": "Descargando actualización…",
+    "ready": "La actualización está lista. Reinicia para aplicarla.",
+    "restart": "Reiniciar app",
+    "error": "No se pudo actualizar automáticamente. Puedes hacerlo desde Play Store.",
+    "openStore": "Abrir Play Store"
+  }
+}

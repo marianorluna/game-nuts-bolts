@@ -11,6 +11,7 @@ import {
   openAppStoreListing,
   startNativeAppUpdate,
 } from '../services/appUpdateService'
+import { useTranslation } from '../i18n/useTranslation'
 
 type UpdatePhase = 'prompt' | 'downloading' | 'ready' | 'error'
 
@@ -29,6 +30,7 @@ export function UpdateAvailableModal({
   updateInfo,
   onDismiss,
 }: UpdateAvailableModalProps) {
+  const { t } = useTranslation()
   const [phase, setPhase] = useState<UpdatePhase>('prompt')
   const [progress, setProgress] = useState(0)
   const [busy, setBusy] = useState(false)
@@ -135,17 +137,19 @@ export function UpdateAvailableModal({
           >
             <div className="mb-2 text-4xl">🔄</div>
             <h2 className="mb-2 text-xl font-bold text-white">
-              Nueva versión disponible
+              {t('update.title')}
             </h2>
 
             {phase === 'prompt' && (
               <>
                 <p className="mb-1 text-sm text-purple-200">
-                  Hay una actualización en Play Store.
+                  {t('update.prompt')}
                 </p>
                 <p className="mb-6 text-sm text-purple-100">
-                  v{currentVersion} →{' '}
-                  <span className="font-bold text-amber-300">v{availableVersion}</span>
+                  {t('update.versionRange', {
+                    current: currentVersion,
+                    available: availableVersion,
+                  })}
                 </p>
                 <div className="flex flex-col gap-3">
                   <button
@@ -154,7 +158,7 @@ export function UpdateAvailableModal({
                     onClick={() => void handleUpdate()}
                     className="rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-3 font-bold text-white shadow-lg transition active:scale-95 disabled:opacity-60"
                   >
-                    Actualizar ahora
+                    {t('update.updateNow')}
                   </button>
                   <button
                     type="button"
@@ -162,7 +166,7 @@ export function UpdateAvailableModal({
                     onClick={onDismiss}
                     className="rounded-xl border border-white/20 py-3 font-semibold text-white transition active:scale-95 disabled:opacity-60"
                   >
-                    Más tarde
+                    {t('update.later')}
                   </button>
                 </div>
               </>
@@ -171,7 +175,7 @@ export function UpdateAvailableModal({
             {phase === 'downloading' && (
               <>
                 <p className="mb-4 text-sm text-purple-200">
-                  Descargando actualización…
+                  {t('update.downloading')}
                 </p>
                 <div className="mb-2 h-2 overflow-hidden rounded-full bg-white/10">
                   <div
@@ -186,7 +190,7 @@ export function UpdateAvailableModal({
             {phase === 'ready' && (
               <>
                 <p className="mb-6 text-sm text-purple-200">
-                  La actualización está lista. Reinicia para aplicarla.
+                  {t('update.ready')}
                 </p>
                 <button
                   type="button"
@@ -194,7 +198,7 @@ export function UpdateAvailableModal({
                   onClick={() => void handleRestart()}
                   className="w-full rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-3 font-bold text-white shadow-lg transition active:scale-95 disabled:opacity-60"
                 >
-                  Reiniciar app
+                  {t('update.restart')}
                 </button>
               </>
             )}
@@ -202,8 +206,7 @@ export function UpdateAvailableModal({
             {phase === 'error' && (
               <>
                 <p className="mb-6 text-sm text-purple-200">
-                  No se pudo actualizar automáticamente. Puedes hacerlo desde Play
-                  Store.
+                  {t('update.error')}
                 </p>
                 <div className="flex flex-col gap-3">
                   <button
@@ -212,7 +215,7 @@ export function UpdateAvailableModal({
                     onClick={() => void handleOpenStore()}
                     className="rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 py-3 font-bold text-white shadow-lg transition active:scale-95 disabled:opacity-60"
                   >
-                    Abrir Play Store
+                    {t('update.openStore')}
                   </button>
                   <button
                     type="button"
@@ -220,7 +223,7 @@ export function UpdateAvailableModal({
                     onClick={onDismiss}
                     className="rounded-xl border border-white/20 py-3 font-semibold text-white transition active:scale-95 disabled:opacity-60"
                   >
-                    Cerrar
+                    {t('common.close')}
                   </button>
                 </div>
               </>
