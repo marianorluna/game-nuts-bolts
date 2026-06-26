@@ -25,17 +25,17 @@ export function HomeScreen() {
     <div className="home-ambient-bg flex h-dvh max-h-dvh flex-col overflow-hidden px-4 pt-safe sm:px-6 md:px-8">
       <div className="home-ambient-glows pointer-events-none absolute inset-0" aria-hidden="true" />
 
-      <header className="relative z-10 flex h-14 shrink-0 items-center justify-center md:h-16">
+      <header className="relative z-10 shrink-0 py-4 text-center md:py-5">
         <button
           type="button"
           onClick={() => setSettingsOpen(true)}
-          className="absolute right-0 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-xl text-white backdrop-blur-sm transition hover:bg-white/25 md:h-12 md:w-12 md:text-2xl"
+          className="absolute right-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12 md:text-2xl"
           aria-label="Configuración"
         >
           {soundEnabled ? '⚙️' : '🔇'}
         </button>
-        <div className="flex items-center justify-center">
-          <div className="relative flex items-center">
+        <div className="flex min-h-9 items-center justify-center md:min-h-11">
+          <div className="relative inline-flex items-center">
             <AppLogo
               size="sm"
               className="absolute right-full top-1/2 mr-2 shrink-0 -translate-y-1/2 md:mr-3"
