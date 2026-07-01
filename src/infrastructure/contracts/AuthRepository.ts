@@ -7,6 +7,7 @@ export interface AuthUser {
 export interface AuthRepository {
   getSession(): Promise<AuthUser | null>
   onAuthStateChange(listener: (user: AuthUser | null) => void): () => void
+  signInWithGoogle(): Promise<void>
   signInWithPassword(email: string, password: string): Promise<AuthUser>
   signUpWithPassword(email: string, password: string): Promise<AuthUser>
   signOut(): Promise<void>

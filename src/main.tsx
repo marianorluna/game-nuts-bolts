@@ -7,13 +7,16 @@ import { initProgressSync, mergeProgressOnSession } from './application/syncProg
 import {
   bindAuthStateListener,
   createInfrastructure,
+  initOAuthHandlers,
   restoreAuthSession,
 } from './infrastructure'
 
 const infrastructure = createInfrastructure()
+
 if (infrastructure) {
   bindAuthStateListener(infrastructure.auth)
   initProgressSync(infrastructure)
+  initOAuthHandlers()
   void restoreAuthSession(infrastructure.auth).then((user) => {
     if (user) void mergeProgressOnSession(user.id)
   })

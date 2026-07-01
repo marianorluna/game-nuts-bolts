@@ -4,6 +4,7 @@
     "close": "Cerrar",
     "gotIt": "Entendido",
     "settings": "Configuración",
+    "account": "Cuenta",
     "byAuthor": "por {{name}}",
     "versionShort": "v{{version}}"
   },
@@ -162,5 +163,30 @@
     "restart": "Reiniciar app",
     "error": "No se pudo actualizar automáticamente. Puedes hacerlo desde Play Store.",
     "openStore": "Abrir Play Store"
+  },
+  "account": {
+    "title": "Cuenta",
+    "authTitle": "Guarda tu progreso",
+    "authSubtitle": "Vincula tu cuenta para respaldar niveles y estrellas en la nube. El juego sigue funcionando sin conexión.",
+    "continueWithGoogle": "Continuar con Google",
+    "useEmail": "Usar email y contraseña",
+    "or": "o",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Contraseña (mín. 6)",
+    "signIn": "Iniciar sesión",
+    "signUp": "Crear cuenta",
+    "signingIn": "Conectando…",
+    "signingOut": "Cerrando sesión…",
+    "needAccount": "¿No tienes cuenta? Regístrate",
+    "haveAccount": "¿Ya tienes cuenta? Inicia sesión",
+    "signedIn": "Jugador conectado",
+    "syncActive": "Progreso sincronizado en la nube",
+    "signOut": "Cerrar sesión",
+    "settingsSubtitle": "Respalda tu progreso en la nube",
+    "linkTitle": "¿Guardamos tu progreso?",
+    "linkMessage": "Llevas el nivel {{level}} desbloqueado. Vincula una cuenta para no perder tus estrellas si cambias de dispositivo.",
+    "linkHint": "Puedes seguir jugando sin cuenta; tu progreso local no se borra.",
+    "linkCta": "Vincular cuenta",
+    "linkLater": "Ahora no"
   }
 }

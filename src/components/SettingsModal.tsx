@@ -1,8 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
 import { useGameStore } from '../store/gameStore'
 import { AUTHOR } from '../config/author'
 import { useTranslation } from '../i18n/useTranslation'
 import type { LocalePreference } from '../i18n/types'
+import { AccountSettingsSection } from './AccountSettingsSection'
+import { AuthModal } from './AuthModal'
 
 interface SettingsModalProps {
   open: boolean
@@ -20,6 +23,7 @@ export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalPro
   const { t, localePreference, setLocalePreference } = useTranslation()
   const soundEnabled = useGameStore((s) => s.settings.soundEnabled)
   const toggleSound = useGameStore((s) => s.toggleSound)
+  const [authOpen, setAuthOpen] = useState(false)
 
   return (
     <AnimatePresence>
@@ -98,6 +102,8 @@ export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalPro
               </div>
             </div>
 
+            <AccountSettingsSection onOpenAuth={() => setAuthOpen(true)} />
+
             {onOpenCredits && (
               <button
                 type="button"
@@ -114,6 +120,7 @@ export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalPro
           </motion.div>
         </motion.div>
       )}
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </AnimatePresence>
   )
 }

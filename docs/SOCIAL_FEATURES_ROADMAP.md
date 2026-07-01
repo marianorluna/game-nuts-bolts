@@ -14,7 +14,7 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 | [1](#prompt-1--backend-supabase) | — | Proyecto Supabase + esquema SQL + RLS | ✅ Completado |
 | [2](#prompt-2--capa-infrastructure) | — | SDK + repositories (sin UI) | ✅ Completado |
 | [3](#prompt-3--sync-offline-first) | v2.0 | Sync al ganar nivel | ✅ Completado |
-| [4](#prompt-4--ui-de-cuenta) | v2.0 | Auth + Google OAuth | ⬜ Pendiente |
+| [4](#prompt-4--ui-de-cuenta) | v2.0 | Auth + Google OAuth | ✅ Completado |
 | [5](#prompt-5--release-v20--migración-beta) | v2.0 | QA + Play Store + jugadores beta | ⬜ Pendiente |
 | [6](#prompt-6--ranking-realtime) | v2.1 | Leaderboard en vivo | ⬜ Pendiente |
 
@@ -183,10 +183,10 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 ### Verificación
 
 - [x] `npm run build` y `npm test` sin errores
-- [ ] Completar nivel offline → sync al reconectar (manual / Prompt 4)
-- [ ] Simular beta con 30+ niveles locales + login → merge correcto (manual / Prompt 4)
+- [ ] Completar nivel offline → sync al reconectar (manual en dispositivo)
+- [ ] Simular beta con 30+ niveles locales + login → merge correcto (manual en dispositivo)
 - [x] Jugador sin cuenta sigue igual que antes (`createInfrastructure()` null si no hay flags)
-- [ ] Revisión contigo antes de Prompt 4
+- [x] Revisión contigo antes de Prompt 4
 
 ---
 
@@ -198,17 +198,17 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 
 ### Qué se hace
 
-- [ ] `AuthModal` — Google + email opcional
-- [ ] `LinkProgressModal` — one-time si `unlockedLevel > 5`
-- [ ] Botón "Cuenta" en Home / Settings
-- [ ] Deep link OAuth Android (`com.nutsandbolts.puzzle://`)
-- [ ] Google OAuth configurado en Supabase + Google Cloud Console
+- [x] `AuthModal` — Google + email opcional
+- [x] `LinkProgressModal` — one-time si `unlockedLevel > 5`
+- [x] Botón "Cuenta" en Home / Settings
+- [x] Deep link OAuth Android (`com.nutsandbolts.puzzle://`)
+- [x] Google OAuth configurado en Supabase + Google Cloud Console (guía en `docs/supabase/README.md`)
 
 ### Verificación
 
-- [ ] Flujo completo en emulador o dispositivo real
-- [ ] 50 niveles locales → Google → sigue en nivel 50 con estrellas intactas
-- [ ] Cerrar sesión: progreso local permanece
+- [ ] Flujo completo en emulador o dispositivo real (requiere credenciales Google en Supabase)
+- [ ] 50 niveles locales → Google → sigue en nivel 50 con estrellas intactas (manual)
+- [x] Cerrar sesión: progreso local permanece (lógica: `signOut` no toca `gameStore` / `localStorage`)
 - [ ] Revisión contigo antes de Prompt 5
 
 ---
@@ -315,9 +315,10 @@ flowchart TB
 | 2026-07-01 | 1+ | Multi-juego: tablas `nb_*` + `game_id`; `src/config/game.ts`. |
 | 2026-07-01 | 2 | Capa infrastructure: contracts, Supabase SDK, `authSession`, `test:supabase`. |
 | 2026-07-01 | 3 | `syncProgress.ts`, merge al login, debounce post-victoria, retry offline. |
+| 2026-07-02 | 4 | UI cuenta: `AuthModal`, `LinkProgressModal`, OAuth Capacitor, deep link Android, `useAuth`. |
 
 ---
 
 ## Próximo paso
 
-**Prompt 4:** UI de cuenta (`AuthModal`, Google OAuth). Di: *"Ejecuta el Prompt 4"*
+**Prompt 5:** Release v2.0 + migración beta. Di: *"Ejecuta el Prompt 5"*

@@ -4,6 +4,7 @@
     "close": "Close",
     "gotIt": "Got it",
     "settings": "Settings",
+    "account": "Account",
     "byAuthor": "by {{name}}",
     "versionShort": "v{{version}}"
   },
@@ -162,5 +163,30 @@
     "restart": "Restart app",
     "error": "Could not update automatically. You can update from the Play Store.",
     "openStore": "Open Play Store"
+  },
+  "account": {
+    "title": "Account",
+    "authTitle": "Save your progress",
+    "authSubtitle": "Link your account to back up levels and stars in the cloud. The game still works offline.",
+    "continueWithGoogle": "Continue with Google",
+    "useEmail": "Use email and password",
+    "or": "or",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password (min. 6)",
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "signingIn": "Signing in…",
+    "signingOut": "Signing out…",
+    "needAccount": "No account? Sign up",
+    "haveAccount": "Already have an account? Sign in",
+    "signedIn": "Signed in",
+    "syncActive": "Progress synced to the cloud",
+    "signOut": "Sign out",
+    "settingsSubtitle": "Back up your progress in the cloud",
+    "linkTitle": "Save your progress?",
+    "linkMessage": "You've unlocked level {{level}}. Link an account so you don't lose your stars if you switch devices.",
+    "linkHint": "You can keep playing without an account; local progress is not deleted.",
+    "linkCta": "Link account",
+    "linkLater": "Not now"
   }
 }

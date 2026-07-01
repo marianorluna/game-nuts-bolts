@@ -36,6 +36,45 @@ Con dos usuarios de prueba (Auth → Users → Add user), mismo `game_id`:
 - Usuario con `show_in_leaderboard = false` **no** aparece en lectura pública del ranking.
 - Queries de leaderboard **siempre** filtran `game_id = 'nuts-and-bolts'`.
 
-## Google OAuth
+## Google OAuth (Prompt 4)
 
-Se configura en **Prompt 4** (Google Cloud Console + Supabase Auth → Google).
+### 1. Google Cloud Console
+
+1. [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials.
+2. **OAuth 2.0 Client ID** → tipo **Web application** (para Supabase).
+3. **Authorized redirect URIs** — añadir la URL de callback de Supabase:
+   ```
+   https://<PROJECT_REF>.supabase.co/auth/v1/callback
+   ```
+   (`<PROJECT_REF>` = ID del proyecto en Supabase Dashboard → Settings → General.)
+4. Crear otro client **Android** (opcional para validación nativa):
+   - Package name: `com.nutsandbolts.puzzle`
+   - SHA-1 del keystore de release/debug.
+
+### 2. Supabase Dashboard
+
+1. **Authentication → Providers → Google**: activar y pegar Client ID + Client Secret del client **Web**.
+2. **Authentication → URL Configuration → Redirect URLs**, añadir:
+   ```
+   com.nutsandbolts.puzzle://login-callback
+   http://localhost:5173/login-callback
+   ```
+   (Añade tu dominio de producción si publicas web.)
+
+### 3. App Android
+
+El deep link ya está en `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<data android:scheme="com.nutsandbolts.puzzle" android:host="login-callback" />
+```
+
+Tras cambios nativos: `npm run cap:sync`.
+
+### 4. Verificación
+
+1. Jugador con 5+ niveles → modal de vinculación (una vez).
+2. Login Google en emulador/dispositivo → vuelve a la app por deep link.
+3. Progreso local se fusiona con la nube (merge dominio).
+4. Cerrar sesión → progreso local intacto en `localStorage`.
+

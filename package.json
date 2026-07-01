@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@capacitor/android": "^7.2.0",
+    "@capacitor/app": "^7.1.2",
+    "@capacitor/browser": "^7.0.5",
     "@capacitor/core": "^7.2.0",
     "@capacitor/splash-screen": "^7.0.5",
     "@capawesome/capacitor-app-update": "^7.2.0",

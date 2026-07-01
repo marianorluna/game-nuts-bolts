@@ -1,21 +1,31 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGameStore } from '../store/gameStore'
 import {
   ALL_CAMPAIGNS,
   getCampaignProgress,
 } from '../domain/content/campaignStructure'
 import { useTranslation } from '../i18n/useTranslation'
+import { useAuth } from '../hooks/useAuth'
 import { SettingsModal } from './SettingsModal'
 import { CreditsModal } from './CreditsModal'
+import { AuthModal } from './AuthModal'
+import { LinkProgressModal } from './LinkProgressModal'
 import { AppFooter } from './AppFooter'
 import { CampaignCard } from './CampaignCard'
 import { AppLogo } from './AppLogo'
 import { getCampaignGridContainerClass } from './campaignGridLayout'
+import {
+  dismissLinkProgressPrompt,
+  shouldShowLinkProgressPrompt,
+} from '../services/linkProgressPromptService'
 
 export function HomeScreen() {
   const { t } = useTranslation()
+  const { cloudSyncEnabled, user, initialized } = useAuth()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [creditsOpen, setCreditsOpen] = useState(false)
+  const [authOpen, setAuthOpen] = useState(false)
+  const [linkProgressOpen, setLinkProgressOpen] = useState(false)
   const openCampaign = useGameStore((s) => s.openCampaign)
   const progress = useGameStore((s) => s.progress)
   const soundEnabled = useGameStore((s) => s.settings.soundEnabled)
@@ -23,11 +33,34 @@ export function HomeScreen() {
   const isCompleted = (id: number) => (progress.levels[id]?.completed ?? false)
   const campaignCount = ALL_CAMPAIGNS.length
 
+  useEffect(() => {
+    if (!initialized) return
+    if (
+      shouldShowLinkProgressPrompt(
+        progress.unlockedLevel,
+        Boolean(user),
+        cloudSyncEnabled,
+      )
+    ) {
+      setLinkProgressOpen(true)
+    }
+  }, [initialized, user, cloudSyncEnabled, progress.unlockedLevel])
+
   return (
     <div className="home-ambient-bg flex h-dvh max-h-dvh flex-col overflow-hidden px-4 pt-safe sm:px-6 md:px-8">
       <div className="home-ambient-glows pointer-events-none absolute inset-0" aria-hidden="true" />
 
       <header className="relative z-10 shrink-0 py-4 text-center md:py-5">
+        {cloudSyncEnabled && (
+          <button
+            type="button"
+            onClick={() => (user ? setSettingsOpen(true) : setAuthOpen(true))}
+            className="absolute left-0 top-4 hidden h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:flex md:h-12 md:w-12"
+            aria-label={t('account.title')}
+          >
+            {user ? '✓' : '👤'}
+          </button>
+        )}
         <button
           type="button"
           onClick={() => setSettingsOpen(true)}
@@ -83,6 +116,19 @@ export function HomeScreen() {
         }}
       />
       <CreditsModal open={creditsOpen} onClose={() => setCreditsOpen(false)} />
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+      <LinkProgressModal
+        open={linkProgressOpen}
+        unlockedLevel={progress.unlockedLevel}
+        onLink={() => {
+          setLinkProgressOpen(false)
+          setAuthOpen(true)
+        }}
+        onDismiss={() => {
+          dismissLinkProgressPrompt()
+          setLinkProgressOpen(false)
+        }}
+      />
     </div>
   )
 }

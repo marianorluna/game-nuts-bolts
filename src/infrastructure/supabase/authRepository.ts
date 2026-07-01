@@ -1,5 +1,7 @@
+import { Capacitor } from '@capacitor/core'
 import type { User } from '@supabase/supabase-js'
 import type { AuthRepository, AuthUser } from '../contracts/AuthRepository'
+import { getOAuthRedirectUrl, openOAuthUrl } from '../oauth'
 import { getSupabaseClient } from './client'
 
 function mapUser(user: User): AuthUser {
@@ -33,6 +35,30 @@ export function createSupabaseAuthRepository(): AuthRepository {
       return () => {
         data.subscription.unsubscribe()
       }
+    },
+
+    async signInWithGoogle() {
+      const redirectTo = getOAuthRedirectUrl()
+
+      if (Capacitor.isNativePlatform()) {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo,
+            skipBrowserRedirect: true,
+          },
+        })
+        if (error) throw error
+        if (!data.url) throw new Error('OAuth sin URL de redirección')
+        await openOAuthUrl(data.url)
+        return
+      }
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo },
+      })
+      if (error) throw error
     },
 
     async signInWithPassword(email, password) {
