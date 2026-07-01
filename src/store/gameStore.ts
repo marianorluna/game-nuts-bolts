@@ -46,6 +46,7 @@ interface GameStore {
   setLocalePreference: (locale: LocalePreference) => void
   getLevelStars: (levelId: number) => number
   isLevelUnlocked: (levelId: number) => boolean
+  replaceProgress: (progress: PlayerProgress) => void
 }
 
 const defaultProgress: PlayerProgress = {
@@ -272,6 +273,8 @@ export const useGameStore = create<GameStore>()(
           isCompleted,
         )
       },
+
+      replaceProgress: (progress) => set({ progress }),
     }),
     {
       name: 'nuts-bolts-progress',

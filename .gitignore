@@ -36,3 +36,80 @@ android/local.properties
 
 # Opcionales
 files-test
+
+# Entornos locales y variables secretas
+.env
+.env.*
+!.env.example
+
+# Salidas de compilación / producción
+build/
+out/
+coverage/
+*.tsbuildinfo
+
+# Archivos del sistema
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Directorios y archivos de pruebas temporales
+*.tmp
+*.temp
+*.bak
+*.swp
+.cache/
+.sass-cache/
+.next/
+.nuxt/
+storybook-static/
+coverage/
+
+# Ignorar archivos de Supabase y backups locales si existen
+supabase/.temp
+.supabase/
+
+# Datos sensibles y otros outputs locales
+*.sqlite
+*.sqlite3
+*.db
+*.local
+*.secret
+*.bak
+*.pid
+
+# Ignorar directorios y contenido de documentación generado
+docs/dist/
+docs/.vitepress/dist
+
+# Otros archivos y directorios específicos del proyecto
+cypress/screenshots/
+cypress/videos/
+files/
+files-test/
+public/screenshots/
+public/videos/
+
+# Ignorar configuración local de npm/yarn/pnpm
+.npm/
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnpm-debug.log
+
+# Ignorar lockfiles secundarios (si no se usan)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# No subir capturas y archivos exportados por error
+*.mp4
+*.webm
+*.zip
+*.tar
+*.tar.gz
+*.rar
+exported-*

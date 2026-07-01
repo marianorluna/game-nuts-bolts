@@ -77,6 +77,23 @@ export function deriveRankingStats(progress: PlayerProgress): RankingStats {
   }
 }
 
+/**
+ * Criterio 4 — clave lexicográfica para ORDER BY en Supabase.
+ * bestMoves por nivel completado, id alto→bajo, zero-padded. Menor clave = mejor.
+ */
+export function buildMovesTiebreakKey(
+  progress: PlayerProgress,
+  maxLevelId: number = MAX_LEVEL_ID,
+): string {
+  const parts: string[] = []
+  for (let id = maxLevelId; id >= 1; id -= 1) {
+    const level = progress.levels[id]
+    if (!level?.completed || level.bestMoves <= 0) continue
+    parts.push(String(level.bestMoves).padStart(6, '0'))
+  }
+  return parts.join('')
+}
+
 /** Criterio 4: bestMoves por nivel completado, del id más alto al más bajo (menor gana). */
 function compareMovesLevelByLevel(
   a: PlayerProgress,

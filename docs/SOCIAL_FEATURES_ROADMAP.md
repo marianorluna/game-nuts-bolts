@@ -10,10 +10,10 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 
 | Prompt | Versión | Descripción | Estado |
 |--------|---------|-------------|--------|
-| [0](#prompt-0--dominio-puro) | — | Merge de progreso + score (sin backend) | ✅ Completado |
-| [1](#prompt-1--backend-supabase) | — | Proyecto Supabase + esquema SQL + RLS | ⬜ Pendiente |
-| [2](#prompt-2--capa-infrastructure) | — | SDK + repositories (sin UI) | ⬜ Pendiente |
-| [3](#prompt-3--sync-offline-first) | v2.0 | Sync al ganar nivel | ⬜ Pendiente |
+| [0](#prompt-0--dominio-puro) | — | Merge + ranking 6 criterios (sin backend) | ✅ Completado |
+| [1](#prompt-1--backend-supabase) | — | Proyecto Supabase + esquema SQL + RLS | ✅ Completado |
+| [2](#prompt-2--capa-infrastructure) | — | SDK + repositories (sin UI) | ✅ Completado |
+| [3](#prompt-3--sync-offline-first) | v2.0 | Sync al ganar nivel | ✅ Completado |
 | [4](#prompt-4--ui-de-cuenta) | v2.0 | Auth + Google OAuth | ⬜ Pendiente |
 | [5](#prompt-5--release-v20--migración-beta) | v2.0 | QA + Play Store + jugadores beta | ⬜ Pendiente |
 | [6](#prompt-6--ranking-realtime) | v2.1 | Leaderboard en vivo | ⬜ Pendiente |
@@ -76,9 +76,11 @@ unlockedLevel = max(local, remoto)
 ### Qué se hace
 
 - [x] `src/domain/progress/mergePlayerProgress.ts`
-- [x] `src/domain/progress/playerRanking.ts` (`comparePlayerRank`, stats)
-- [x] Tests unitarios del merge (`npm test`)
-- [x] Barrel `src/domain/progress/index.ts` (tipos existentes en `types.ts`, sin cambios)
+- [x] `src/domain/progress/playerRanking.ts` — `comparePlayerRank`, `deriveRankingStats`, `computeRankingPointsThrough3`, `shouldUpdateRankSnapshot`, `hasRankingStatsChanged`
+- [x] Tipos en `src/domain/types.ts`: `PlayerRankingMeta`, `PlayerRankingEntry`
+- [x] Tests unitarios merge + ranking (`mergePlayerProgress.test.ts`, `playerRanking.test.ts`)
+- [x] Barrel `src/domain/progress/index.ts`
+- [x] Reglas documentadas en [RANKING_RULES.md](./RANKING_RULES.md) (6 criterios lexicográficos; snapshot al subir `unlockedLevel`)
 
 ### Qué NO se hace
 
@@ -89,12 +91,12 @@ unlockedLevel = max(local, remoto)
 ### Verificación
 
 - [x] `npm run build` sin errores
-- [x] Tests cubren: local mejor, remoto mejor, empate, nivel parcial
-- [ ] Revisión contigo antes de Prompt 1
+- [x] Tests cubren: local mejor, remoto mejor, empate, nivel parcial, desempates 1→6
+- [x] Revisión contigo antes de Prompt 1
 
 ### Entregable
 
-Funciones de dominio probadas, listas para cuando exista la nube.
+Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas para esquema Supabase (Prompt 1).
 
 ---
 
@@ -108,11 +110,24 @@ Funciones de dominio probadas, listas para cuando exista la nube.
 
 ### Qué se hace
 
-- [ ] Proyecto Supabase dedicado a Nuts & Bolts (no mezclar con otros)
-- [ ] Tablas: `player_profiles`, `player_progress`, `leaderboard_events`
-- [ ] Row Level Security (RLS)
-- [ ] `.env.example` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`
-- [ ] SQL guardado en `docs/supabase/schema.sql` (o similar)
+- [x] Proyecto Supabase compartido (`games`) — URL + anon key en `.env.local`
+- [x] Tablas: `nb_player_profiles`, `nb_player_progress`, `nb_leaderboard_events`
+- [x] Columna `game_id` en todas las tablas (PK compuesta en profiles/progress)
+- [x] Columnas de ranking en `nb_player_progress` — ver [RANKING_RULES.md](./RANKING_RULES.md#columnas-en-supabase-prompt-1--6):
+  `completed_levels`, `total_stars`, `weighted_tier_points`, `moves_tiebreak_key`, `total_best_moves`, `rank_snapshot_at`
+- [x] Payload JSON `levels` + `unlocked_level` (equivalente a `PlayerProgress` local)
+- [x] Row Level Security (RLS): cada usuario solo escribe su fila; lectura pública del ranking solo con `show_in_leaderboard = true` en el mismo `game_id`
+- [x] Activar **Email** provider en Supabase Dashboard (Google se configura en Prompt 4)
+- [x] `.env.example` con:
+  ```
+  VITE_SUPABASE_URL=
+  VITE_SUPABASE_ANON_KEY=
+  VITE_GAME_ID=nuts-and-bolts
+  VITE_FEATURE_CLOUD_SYNC=true
+  VITE_FEATURE_LEADERBOARD=false
+  ```
+- [x] SQL guardado en `docs/supabase/schema.sql` (aplicar en SQL Editor del dashboard)
+- [x] `src/config/game.ts` — `GAME_ID`, nombres de tablas para Prompt 2
 
 ### Qué NO se hace
 
@@ -121,9 +136,9 @@ Funciones de dominio probadas, listas para cuando exista la nube.
 
 ### Verificación
 
-- [ ] Tablas visibles en Supabase Dashboard
-- [ ] Usuario A no puede escribir progreso de usuario B
-- [ ] Revisión contigo antes de Prompt 2
+- [x] Tablas visibles en Supabase Dashboard
+- [x] Usuario A no puede escribir progreso de usuario B (RLS en `schema.sql`)
+- [x] Revisión contigo antes de Prompt 2
 
 ---
 
@@ -135,16 +150,18 @@ Funciones de dominio probadas, listas para cuando exista la nube.
 
 ### Qué se hace
 
-- [ ] `src/infrastructure/contracts/` — `AuthRepository`, `ProgressRepository`
-- [ ] `src/infrastructure/supabase/` — client, auth, progress
-- [ ] `@supabase/supabase-js` en `package.json`
-- [ ] Restaurar sesión al arranque (`getSession`) sin modales
+- [x] `src/infrastructure/contracts/` — `AuthRepository`, `ProgressRepository`
+- [x] `src/infrastructure/supabase/` — client, auth, progress (tablas `nb_*`, filtro `game_id`)
+- [x] `@supabase/supabase-js` en `package.json`
+- [x] Restaurar sesión al arranque (`getSession`) sin modales — `main.tsx` + `authSession.ts`
+- [x] `buildMovesTiebreakKey` en dominio (columna `moves_tiebreak_key`)
+- [x] Script `npm run test:supabase` — login/registro + upsert de prueba
 
 ### Verificación
 
-- [ ] Login de prueba (script o consola)
-- [ ] Upsert de `PlayerProgress` de prueba en BD
-- [ ] Revisión contigo antes de Prompt 3
+- [x] Login de prueba (script `scripts/test-supabase.ts`)
+- [x] Upsert de `PlayerProgress` de prueba en BD
+- [x] Revisión contigo antes de Prompt 3
 
 ---
 
@@ -156,15 +173,19 @@ Funciones de dominio probadas, listas para cuando exista la nube.
 
 ### Qué se hace
 
-- [ ] `src/application/syncProgress.ts`
-- [ ] Hook en `gameStore` post-victoria (debounced, retry sin red)
-- [ ] Merge automático local ↔ remoto al detectar sesión
+- [x] `src/application/syncProgress.ts`
+- [x] Suscripción en `gameStore` post-victoria vía `initProgressSync` (debounced 800 ms, retry en `online`)
+- [x] Usar `hasRankingStatsChanged` para decidir upsert; `shouldUpdateRankSnapshot` para `rank_snapshot_at`
+- [x] Merge automático local ↔ remoto al detectar sesión (`mergePlayerProgress`)
+- [x] `replaceProgress` en `gameStore` para aplicar merge sin re-sync
+- [x] Tests unitarios `syncProgress.test.ts`
 
 ### Verificación
 
-- [ ] Completar nivel offline → sync al reconectar
-- [ ] Simular beta con 30+ niveles locales + login → merge correcto
-- [ ] Jugador sin cuenta sigue igual que antes
+- [x] `npm run build` y `npm test` sin errores
+- [ ] Completar nivel offline → sync al reconectar (manual / Prompt 4)
+- [ ] Simular beta con 30+ niveles locales + login → merge correcto (manual / Prompt 4)
+- [x] Jugador sin cuenta sigue igual que antes (`createInfrastructure()` null si no hay flags)
 - [ ] Revisión contigo antes de Prompt 4
 
 ---
@@ -289,9 +310,14 @@ flowchart TB
 | 2026-07-01 | 0 | `mergePlayerProgress`, `comparePlayerRank`, vitest. |
 | 2026-07-01 | 0+ | Sistema de puntos acumulativos — ver [RANKING_RULES.md](./RANKING_RULES.md). |
 | 2026-07-01 | 0++ | Criterio 1 = niveles completados; snapshot solo al subir `unlockedLevel`. |
+| 2026-07-01 | — | Roadmap alineado con dominio (tests ranking, RANKING_RULES, columnas Prompt 1). |
+| 2026-07-01 | 1 | `docs/supabase/schema.sql` + `.env.example` con feature flags. |
+| 2026-07-01 | 1+ | Multi-juego: tablas `nb_*` + `game_id`; `src/config/game.ts`. |
+| 2026-07-01 | 2 | Capa infrastructure: contracts, Supabase SDK, `authSession`, `test:supabase`. |
+| 2026-07-01 | 3 | `syncProgress.ts`, merge al login, debounce post-victoria, retry offline. |
 
 ---
 
 ## Próximo paso
 
-**Prompt 1** — Crea proyecto en [supabase.com](https://supabase.com) y di: *"Ejecuta el Prompt 1"*
+**Prompt 4:** UI de cuenta (`AuthModal`, Google OAuth). Di: *"Ejecuta el Prompt 4"*

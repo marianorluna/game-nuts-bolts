@@ -56,12 +56,13 @@ Nuts & Bolts es hoy una app 100% cliente (React + Capacitor Android). El progres
 
 ## Consecuencias de la decisión
 
-1. **Proyecto Supabase dedicado** solo para Nuts & Bolts (no compartir con otros apps).
+1. **Proyecto Supabase compartido** (`games`) con tablas prefijadas `nb_` y columna `game_id` (`nuts-and-bolts` para este juego).
 2. **SDK solo en** `src/infrastructure/supabase/` — el dominio no importa `@supabase/supabase-js`.
 3. **Variables de entorno** (Prompt 1):
    ```
    VITE_SUPABASE_URL=https://xxxx.supabase.co
    VITE_SUPABASE_ANON_KEY=eyJ...
+   VITE_GAME_ID=nuts-and-bolts
    VITE_FEATURE_CLOUD_SYNC=true
    VITE_FEATURE_LEADERBOARD=false   # true en v2.1 (Prompt 6)
    ```
@@ -75,11 +76,11 @@ Se crea en **Prompt 1**. Tablas:
 
 | Tabla | Propósito |
 |-------|-----------|
-| `player_profiles` | Nombre, avatar, opt-in ranking |
-| `player_progress` | Snapshot de `PlayerProgress` + columnas de ranking (ver [RANKING_RULES.md](./RANKING_RULES.md)) |
-| `leaderboard_events` | Feed de eventos (Prompt 6) |
+| `nb_player_profiles` | Nombre, avatar, opt-in ranking — PK `(user_id, game_id)` |
+| `nb_player_progress` | Snapshot de `PlayerProgress` + columnas de ranking (ver [RANKING_RULES.md](./RANKING_RULES.md)) |
+| `nb_leaderboard_events` | Feed de eventos por `game_id` (Prompt 6) |
 
-RLS: cada usuario escribe solo su fila; lectura pública del ranking solo si `show_in_leaderboard = true`.
+RLS: cada usuario escribe solo su fila; lectura pública del ranking solo si `show_in_leaderboard = true` en el mismo `game_id`.
 
 ---
 

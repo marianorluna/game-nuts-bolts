@@ -1,5 +1,6 @@
 export { mergePlayerProgress } from './mergePlayerProgress'
 export {
+  buildMovesTiebreakKey,
   comparePlayerRank,
   computeRankingPointsThrough3,
   countCompletedLevels,

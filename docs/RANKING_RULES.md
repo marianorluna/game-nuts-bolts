@@ -82,8 +82,11 @@ import {
 
 ## Columnas en Supabase (Prompt 1 / 6)
 
+Tablas: `nb_player_progress` — filtrar siempre por `game_id = 'nuts-and-bolts'`.
+
 | Columna | Criterio |
 |---------|----------|
+| `game_id` | Aislamiento multi-juego (siempre en WHERE) |
 | `completed_levels` | 1 |
 | `total_stars` | 2 |
 | `weighted_tier_points` | 3 |

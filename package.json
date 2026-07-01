@@ -15,13 +15,15 @@
     "validate:locales": "npx tsx scripts/validate-locales.ts",
     "bake:levels": "npx tsx scripts/bake-levels.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:supabase": "npx tsx scripts/test-supabase.ts"
   },
   "dependencies": {
     "@capacitor/android": "^7.2.0",
     "@capacitor/core": "^7.2.0",
     "@capacitor/splash-screen": "^7.0.5",
     "@capawesome/capacitor-app-update": "^7.2.0",
+    "@supabase/supabase-js": "^2.110.0",
     "framer-motion": "^12.12.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
