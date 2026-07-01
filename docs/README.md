@@ -18,6 +18,17 @@
 - **Fase 2:** 100 niveles + multiNut + lockedBolt ✅
 - **Sección 2:** pendiente — niveles 101–200
 
+## Funciones sociales y ranking (v2.0+)
+
+| Documento | Descripción |
+|-----------|-------------|
+| [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md) | **Prompts incrementales** — avance, checklists y verificaciones |
+| [RANKING_RULES.md](./RANKING_RULES.md) | Criterios de orden del leaderboard (6 niveles de desempate) |
+| [BACKEND_DECISION.md](./BACKEND_DECISION.md) | Por qué Supabase y alternativas descartadas |
+| [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) | Migración segura jugadores beta *(Prompt 5)* |
+
+**Estado:** Prompt 0 ✅ · Prompt 1 pendiente · Backend: Supabase
+
 ## Publicación
 
 | Documento | Descripción |
@@ -29,4 +40,5 @@
 ```bash
 npm run validate:levels   # validar todos los niveles hornados
 npm run bake:levels       # regenerar bakedLevels (usar append-only tras Fase 1)
+npm test                  # tests unitarios (dominio, merge de progreso)
 ```

@@ -14,7 +14,7 @@ export interface AuthorConfig {
 /** Personaliza tus datos de autor aquí */
 export const AUTHOR: AuthorConfig = {
   name: 'Mariano Luna',
-  avatar: '👩‍💻',
+  avatar: '👨‍💻',
   links: [
     {
       id: 'github',

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { Capacitor } from '@capacitor/core'
+import { SplashScreen as CapSplash } from '@capacitor/splash-screen'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AUTHOR } from '../config/author'
 import { APP_VERSION } from '../config/version'
@@ -19,6 +21,17 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
   useEffect(() => {
     const timer = window.setTimeout(() => setReady(true), SPLASH_DURATION_MS)
     return () => window.clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return
+
+    const frame = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        void CapSplash.hide()
+      })
+    })
+    return () => window.cancelAnimationFrame(frame)
   }, [])
 
   const dismiss = () => {

@@ -75,6 +75,20 @@ export interface PlayerProgress {
   levels: Record<number, LevelProgress>
 }
 
+/** Metadatos para desempate temporal en ranking (criterio 6). */
+export interface PlayerRankingMeta {
+  /**
+   * ISO 8601: momento en que el jugador completó el nivel que subió su
+   * `unlockedLevel` al techo actual (llegar antes al último nivel desbloqueado).
+   */
+  rankSnapshotAt: string
+}
+
+export interface PlayerRankingEntry {
+  progress: PlayerProgress
+  meta: PlayerRankingMeta
+}
+
 export interface GameSettings {
   soundEnabled: boolean
   locale: 'auto' | 'es' | 'en'

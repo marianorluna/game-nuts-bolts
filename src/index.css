@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+@source '../index.html';
+@source '../src/**/*.{ts,tsx}';
+
 @theme {
   --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
