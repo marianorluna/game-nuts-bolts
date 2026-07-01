@@ -26,15 +26,17 @@ export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalPro
   const [authOpen, setAuthOpen] = useState(false)
 
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4"
-          onClick={onClose}
-        >
+    <>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            key="settings"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4"
+            onClick={onClose}
+          >
           <motion.div
             initial={{ scale: 0.85, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -118,9 +120,10 @@ export function SettingsModal({ open, onClose, onOpenCredits }: SettingsModalPro
               </button>
             )}
           </motion.div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
-    </AnimatePresence>
+    </>
   )
 }
