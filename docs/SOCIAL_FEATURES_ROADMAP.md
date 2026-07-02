@@ -1,22 +1,22 @@
 # Roadmap: funciones sociales y ranking
 
-Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat (ej. *"Ejecuta el Prompt 0"*), se verifica contigo y solo entonces se pasa al siguiente.
+Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat (ej. _"Ejecuta el Prompt 0"_), se verifica contigo y solo entonces se pasa al siguiente.
 
-**Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) *(se crea en Prompt 5)* · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md)
+**Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) _(se crea en Prompt 5)_ · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md)
 
 ---
 
 ## Avance general
 
-| Prompt | Versión | Descripción | Estado |
-|--------|---------|-------------|--------|
-| [0](#prompt-0--dominio-puro) | — | Merge + ranking 6 criterios (sin backend) | ✅ Completado |
-| [1](#prompt-1--backend-supabase) | — | Proyecto Supabase + esquema SQL + RLS | ✅ Completado |
-| [2](#prompt-2--capa-infrastructure) | — | SDK + repositories (sin UI) | ✅ Completado |
-| [3](#prompt-3--sync-offline-first) | v2.0 | Sync al ganar nivel | ✅ Completado |
-| [4](#prompt-4--ui-de-cuenta) | v2.0 | Auth + Google OAuth | ✅ Completado |
-| [5](#prompt-5--release-v20--migración-beta) | v2.0 | QA + Play Store + jugadores beta | ⬜ Pendiente |
-| [6](#prompt-6--ranking-realtime) | v2.1 | Leaderboard en vivo | ⬜ Pendiente |
+| Prompt                                      | Versión | Descripción                               | Estado        |
+| ------------------------------------------- | ------- | ----------------------------------------- | ------------- |
+| [0](#prompt-0--dominio-puro)                | —       | Merge + ranking 6 criterios (sin backend) | ✅ Completado |
+| [1](#prompt-1--backend-supabase)            | —       | Proyecto Supabase + esquema SQL + RLS     | ✅ Completado |
+| [2](#prompt-2--capa-infrastructure)         | —       | SDK + repositories (sin UI)               | ✅ Completado |
+| [3](#prompt-3--sync-offline-first)          | v1.2.0  | Sync al ganar nivel                       | ✅ Completado |
+| [4](#prompt-4--ui-de-cuenta)                | v1.2.0  | Auth + Google OAuth                       | ✅ Completado |
+| [5](#prompt-5--release-v120--migración-beta) | v1.2.0  | QA + Play Store + jugadores beta          | ⬜ Pendiente  |
+| [6](#prompt-6--ranking-realtime)            | v1.3.0  | Leaderboard en vivo                       | ⬜ Pendiente  |
 
 **Leyenda:** ⬜ Pendiente · 🔄 En curso · ✅ Completado
 
@@ -35,26 +35,26 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 ### Regla de merge (dominio puro)
 
 ```typescript
-stars         = max(local, remoto)
-bestMoves     = min(local, remoto)  // si ambos > 0
-completed     = local || remoto
-unlockedLevel = max(local, remoto)
+stars = max(local, remoto);
+bestMoves = min(local, remoto); // si ambos > 0
+completed = local || remoto;
+unlockedLevel = max(local, remoto);
 ```
 
 ---
 
 ## Decisiones tomadas
 
-| Decisión | Elección | Documento |
-|----------|----------|-----------|
-| Backend | **Supabase** | [BACKEND_DECISION.md](./BACKEND_DECISION.md) |
-| Auth (proveedor) | **Supabase Auth** | [BACKEND_DECISION.md](./BACKEND_DECISION.md#autenticación-supabase-auth) |
-| Login principal | **Google** | Prompt 4 |
-| Login alternativo | **Email + contraseña** | Prompt 4 |
-| Facebook | No en v1 (v2.2+ si hay demanda) | [BACKEND_DECISION.md](./BACKEND_DECISION.md#autenticación-supabase-auth) |
-| Ranking público | Opt-in (`show_in_leaderboard`, default off) | Prompt 6 |
-| Orden del ranking | 6 criterios — ver [RANKING_RULES.md](./RANKING_RULES.md) | Prompt 0 |
-| Releases | v2.0 = cuenta + sync; v2.1 = ranking | — |
+| Decisión          | Elección                                                 | Documento                                                                |
+| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Backend           | **Supabase**                                             | [BACKEND_DECISION.md](./BACKEND_DECISION.md)                             |
+| Auth (proveedor)  | **Supabase Auth**                                        | [BACKEND_DECISION.md](./BACKEND_DECISION.md#autenticación-supabase-auth) |
+| Login principal   | **Google**                                               | Prompt 4                                                                 |
+| Login alternativo | **Email + contraseña**                                   | Prompt 4                                                                 |
+| Facebook          | No en v1.2 (v1.4+ si hay demanda)                        | [BACKEND_DECISION.md](./BACKEND_DECISION.md#autenticación-supabase-auth) |
+| Ranking público   | Opt-in (`show_in_leaderboard`, default off)              | Prompt 6                                                                 |
+| Orden del ranking | 6 criterios — ver [RANKING_RULES.md](./RANKING_RULES.md) | Prompt 0                                                                 |
+| Releases          | v1.2.0 = cuenta + sync; v1.3.0 = ranking                 | —                                                                        |
 
 ---
 
@@ -114,7 +114,7 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 - [x] Tablas: `nb_player_profiles`, `nb_player_progress`, `nb_leaderboard_events`
 - [x] Columna `game_id` en todas las tablas (PK compuesta en profiles/progress)
 - [x] Columnas de ranking en `nb_player_progress` — ver [RANKING_RULES.md](./RANKING_RULES.md#columnas-en-supabase-prompt-1--6):
-  `completed_levels`, `total_stars`, `weighted_tier_points`, `moves_tiebreak_key`, `total_best_moves`, `rank_snapshot_at`
+      `completed_levels`, `total_stars`, `weighted_tier_points`, `moves_tiebreak_key`, `total_best_moves`, `rank_snapshot_at`
 - [x] Payload JSON `levels` + `unlocked_level` (equivalente a `PlayerProgress` local)
 - [x] Row Level Security (RLS): cada usuario solo escribe su fila; lectura pública del ranking solo con `show_in_leaderboard = true` en el mismo `game_id`
 - [x] Activar **Email** provider en Supabase Dashboard (Google se configura en Prompt 4)
@@ -206,27 +206,27 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 
 ### Verificación
 
-- [ ] Flujo completo en emulador o dispositivo real (requiere credenciales Google en Supabase)
-- [ ] 50 niveles locales → Google → sigue en nivel 50 con estrellas intactas (manual)
+- [x] Flujo completo en emulador o dispositivo real (requiere credenciales Google en Supabase)
+- [x] 50 niveles locales → Google → sigue en nivel 50 con estrellas intactas (manual)
 - [x] Cerrar sesión: progreso local permanece (lógica: `signOut` no toca `gameStore` / `localStorage`)
-- [ ] Revisión contigo antes de Prompt 5
+- [x] Revisión contigo antes de Prompt 5
 
 ---
 
-## Prompt 5 — Release v2.0 + migración beta
+## Prompt 5 — Release v1.2.0 + migración beta
 
 **Comando en chat:** `Ejecuta el Prompt 5`
 
-**Objetivo:** Publicar v2.0 en Play Store sin perder saves de los ~20 beta.
+**Objetivo:** Publicar v1.2.0 en Play Store sin perder saves de los ~20 beta.
 
 ### Qué se hace
 
 - [ ] [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) — comunicación y planes A/B/C
 - [ ] Export manual de save (plan B para soporte)
-- [ ] Bump versión en `package.json` / Android
+- [x] Bump versión en `package.json` / Android (`1.2.0`, `versionCode` 3)
 - [ ] Checklist QA completo
 
-### Checklist QA v2.0
+### Checklist QA v1.2.0
 
 - [ ] Jugador nuevo sin cuenta: juega normal
 - [ ] Jugador con 30+ niveles sin cuenta: actualiza, sigue igual
@@ -246,7 +246,7 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 
 **Comando en chat:** `Ejecuta el Prompt 6`
 
-**Versión:** v2.1 (release separada de v2.0)
+**Versión:** v1.3.0 (release separada de v1.2.0)
 
 **Objetivo:** Ranking global con actualizaciones en tiempo real.
 
@@ -263,7 +263,7 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 - [ ] Dos dispositivos: uno completa nivel → otro ve cambio en <3 s
 - [ ] Jugador sin opt-in no aparece en ranking
 - [ ] Offline: último snapshot cacheado
-- [ ] Revisión contigo → release v2.1
+- [ ] Revisión contigo → release v1.3.0
 
 ---
 
@@ -293,32 +293,32 @@ flowchart TB
 
 ## Riesgos y mitigaciones
 
-| Riesgo | Mitigación |
-|--------|------------|
+| Riesgo                    | Mitigación                                    |
+| ------------------------- | --------------------------------------------- |
 | Pérdida de save al migrar | Merge "mejor gana"; local primario en partida |
-| OAuth roto en Android | Probar en Prompt 4 antes de Play Store |
-| Hacer demasiado de golpe | Un prompt = una verificación |
-| Trampas en ranking | Validación servidor + rate limit (Prompt 6) |
+| OAuth roto en Android     | Probar en Prompt 4 antes de Play Store        |
+| Hacer demasiado de golpe  | Un prompt = una verificación                  |
+| Trampas en ranking        | Validación servidor + rate limit (Prompt 6)   |
 
 ---
 
 ## Historial
 
-| Fecha | Prompt | Notas |
-|-------|--------|-------|
-| 2026-07-01 | — | Roadmap creado. Backend: Supabase. |
-| 2026-07-01 | 0 | `mergePlayerProgress`, `comparePlayerRank`, vitest. |
-| 2026-07-01 | 0+ | Sistema de puntos acumulativos — ver [RANKING_RULES.md](./RANKING_RULES.md). |
-| 2026-07-01 | 0++ | Criterio 1 = niveles completados; snapshot solo al subir `unlockedLevel`. |
-| 2026-07-01 | — | Roadmap alineado con dominio (tests ranking, RANKING_RULES, columnas Prompt 1). |
-| 2026-07-01 | 1 | `docs/supabase/schema.sql` + `.env.example` con feature flags. |
-| 2026-07-01 | 1+ | Multi-juego: tablas `nb_*` + `game_id`; `src/config/game.ts`. |
-| 2026-07-01 | 2 | Capa infrastructure: contracts, Supabase SDK, `authSession`, `test:supabase`. |
-| 2026-07-01 | 3 | `syncProgress.ts`, merge al login, debounce post-victoria, retry offline. |
-| 2026-07-02 | 4 | UI cuenta: `AuthModal`, `LinkProgressModal`, OAuth Capacitor, deep link Android, `useAuth`. |
+| Fecha      | Prompt | Notas                                                                                       |
+| ---------- | ------ | ------------------------------------------------------------------------------------------- |
+| 2026-07-01 | —      | Roadmap creado. Backend: Supabase.                                                          |
+| 2026-07-01 | 0      | `mergePlayerProgress`, `comparePlayerRank`, vitest.                                         |
+| 2026-07-01 | 0+     | Sistema de puntos acumulativos — ver [RANKING_RULES.md](./RANKING_RULES.md).                |
+| 2026-07-01 | 0++    | Criterio 1 = niveles completados; snapshot solo al subir `unlockedLevel`.                   |
+| 2026-07-01 | —      | Roadmap alineado con dominio (tests ranking, RANKING_RULES, columnas Prompt 1).             |
+| 2026-07-01 | 1      | `docs/supabase/schema.sql` + `.env.example` con feature flags.                              |
+| 2026-07-01 | 1+     | Multi-juego: tablas `nb_*` + `game_id`; `src/config/game.ts`.                               |
+| 2026-07-01 | 2      | Capa infrastructure: contracts, Supabase SDK, `authSession`, `test:supabase`.               |
+| 2026-07-01 | 3      | `syncProgress.ts`, merge al login, debounce post-victoria, retry offline.                   |
+| 2026-07-02 | 4      | UI cuenta: `AuthModal`, `LinkProgressModal`, OAuth Capacitor, deep link Android, `useAuth`. |
 
 ---
 
 ## Próximo paso
 
-**Prompt 5:** Release v2.0 + migración beta. Di: *"Ejecuta el Prompt 5"*
+**Prompt 5:** Release v1.2.0 + migración beta. Di: _"Ejecuta el Prompt 5"_

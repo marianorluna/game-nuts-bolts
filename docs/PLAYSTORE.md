@@ -84,7 +84,7 @@ cd android
 
 URL pública: **https://games.marianorluna.com/nuts-and-bolts/privacy.html**
 
-Ver [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) para el repositorio de despliegue, flujo de actualización y qué declarar en Play Console (incl. **Seguridad de los datos** en v2.0+).
+Ver [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) para el repositorio de despliegue, flujo de actualización y qué declarar en Play Console (incl. **Seguridad de los datos** en v1.2.0+).
 
 ## 7. Clasificación de contenido
 
@@ -100,8 +100,8 @@ Edita **solo** `package.json`:
 
 ```json
 {
-  "version": "1.1.0",
-  "versionCode": 2
+  "version": "1.2.0",
+  "versionCode": 3
 }
 ```
 
@@ -112,7 +112,7 @@ Edita **solo** `package.json`:
 
 La app lee `version` vía `src/config/version.ts`. Android se sincroniza automáticamente al ejecutar `npm run cap:sync` (o manualmente con `npm run sync:version`).
 
-### Pasos para publicar v1.1.0
+### Pasos para publicar v1.2.0
 
 1. Sube `version` y `versionCode` en `package.json`
 2. `npm run cap:sync` → genera build web y actualiza `android/app/build.gradle`

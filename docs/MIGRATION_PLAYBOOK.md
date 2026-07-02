@@ -8,6 +8,6 @@ Este documento incluirá:
 - Plan A: vinculación automática al iniciar sesión con Google
 - Plan B: export manual de progreso desde la app (soporte)
 - Plan C: merge si tienen progreso en dos dispositivos
-- Checklist antes de publicar v2.0 en Play Store
+- Checklist antes de publicar v1.2.0 en Play Store
 
 **Mientras tanto:** los jugadores beta no pierden progreso; la actualización es offline-first y la cuenta es opcional.

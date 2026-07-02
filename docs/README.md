@@ -19,7 +19,7 @@
 - **Fase 2:** 100 niveles + multiNut + lockedBolt ✅
 - **Sección 2:** pendiente — niveles 101–200
 
-## Funciones sociales y ranking (v2.0+)
+## Funciones sociales y ranking (v1.2.0+)
 
 | Documento                                                  | Descripción                                                     |
 | ---------------------------------------------------------- | --------------------------------------------------------------- |

@@ -16,7 +16,7 @@ Nuts & Bolts es hoy una app 100% cliente (React + Capacitor Android). El progres
 
 - Base de datos (progreso, perfiles, eventos)
 - Autenticación (Google en Android)
-- WebSockets / realtime (ranking en vivo, v2.1)
+- WebSockets / realtime (ranking en vivo, v1.3.0)
 
 ---
 
@@ -64,7 +64,7 @@ Nuts & Bolts es hoy una app 100% cliente (React + Capacitor Android). El progres
    VITE_SUPABASE_ANON_KEY=eyJ...
    VITE_GAME_ID=nuts-and-bolts
    VITE_FEATURE_CLOUD_SYNC=true
-   VITE_FEATURE_LEADERBOARD=false   # true en v2.1 (Prompt 6)
+   VITE_FEATURE_LEADERBOARD=false   # true en v1.3.0 (Prompt 6)
    ```
 4. **Migración futura** a VPS: reimplementar `src/infrastructure/supabase/` como `rest/` sin tocar dominio ni UI.
 
@@ -90,11 +90,11 @@ RLS: cada usuario escribe solo su fila; lectura pública del ranking solo si `sh
 
 ### Proveedores por versión
 
-| Proveedor | v2.0 (Prompt 4) | v2.1+ | Notas |
+| Proveedor | v1.2.0 (Prompt 4) | v1.3.0+ | Notas |
 |-----------|-----------------|-------|-------|
 | **Google** | ✅ Principal | ✅ | Un toque en Android; nombre y avatar automáticos para el ranking |
 | **Email + contraseña** | ✅ Secundario | ✅ | Para quien no quiera usar Google; registro con correo |
-| **Facebook** | ❌ No | 🔜 Solo si hay demanda (v2.2+) | Requiere app en Meta Developers, revisión y mantenimiento extra |
+| **Facebook** | ❌ No | 🔜 Solo si hay demanda (v1.4+) | Requiere app en Meta Developers, revisión y mantenimiento extra |
 | **Apple** | ❌ No | 🔜 Si publicas en iOS | Obligatorio en App Store si ofreces otros OAuth; hoy solo Android |
 
 ### Por qué Google primero

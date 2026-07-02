@@ -43,8 +43,8 @@ Edita aquí para probar el texto; cuando esté listo, copia el mismo contenido a
 | Versión | Funciones relevantes para la política |
 | ------- | ------------------------------------- |
 | v1.x | Solo almacenamiento local en el dispositivo |
-| v2.0 | Cuenta opcional (Google / email), sync de progreso vía Supabase |
-| v2.1 | Ranking global con opt-in (`show_in_leaderboard`, default off) |
+| v1.2.0 | Cuenta opcional (Google / email), sync de progreso vía Supabase |
+| v1.3.0 | Ranking global con opt-in (`show_in_leaderboard`, default off) |
 
 Decisiones de privacidad del producto: [BACKEND_DECISION.md](./BACKEND_DECISION.md#privacidad-y-ranking) · Roadmap: [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md)
 
@@ -57,4 +57,4 @@ Decisiones de privacidad del producto: [BACKEND_DECISION.md](./BACKEND_DECISION.
 | Fecha | Cambio |
 | ----- | ------ |
 | 2026-06-16 | Política v1: sin cuentas ni recopilación en servidor |
-| 2026-07-02 | Política v2: sync opcional, Supabase, ranking próximo con opt-in |
+| 2026-07-02 | Política v1.2: sync opcional, Supabase, ranking próximo con opt-in |
