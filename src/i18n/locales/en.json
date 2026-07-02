@@ -114,7 +114,8 @@
     "movesTwoStarsSuffix": "the maximum is {{count}} moves.",
     "movesOneStar": "If you use more moves, you can still finish the level and earn 1 star ⭐.",
     "coachMoves": "Tap here to see how to earn stars based on your moves.",
-    "coachMultiNut": "New rule: same-color nuts on top move together."
+    "coachMultiNut": "New rule: same-color nuts on top move together.",
+    "coachLockedBolt": "New rule: some bolts are locked. Complete a full stack of the shown color to unlock them."
   },
   "win": {
     "completed": "Level complete!",

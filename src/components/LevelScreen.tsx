@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import type { BoardBounds } from '../hooks/useResponsiveBoardScale'
 import { useGameLogic } from '../hooks/useGameLogic'
 import { useGameStore } from '../store/gameStore'
@@ -7,6 +8,7 @@ import { WinModal } from './WinModal'
 import { MovesInfoModal } from './MovesInfoModal'
 import { MovesCoachMark } from './MovesCoachMark'
 import { MultiNutCoachMark } from './MultiNutCoachMark'
+import { LockedBoltCoachMark } from './LockedBoltCoachMark'
 import { SettingsModal } from './SettingsModal'
 import { BackArrowIcon, UndoArrowIcon, LevelHomeIcon } from './icons/GameIcons'
 import { getStarThresholds } from '../domain/gameEngine'
@@ -15,14 +17,7 @@ import { getStageForLevel } from '../domain/content/campaignStructure'
 import { getDifficultyLabel, getStageName } from '../i18n/campaignLabels'
 import { useTranslation } from '../i18n/useTranslation'
 import { MAX_UNDOS } from '../domain/types'
-import {
-  hasSeenMovesCoachMark,
-  markMovesCoachMarkSeen,
-} from '../services/onboardingService'
-import {
-  hasSeenMultiNutCoachMark,
-  markMultiNutCoachMarkSeen,
-} from '../services/multiNutOnboardingService'
+import { useMechanicCoachMarks } from '../hooks/useMechanicCoachMarks'
 import { EndOfContentModal } from './EndOfContentModal'
 import {
   hasSeenEndOfContentModal,
@@ -35,24 +30,33 @@ export function LevelScreen() {
   const [boardBounds, setBoardBounds] = useState<BoardBounds | null>(null)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [movesInfoOpen, setMovesInfoOpen] = useState(false)
-  const [coachMarkVisible, setCoachMarkVisible] = useState(false)
-  const [multiNutCoachVisible, setMultiNutCoachVisible] = useState(false)
   const [endOfContentOpen, setEndOfContentOpen] = useState(false)
+  const [winOverlayOpen, setWinOverlayOpen] = useState(false)
   const pendingWinAction = useRef<(() => void) | null>(null)
+  const pendingWinOverlayAction = useRef<(() => void) | null>(null)
   const soundEnabled = useGameStore((s) => s.settings.soundEnabled)
   const { session, level, selectBolt, undo, resetLevel, startLevel, setScreen } =
     useGameLogic()
+  const {
+    movesCoachVisible,
+    multiNutCoachVisible,
+    lockedBoltCoachVisible,
+    dismissMovesCoach,
+    dismissMultiNutCoach,
+    dismissLockedBoltCoach,
+  } = useMechanicCoachMarks(level?.id)
 
   useEffect(() => {
-    if (!level) return
-    if (level.id === 61 && !hasSeenMultiNutCoachMark()) {
-      setMultiNutCoachVisible(true)
-      setCoachMarkVisible(false)
-      return
+    if (session?.isWon) {
+      setWinOverlayOpen(true)
     }
-    setMultiNutCoachVisible(false)
-    setCoachMarkVisible(!hasSeenMovesCoachMark())
-  }, [level?.id])
+  }, [session?.isWon, session?.levelId])
+
+  useEffect(() => {
+    if (session && !session.isWon) {
+      setWinOverlayOpen(false)
+    }
+  }, [session?.isWon, session?.levelId])
 
   useEffect(() => {
     const node = boardAreaRef.current
@@ -76,15 +80,7 @@ export function LevelScreen() {
     }
   }, [])
 
-  const dismissMultiNutCoach = () => {
-    markMultiNutCoachMarkSeen()
-    setMultiNutCoachVisible(false)
-  }
-
-  const dismissCoachMark = () => {
-    markMovesCoachMarkSeen()
-    setCoachMarkVisible(false)
-  }
+  const dismissCoachMark = dismissMovesCoach
 
   const openMovesInfo = () => {
     dismissCoachMark()
@@ -105,6 +101,17 @@ export function LevelScreen() {
       return
     }
     action()
+  }
+
+  const runAfterWinOverlay = (action: () => void) => {
+    pendingWinOverlayAction.current = action
+    setWinOverlayOpen(false)
+  }
+
+  const handleWinOverlayExit = () => {
+    const action = pendingWinOverlayAction.current
+    pendingWinOverlayAction.current = null
+    action?.()
   }
 
   if (!session || !level) return null
@@ -160,12 +167,8 @@ export function LevelScreen() {
         ref={boardAreaRef}
         className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-hidden py-4 md:py-6"
       >
-        {multiNutCoachVisible && (
-          <div className="absolute inset-x-4 top-4 z-30 flex justify-center">
-            <MultiNutCoachMark onDismiss={dismissMultiNutCoach} />
-          </div>
-        )}
         <GameBoard
+          key={session.levelId}
           session={session}
           onSelectBolt={selectBolt}
           boardBounds={boardBounds}
@@ -192,7 +195,13 @@ export function LevelScreen() {
         </div>
 
         <div className="relative overflow-visible">
-          {coachMarkVisible && <MovesCoachMark onDismiss={dismissCoachMark} />}
+          {lockedBoltCoachVisible && (
+            <LockedBoltCoachMark onDismiss={dismissLockedBoltCoach} />
+          )}
+          {multiNutCoachVisible && (
+            <MultiNutCoachMark onDismiss={dismissMultiNutCoach} />
+          )}
+          {movesCoachVisible && <MovesCoachMark onDismiss={dismissCoachMark} />}
 
           <button
             type="button"
@@ -236,24 +245,31 @@ export function LevelScreen() {
         currentMoves={session.moves}
       />
 
-      {session.isWon && (
-        <WinModal
-          levelId={session.levelId}
-          moves={session.moves}
-          onNext={() =>
-            runWinAction(() => {
-              const nextId = session.levelId + 1
-              if (nextId <= MAX_LEVEL_ID) {
-                startLevel(nextId)
-              } else {
-                setScreen('campaign')
-              }
-            })
-          }
-          onReplay={() => runWinAction(resetLevel)}
-          onHome={() => runWinAction(() => setScreen('campaign'))}
-        />
-      )}
+      <AnimatePresence onExitComplete={handleWinOverlayExit}>
+        {winOverlayOpen && session.isWon && (
+          <WinModal
+            key={session.levelId}
+            levelId={session.levelId}
+            moves={session.moves}
+            onNext={() =>
+              runAfterWinOverlay(() =>
+                runWinAction(() => {
+                  const nextId = session.levelId + 1
+                  if (nextId <= MAX_LEVEL_ID) {
+                    startLevel(nextId)
+                  } else {
+                    setScreen('campaign')
+                  }
+                }),
+              )
+            }
+            onReplay={() => runAfterWinOverlay(() => runWinAction(resetLevel))}
+            onHome={() =>
+              runAfterWinOverlay(() => runWinAction(() => setScreen('campaign')))
+            }
+          />
+        )}
+      </AnimatePresence>
 
       <EndOfContentModal open={endOfContentOpen} onClose={dismissEndOfContent} />
     </div>

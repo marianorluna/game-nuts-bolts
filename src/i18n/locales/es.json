@@ -114,7 +114,8 @@
     "movesTwoStarsSuffix": "el máximo es de {{count}} movimientos.",
     "movesOneStar": "Si usas más movimientos, igual puedes completar el nivel y ganar 1 estrella ⭐.",
     "coachMoves": "Toca aquí para ver cómo ganar estrellas según tus movimientos.",
-    "coachMultiNut": "Nueva regla: las tuercas del mismo color en la cima se mueven juntas."
+    "coachMultiNut": "Nueva regla: las tuercas del mismo color en la cima se mueven juntas.",
+    "coachLockedBolt": "Nueva regla: algunos bulones están bloqueados. Completa un bulón del color indicado para desbloquearlos."
   },
   "win": {
     "completed": "¡Nivel completado!",

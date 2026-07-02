@@ -69,7 +69,11 @@ export const useGameStore = create<GameStore>()(
       homeStageId: SECTION_1_FUNDAMENTOS.stages[0]!.id,
       selectedCampaignId: CAMPAIGN_1_TALLER.id,
 
-      setScreen: (screen) => set({ screen }),
+      setScreen: (screen) =>
+        set((state) => ({
+          screen,
+          session: screen === 'game' ? state.session : null,
+        })),
 
       openCampaign: (campaignId) => {
         set({ selectedCampaignId: campaignId, screen: 'campaign' })

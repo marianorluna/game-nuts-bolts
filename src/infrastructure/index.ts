@@ -25,7 +25,12 @@ export function createInfrastructure(): Infrastructure | null {
 
 export { isCloudSyncEnabled } from './config'
 export { getRegisteredInfrastructure, registerInfrastructure } from './runtime'
-export { getOAuthRedirectUrl, OAUTH_REDIRECT_SCHEME, initOAuthHandlers } from './oauth'
+export {
+  completeWebOAuthCallback,
+  getOAuthRedirectUrl,
+  OAUTH_REDIRECT_SCHEME,
+  initOAuthHandlers,
+} from './oauth'
 export {
   bindAuthStateListener,
   getCurrentAuthUser,

@@ -82,10 +82,9 @@ cd android
 
 ### Política de privacidad
 
-La app no recopila datos personales. Opciones:
-- Crear una página simple en GitHub Pages
-- Usar un generador de política de privacidad gratuito
-- URL ejemplo: `https://tudominio.com/privacy`
+URL pública: **https://games.marianorluna.com/nuts-and-bolts/privacy.html**
+
+Ver [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) para el repositorio de despliegue, flujo de actualización y qué declarar en Play Console (incl. **Seguridad de los datos** en v2.0+).
 
 ## 7. Clasificación de contenido
 

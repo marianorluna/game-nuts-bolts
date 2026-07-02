@@ -13,6 +13,7 @@ import { LinkProgressModal } from './LinkProgressModal'
 import { AppFooter } from './AppFooter'
 import { CampaignCard } from './CampaignCard'
 import { AppLogo } from './AppLogo'
+import { UserAvatar } from './UserAvatar'
 import { getCampaignGridContainerClass } from './campaignGridLayout'
 import {
   dismissLinkProgressPrompt,
@@ -32,6 +33,7 @@ export function HomeScreen() {
 
   const isCompleted = (id: number) => (progress.levels[id]?.completed ?? false)
   const campaignCount = ALL_CAMPAIGNS.length
+  const showSessionAvatar = cloudSyncEnabled && Boolean(user)
 
   useEffect(() => {
     if (!initialized) return
@@ -55,19 +57,32 @@ export function HomeScreen() {
           <button
             type="button"
             onClick={() => (user ? setSettingsOpen(true) : setAuthOpen(true))}
-            className="absolute left-0 top-4 hidden h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:flex md:h-12 md:w-12"
+            className="absolute left-0 top-4 hidden h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:flex md:h-12 md:w-12"
             aria-label={t('account.title')}
           >
-            {user ? '✓' : '👤'}
+            {user ? (
+              <span className="flex h-8 w-8 overflow-hidden rounded-full md:h-9 md:w-9">
+                <UserAvatar user={user} className="text-sm md:text-base" />
+              </span>
+            ) : (
+              '👤'
+            )}
           </button>
         )}
         <button
           type="button"
           onClick={() => setSettingsOpen(true)}
           className="absolute right-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12 md:text-2xl"
-          aria-label={t('common.settings')}
+          aria-label={showSessionAvatar ? t('account.title') : t('common.settings')}
         >
-          {soundEnabled ? '⚙️' : '🔇'}
+          {showSessionAvatar ? (
+            <span className="flex h-8 w-8 overflow-hidden rounded-full md:hidden">
+              <UserAvatar user={user!} className="text-sm" />
+            </span>
+          ) : null}
+          <span className={showSessionAvatar ? 'hidden md:inline' : undefined}>
+            {soundEnabled ? '⚙️' : '🔇'}
+          </span>
         </button>
         <div className="flex min-h-9 items-center justify-center md:min-h-11">
           <div className="relative inline-flex items-center">

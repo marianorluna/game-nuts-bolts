@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import { getStarThresholds } from '../domain/gameEngine'
 import { getLevelById, MAX_LEVEL_ID } from '../domain/levels'
@@ -41,19 +41,19 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
   }, [stars])
 
   return (
-    <AnimatePresence>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.18 }}
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4"
+    >
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+        className="w-full max-w-sm rounded-2xl bg-gradient-to-b from-[#3d2a6b] to-[#2d1b4e] p-6 text-center shadow-2xl"
       >
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-          className="w-full max-w-sm rounded-2xl bg-gradient-to-b from-[#3d2a6b] to-[#2d1b4e] p-6 text-center shadow-2xl"
-        >
           <motion.div
             initial={{ rotate: -10, scale: 0 }}
             animate={{ rotate: 0, scale: 1 }}
@@ -124,9 +124,8 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
             >
               {t('win.backToMenu')}
             </button>
-          </div>
-        </motion.div>
+        </div>
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   )
 }

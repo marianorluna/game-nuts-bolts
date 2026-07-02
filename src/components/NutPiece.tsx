@@ -30,7 +30,6 @@ export function NutPiece({
 
   return (
     <motion.div
-      layout
       // Al montar (nut llega a un nuevo bulón) simula enroscado: rota de +25° a 0°
       initial={{ rotate: 25, scale: 0.82, opacity: 0.6 }}
       animate={{

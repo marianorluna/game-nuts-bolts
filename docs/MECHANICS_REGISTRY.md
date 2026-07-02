@@ -57,7 +57,7 @@ Actualizar este archivo **antes** de implementar una mecánica nueva y marcarla 
   - Cuenta como **1 movimiento**
 - **Motor:** `gameEngine.getMovableCount` (contar contiguas), `canMove`, `moveNuts`
 - **Validación:** BFS existente — delega en el motor; sin cambio de API del solver
-- **UI:** coach mark en nivel 61 (patrón `MovesCoachMark.tsx`)
+- **UI:** coach mark en nivel 61 (`MultiNutCoachMark.tsx`); ver `src/config/mechanicOnboarding.ts`
 - **Flag:** `mechanics: ['multiNut']` en `LevelDefinition`
 - **Compatibilidad:** omitido = clásico (1 tuerca). Niveles 1–60 sin cambios.
 
@@ -73,7 +73,7 @@ Actualizar este archivo **antes** de implementar una mecánica nueva y marcarla 
   - Estado de locks forma parte del estado del BFS
 - **Motor:** `gameEngine.canMove` + estado de sesión; `BoltConfig` en `LevelDefinition`
 - **Validación:** BFS extendido — estado `(bolts, unlockedBoltIndices)`
-- **UI:** overlay de candado en `BoltStack.tsx`
+- **UI:** overlay de candado en `BoltStack.tsx`; coach mark en nivel 81 (`LockedBoltCoachMark.tsx`)
 - **Flag:** `boltConfigs[i].locked`, `boltConfigs[i].unlockWhenColor`
 - **Compatibilidad:** sin `boltConfigs` = ningún bulón bloqueado
 - **Decisión:** postergado a nivel 81 para no solapar tutorial de multiNut

@@ -6,6 +6,7 @@ import { I18nProvider } from './i18n/I18nProvider'
 import { initProgressSync, mergeProgressOnSession } from './application/syncProgress'
 import {
   bindAuthStateListener,
+  completeWebOAuthCallback,
   createInfrastructure,
   initOAuthHandlers,
   restoreAuthSession,
@@ -17,9 +18,15 @@ if (infrastructure) {
   bindAuthStateListener(infrastructure.auth)
   initProgressSync(infrastructure)
   initOAuthHandlers()
-  void restoreAuthSession(infrastructure.auth).then((user) => {
+  void (async () => {
+    try {
+      await completeWebOAuthCallback()
+    } catch (err) {
+      console.error('[oauth] web callback failed', err)
+    }
+    const user = await restoreAuthSession(infrastructure.auth)
     if (user) void mergeProgressOnSession(user.id)
-  })
+  })()
 }
 
 createRoot(document.getElementById('root')!).render(

@@ -1,5 +1,6 @@
 import { useAuth } from '../hooks/useAuth'
 import { useTranslation } from '../i18n/useTranslation'
+import { UserAvatar } from './UserAvatar'
 
 interface AccountSettingsSectionProps {
   onOpenAuth: () => void
@@ -17,8 +18,8 @@ export function AccountSettingsSection({ onOpenAuth }: AccountSettingsSectionPro
     return (
       <div className="mt-3 rounded-xl bg-white/10 px-4 py-4">
         <div className="mb-3 flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-400/25 text-xl">
-            👤
+          <span className="flex h-10 w-10 overflow-hidden rounded-full bg-amber-400/25">
+            <UserAvatar user={user} className="text-base" />
           </span>
           <div className="min-w-0 flex-1 text-left">
             <p className="truncate font-semibold text-white">{label}</p>

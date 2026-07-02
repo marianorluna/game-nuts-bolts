@@ -2,14 +2,14 @@ import { useId } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from '../i18n/useTranslation'
 
-interface MultiNutCoachMarkProps {
+interface LockedBoltCoachMarkProps {
   onDismiss: () => void
 }
 
 const BUBBLE_PATH =
   'M14 0 H230 A14 14 0 0 1 244 14 V100 A14 14 0 0 1 230 114 H134 L122 128 L110 114 H14 A14 14 0 0 1 0 100 V14 A14 14 0 0 1 14 0 Z'
 
-export function MultiNutCoachMark({ onDismiss }: MultiNutCoachMarkProps) {
+export function LockedBoltCoachMark({ onDismiss }: LockedBoltCoachMarkProps) {
   const { t } = useTranslation()
   const gradientId = useId()
   const glowFilterId = `${gradientId}-glow`
@@ -19,7 +19,7 @@ export function MultiNutCoachMark({ onDismiss }: MultiNutCoachMarkProps) {
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 6 }}
-      className="absolute bottom-full left-1/2 z-30 mb-2 w-56 -translate-x-1/2 pb-4 pointer-events-auto"
+      className="pointer-events-auto absolute bottom-full left-1/2 z-30 mb-2 w-56 -translate-x-1/2 pb-4"
       role="status"
     >
       <svg
@@ -30,8 +30,8 @@ export function MultiNutCoachMark({ onDismiss }: MultiNutCoachMarkProps) {
       >
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#3d3520" />
-            <stop offset="100%" stopColor="#2a2518" />
+            <stop offset="0%" stopColor="#3a5260" />
+            <stop offset="100%" stopColor="#2a3d4a" />
           </linearGradient>
           <filter
             id={glowFilterId}
@@ -48,7 +48,7 @@ export function MultiNutCoachMark({ onDismiss }: MultiNutCoachMarkProps) {
         </defs>
         <path
           d={BUBBLE_PATH}
-          fill="rgba(255, 200, 80, 0.25)"
+          fill="rgba(34, 211, 238, 0.22)"
           filter={`url(#${glowFilterId})`}
         />
         <path
@@ -61,8 +61,8 @@ export function MultiNutCoachMark({ onDismiss }: MultiNutCoachMarkProps) {
       </svg>
 
       <div className="relative px-4 pb-5 pt-3 text-center">
-        <p className="text-sm font-medium leading-snug text-amber-100">
-          {t('level.coachMultiNut')}
+        <p className="text-sm font-medium leading-snug text-cyan-100">
+          {t('level.coachLockedBolt')}
         </p>
         <button
           type="button"

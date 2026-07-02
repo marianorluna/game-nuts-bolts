@@ -55,6 +55,7 @@ Usar antes de escribir código del motor.
 - [ ] Implementar reglas en `src/domain/gameEngine.ts`
 - [ ] Extender BFS en `src/domain/levelValidator.ts` si la mecánica añade estado
 - [ ] UI mínima: `BoltStack`, `NutPiece` y/o coach mark
+- [ ] **Globo de ayuda (obligatorio):** registrar nivel intro en `src/config/mechanicOnboarding.ts`, crear `{Mechanic}CoachMark.tsx`, `{mechanic}OnboardingService.ts`, claves i18n `level.coach{Mechanic}` y conectar en `useMechanicCoachMarks.ts`
 - [ ] Inicializar estado en `gameStore.createSessionFromLevel`
 - [ ] Crear niveles de tutorial + práctica + reto con la mecánica
 - [ ] `npm run validate:levels`

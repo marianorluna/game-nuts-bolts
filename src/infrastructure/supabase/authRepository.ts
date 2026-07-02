@@ -15,6 +15,13 @@ function mapUser(user: User): AuthUser {
       ?? (typeof user.user_metadata?.name === 'string'
         ? user.user_metadata.name
         : null),
+    avatarUrl:
+      (typeof user.user_metadata?.avatar_url === 'string'
+        ? user.user_metadata.avatar_url
+        : null)
+      ?? (typeof user.user_metadata?.picture === 'string'
+        ? user.user_metadata.picture
+        : null),
   }
 }
 

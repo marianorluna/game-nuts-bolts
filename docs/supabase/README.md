@@ -2,11 +2,11 @@
 
 Proyecto Supabase **multi-juego** (`games`): tablas con prefijo `nb_` y columna `game_id` para aislar datos por juego.
 
-| Tabla | PK | Notas |
-|-------|-----|-------|
-| `nb_player_profiles` | `(user_id, game_id)` | Perfil y opt-in ranking |
-| `nb_player_progress` | `(user_id, game_id)` | Progreso + columnas de ranking |
-| `nb_leaderboard_events` | `id` | Feed por `game_id` (Prompt 6) |
+| Tabla                   | PK                   | Notas                          |
+| ----------------------- | -------------------- | ------------------------------ |
+| `nb_player_profiles`    | `(user_id, game_id)` | Perfil y opt-in ranking        |
+| `nb_player_progress`    | `(user_id, game_id)` | Progreso + columnas de ranking |
+| `nb_leaderboard_events` | `id`                 | Feed por `game_id` (Prompt 6)  |
 
 **game_id de este juego:** `nuts-and-bolts` → `VITE_GAME_ID` en `.env.local`
 
@@ -40,7 +40,9 @@ Con dos usuarios de prueba (Auth → Users → Add user), mismo `game_id`:
 
 ### 1. Google Cloud Console
 
-1. [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials.
+**Proyecto GCP:** `games-puzzles-play`
+
+1. [Google Cloud Console](https://console.cloud.google.com/) → seleccionar proyecto `games-puzzles-play` → APIs & Services → Credentials.
 2. **OAuth 2.0 Client ID** → tipo **Web application** (para Supabase).
 3. **Authorized redirect URIs** — añadir la URL de callback de Supabase:
    ```
@@ -77,4 +79,3 @@ Tras cambios nativos: `npm run cap:sync`.
 2. Login Google en emulador/dispositivo → vuelve a la app por deep link.
 3. Progreso local se fusiona con la nube (merge dominio).
 4. Cerrar sesión → progreso local intacto en `localStorage`.
-

@@ -55,18 +55,26 @@ function cleanWebOAuthUrl(): void {
 }
 
 /**
- * Web: intercambia ?code= al volver del proveedor.
+ * Web PKCE: intercambia ?code= al volver del proveedor antes de restaurar sesión.
+ * Devuelve true si se procesó un callback OAuth en esta carga.
+ */
+export async function completeWebOAuthCallback(): Promise<boolean> {
+  if (Capacitor.isNativePlatform()) return false
+
+  const code = extractOAuthCode(window.location.href)
+  if (!code) return false
+
+  await exchangeOAuthCode(code)
+  cleanWebOAuthUrl()
+  return true
+}
+
+/**
+ * Web: completeWebOAuthCallback() en main antes de getSession.
  * Native: escucha deep link com.nutsandbolts.puzzle://login-callback
  */
 export function initOAuthHandlers(): () => void {
   if (!Capacitor.isNativePlatform()) {
-    const params = new URLSearchParams(window.location.search)
-    const code = params.get('code')
-    if (code) {
-      void exchangeOAuthCode(code)
-        .then(() => cleanWebOAuthUrl())
-        .catch((err) => console.error('[oauth] web callback failed', err))
-    }
     return () => undefined
   }
 
