@@ -16,7 +16,8 @@
     "bake:levels": "npx tsx scripts/bake-levels.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:supabase": "npx tsx scripts/test-supabase.ts"
+    "test:supabase": "npx tsx scripts/test-supabase.ts",
+    "generate:icons": "python scripts/generate-icons-from-splash.py && npx @capacitor/assets generate --android --iconBackgroundColor \"#2d1b4e\""
   },
   "dependencies": {
     "@capacitor/android": "^7.2.0",
