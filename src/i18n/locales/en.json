@@ -153,6 +153,16 @@
     "role": "Software Developer",
     "bio": "I build software and enjoy exploring ideas in mobile form. Nuts & Bolts started as a logic and color puzzle, designed for short play sessions."
   },
+  "whatsNew": {
+    "versionBadge": "What's new in v{{version}}",
+    "subtitle": "Here's what's new in this update:",
+    "continue": "Great!"
+  },
+  "whatsNew": {
+    "versionBadge": "What's new in v{{version}}",
+    "subtitle": "Here's what's new in this update:",
+    "continue": "Great!"
+  },
   "update": {
     "title": "New version available",
     "prompt": "An update is available on the Play Store.",

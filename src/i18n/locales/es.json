@@ -153,6 +153,16 @@
     "role": "Desarrollador de software",
     "bio": "Desarrollo software y disfruto explorar ideas en formato mobile. Nuts & Bolts nació como un puzzle de lógica y color, pensado para partidas cortas."
   },
+  "whatsNew": {
+    "versionBadge": "Novedades v{{version}}",
+    "subtitle": "Qué hay de nuevo en esta actualización:",
+    "continue": "¡Genial!"
+  },
+  "whatsNew": {
+    "versionBadge": "Novedades v{{version}}",
+    "subtitle": "Qué hay de nuevo en esta actualización:",
+    "continue": "¡Genial!"
+  },
   "update": {
     "title": "Nueva versión disponible",
     "prompt": "Hay una actualización en Play Store.",

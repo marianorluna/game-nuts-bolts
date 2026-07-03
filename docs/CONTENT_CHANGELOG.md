@@ -1,6 +1,7 @@
 # Changelog de contenido — Nuts & Bolts
 
 Historial de expansiones de niveles, mecánicas y decisiones de diseño.  
+Para **releases de la app** (semver, Play Store), ver [CHANGELOG.md](./CHANGELOG.md).  
 Entradas más recientes arriba. Cada fase o release de contenido debe añadir una entrada.
 
 **Documentos relacionados:** [CONTENT_ARCHITECTURE.md](./CONTENT_ARCHITECTURE.md) · [MECHANICS_REGISTRY.md](./MECHANICS_REGISTRY.md)

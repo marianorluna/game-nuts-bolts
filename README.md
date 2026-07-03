@@ -1,150 +1,100 @@
-# Nuts & Bolts Sort Puzzle
+# Nuts & Bolts
 
-Juego mobile de puzzle: ordena tuercas por color moviéndolas entre bulones.
+**Puzzle de ordenar tuercas por color** — disponible en Android.
 
-## Stack
+[![Versión](https://img.shields.io/badge/versión-1.2.0-blue)](docs/CHANGELOG.md)
+[![Niveles](https://img.shields.io/badge/niveles-100-orange)](docs/LEVELS.md)
 
-- React 19 + Vite + TypeScript
-- Tailwind CSS 4
-- Framer Motion (animaciones)
-- Zustand (estado + progreso en localStorage)
-- Capacitor 7 (Android)
+<p align="center">
+  <img src="public/logo.png" alt="Nuts & Bolts" width="120" />
+</p>
+
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.nutsandbolts.puzzle">Descargar en Google Play</a>
+</p>
+
+---
+
+## El juego
+
+Nuts & Bolts es un puzzle relajante en el que mueves tuercas de colores entre bulones hasta dejar cada uno ordenado. La mecánica es sencilla: toca un bulón para seleccionarlo y otro para mover la tuerca superior (o el bloque de tuercas del mismo color, según el nivel).
+
+El progreso es lineal: completas niveles, ganas estrellas y desbloqueas los siguientes. Puedes jugar sin conexión; la cuenta y la nube son opcionales.
+
+## Características
+
+| Área | Qué incluye |
+|------|-------------|
+| **Campaña** | 100 niveles en la campaña *El Taller*, repartidos en tres etapas con ambientación distinta |
+| **Estrellas** | Hasta 3 por nivel según los movimientos usados |
+| **Deshacer** | Límite de deshaceres según la dificultad del nivel |
+| **Mecánicas** | Puzzle clásico, tuercas en bloque (*multiNut*) y bulones bloqueados (*lockedBolt*) |
+| **Idiomas** | Español e inglés (detección automática o manual en Configuración) |
+| **Progreso** | Guardado local; cuenta opcional con Google o correo para respaldo en la nube |
+| **Sincronización** | Offline-first: juegas sin red y el progreso se sincroniza al volver a tener conexión |
+| **Actualizaciones** | Aviso en la app cuando hay una versión nueva en Play Store |
+| **Novedades** | Modal «Qué hay de nuevo» al actualizar |
+
+## Contenido publicado
+
+### Campaña: El Taller (100 niveles)
+
+| Etapa | Niveles | Ambiente | Mecánicas |
+|-------|---------|----------|-----------|
+| Caja de herramientas | 1–30 | Taller | Clásico |
+| El garaje apretado | 31–60 | Garaje | Clásico |
+| La línea de montaje | 61–100 | Fábrica | Bloques de tuercas (desde 61) y bulones bloqueados (desde 81) |
+
+Niveles de reto en los hitos 20, 40, 60, 80 y 100.
+
+### Próximamente en el menú
+
+*La Obra* y *La Fábrica* aparecen como campañas bloqueadas; el contenido de la Sección 2 está en desarrollo.
+
+## Cómo se juega
+
+1. **Seleccionar** — Toca un bulón con tuercas para marcarlo como origen.
+2. **Mover** — Toca un bulón válido (vacío o con el mismo color arriba) para trasladar la(s) tuerca(s).
+3. **Ganar** — Cada bulón queda vacío o lleno de un solo color.
+4. **Estrellas** — Menos movimientos, más estrellas; puedes repetir niveles para mejorar tu puntuación.
+
+La app incluye tutoriales contextuales (movimientos, bloques, bulones bloqueados) en los primeros niveles de cada mecánica.
+
+## Privacidad
+
+- Sin cuenta: el progreso se guarda solo en el dispositivo.
+- Con cuenta: se sincroniza el avance de niveles y estrellas vía Supabase.
+- [Política de privacidad](https://games.marianorluna.com/nuts-and-bolts/privacy.html)
+
+## Historial de versiones
+
+| Versión | Fecha | Resumen |
+|---------|-------|---------|
+| **1.2.0** | 2026-07-03 | Cuenta opcional y guardado en la nube |
+| **1.1.0** | 2026-06-26 | 100 niveles, nuevas mecánicas, i18n ES/EN |
+| **1.0.0** | 2026-06-16 | Lanzamiento inicial (30 niveles) |
+
+Detalle completo en [docs/CHANGELOG.md](docs/CHANGELOG.md).
 
 ## Desarrollo
+
+Repositorio del juego (React + Capacitor). Para ejecutarlo en local:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abre `http://localhost:5173` en el navegador o en el emulador Android.
+Documentación técnica, scripts de release y guía de Play Store:
 
-## Scripts
+- [docs/README.md](docs/README.md) — índice de documentación
+- [docs/SCRIPTS.md](docs/SCRIPTS.md) — comandos npm y flujo de release
+- [docs/PLAYSTORE.md](docs/PLAYSTORE.md) — publicación en Android
 
-| Comando | Descripción |
-|---------|-------------|
-| `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Build de producción |
-| `npm run validate:levels` | Valida estructura y solvabilidad de los 30 niveles |
-| `npm run cap:sync` | Build + sincroniza con Capacitor |
-| `npm run cap:android` | Abre el proyecto en Android Studio |
+### Stack
 
-## Publicar en Play Store
+React 19 · Vite · TypeScript · Tailwind CSS 4 · Framer Motion · Zustand · Capacitor 7 · Supabase
 
-### Requisitos previos
+## Autor
 
-1. **Cuenta Google Play Console** — $25 USD (pago único)
-2. **Android Studio** — [developer.android.com/studio](https://developer.android.com/studio)
-3. **JDK 17+** — incluido con Android Studio
-4. **Node.js 18+**
-
-### Paso 1: Generar keystore (solo una vez)
-
-```bash
-keytool -genkey -v -keystore nuts-bolts-release.keystore -alias nuts-bolts -keyalg RSA -keysize 2048 -validity 10000
-```
-
-Guarda el keystore y las contraseñas en un lugar seguro.
-
-### Paso 2: Configurar firma en Android
-
-Crea `android/keystore.properties`:
-
-```properties
-storeFile=../nuts-bolts-release.keystore
-storePassword=TU_PASSWORD
-keyAlias=nuts-bolts
-keyPassword=TU_PASSWORD
-```
-
-Edita `android/app/build.gradle` para usar la firma en release (ver documentación de Capacitor/Android).
-
-### Paso 3: Build y sync
-
-```bash
-npm run cap:sync
-npx cap add android   # solo la primera vez
-```
-
-### Paso 4: Generar AAB en Android Studio
-
-1. `npm run cap:android`
-2. **Build → Generate Signed Bundle / APK**
-3. Selecciona **Android App Bundle (AAB)**
-4. Usa tu keystore
-5. El AAB queda en `android/app/release/`
-
-### Paso 5: Subir a Play Console
-
-1. [play.google.com/console](https://play.google.com/console)
-2. **Crear app** → Nombre: "Nuts & Bolts"
-3. **Producción → Crear nueva versión** → subir el AAB
-4. Completar la ficha:
-
-| Asset | Tamaño |
-|-------|--------|
-| Ícono | 512×512 PNG |
-| Feature graphic | 1024×500 PNG |
-| Screenshots | Mínimo 2, recomendado 4-8 (teléfono) |
-
-### Textos sugeridos para la ficha
-
-**Título:** Nuts & Bolts - Sort Puzzle
-
-**Descripción corta:** Ordena tuercas de colores en este puzzle relajante.
-
-**Descripción larga:**
-```
-¡Desenrosca y ordena tuercas de colores en este puzzle adictivo!
-
-🎮 30 niveles de dificultad creciente
-⭐ Gana hasta 3 estrellas por nivel
-🔩 Mecánica simple: toca para seleccionar, toca para mover
-↩️ Deshacer movimientos cuando te equivoques
-
-¿Puedes ordenar todas las tuercas?
-```
-
-**Categoría:** Puzzle  
-**Clasificación de contenido:** Para todos  
-**Política de privacidad:** No recopila datos (puedes usar una URL genérica o crear una página simple)
-
-### Checklist Play Store
-
-- [ ] Cuenta developer creada ($25)
-- [ ] AAB firmado generado
-- [ ] Ícono 512×512
-- [ ] 2+ screenshots del juego
-- [ ] Feature graphic 1024×500
-- [ ] Descripción y clasificación de contenido
-- [ ] Política de privacidad (URL)
-- [ ] Primera versión en revisión (1-3 días)
-
-## Estructura del proyecto
-
-```
-src/
-  domain/          # Lógica pura (motor, niveles, validador)
-  store/           # Zustand
-  components/      # UI React
-  hooks/           # useGameLogic
-```
-
-## Niveles
-
-- **1-10:** Fácil (2→5 colores, **2 bulones vacíos**)
-- **11-20:** Medio (4→6 colores, **2 bulones vacíos**)
-- **21-30:** Difícil (6-7 colores, 1 bulón vacío en los últimos)
-
-Generación híbrida:
-
-- **Niveles 1-4 (tutorial):** scramble inverso desde estado resuelto, con 2 bulones vacíos.
-- **Niveles 5-30:** mezcla Fisher-Yates (reparte colores entre bulones) + verificación BFS.
-
-Criterios de calidad por nivel: movimientos mínimos, colores repartidos en varios bulones,
-y ningún bulón ya resuelto al inicio (en niveles avanzados).
-
-```bash
-npm run bake:levels      # regenerar niveles
-npm run validate:levels  # verificar estructura, unicidad y solvabilidad
-```
+**Mariano Luna** — [marianorluna.com](https://marianorluna.com) · [GitHub](https://github.com/marianorluna)

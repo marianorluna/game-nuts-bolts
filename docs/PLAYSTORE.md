@@ -118,7 +118,19 @@ La app lee `version` vía `src/config/version.ts`. Android se sincroniza automá
 2. `npm run cap:sync` → genera build web y actualiza `android/app/build.gradle`
 3. Genera el AAB (`./gradlew bundleRelease` en `android/`)
 4. **Producción → Crear nueva versión** → sube el AAB
-5. Notas de la versión: describe cambios para el jugador (ej. "10 niveles nuevos")
+5. Notas de la versión: copia los `highlights` de [CHANGELOG.md](./CHANGELOG.md) (sección ES) o edita `src/data/release-notes.json`
+
+### Changelog y modal «Novedades»
+
+| Recurso | Descripción |
+| ------- | ----------- |
+| `src/data/release-notes.json` | Fuente de verdad — textos del modal y del changelog |
+| [CHANGELOG.md](./CHANGELOG.md) | Historial de releases (generado automáticamente) |
+| `npm run release:prepare` | Ejecutar antes de cada release en Play Store |
+
+Flujo: sube versión en `package.json` → edita `release-notes.json` → `npm run release:prepare` → build AAB.
+
+Al abrir la app tras actualizar, el jugador ve un modal con los `highlights` de su versión (una vez por versión).
 
 ## 9. Aviso de actualización in-app
 

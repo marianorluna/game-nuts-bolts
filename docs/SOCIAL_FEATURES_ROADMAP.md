@@ -2,7 +2,7 @@
 
 Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat (ej. _"Ejecuta el Prompt 0"_), se verifica contigo y solo entonces se pasa al siguiente.
 
-**Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) _(se crea en Prompt 5)_ · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md)
+**Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) _(se crea en Prompt 5)_ · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md) · [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) _(actualizar en Prompts 7–8)_
 
 ---
 
@@ -17,6 +17,8 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 | [4](#prompt-4--ui-de-cuenta)                | v1.2.0  | Auth + Google OAuth                       | ✅ Completado |
 | [5](#prompt-5--release-v120--migración-beta) | v1.2.0  | QA + Play Store + jugadores beta          | ⬜ Pendiente  |
 | [6](#prompt-6--ranking-realtime)            | v1.3.0  | Leaderboard en vivo                       | ⬜ Pendiente  |
+| [7](#prompt-7--push-infraestructura--ranking) | v1.3.1 | FCM + tokens + push «te superaron»        | ⬜ Pendiente  |
+| [8](#prompt-8--push-engagement--contenido)  | v1.4.0  | Re-engagement, updates, racha, hitos      | ⬜ Pendiente  |
 
 **Leyenda:** ⬜ Pendiente · 🔄 En curso · ✅ Completado
 
@@ -31,6 +33,8 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 - [ ] Los ~20 jugadores beta **no pierden progreso** al actualizar
 - [ ] El dominio (`src/domain/`) **no importa** SDK de Supabase ni ningún backend
 - [ ] Ranking público solo con **opt-in** (`show_in_leaderboard`, default off)
+- [ ] Notificaciones push solo con **opt-in** explícito (permiso Android + toggles por categoría)
+- [ ] Push personalizadas requieren **cuenta vinculada** (sin cuenta: no hay token en servidor)
 
 ### Regla de merge (dominio puro)
 
@@ -53,8 +57,10 @@ unlockedLevel = max(local, remoto);
 | Login alternativo | **Email + contraseña**                                   | Prompt 4                                                                 |
 | Facebook          | No en v1.2 (v1.4+ si hay demanda)                        | [BACKEND_DECISION.md](./BACKEND_DECISION.md#autenticación-supabase-auth) |
 | Ranking público   | Opt-in (`show_in_leaderboard`, default off)              | Prompt 6                                                                 |
+| Push notifications | **FCM** (Firebase Cloud Messaging) vía Capacitor        | [Prompt 7](#prompt-7--push-infraestructura--ranking)                     |
+| Envío de push     | Supabase Edge Functions (sin servidor adicional)         | Prompt 7–8                                                               |
 | Orden del ranking | 6 criterios — ver [RANKING_RULES.md](./RANKING_RULES.md) | Prompt 0                                                                 |
-| Releases          | v1.2.0 = cuenta + sync; v1.3.0 = ranking                 | —                                                                        |
+| Releases          | v1.2.0 = cuenta + sync; v1.3.0 = ranking; v1.3.1 = push ranking; v1.4.0 = push engagement | —                                                         |
 
 ---
 
@@ -224,7 +230,10 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 - [ ] [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) — comunicación y planes A/B/C
 - [ ] Export manual de save (plan B para soporte)
 - [x] Bump versión en `package.json` / Android (`1.2.0`, `versionCode` 3)
+- [ ] Actualizar `src/data/release-notes.json` y ejecutar `npm run release:prepare`
+- [ ] Copiar `highlights` de v1.2.0 a notas de Play Console
 - [ ] Checklist QA completo
+- [ ] `npm run release:prepare` — validar `release-notes.json` y regenerar [CHANGELOG.md](./CHANGELOG.md)
 
 ### Checklist QA v1.2.0
 
@@ -232,7 +241,9 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 - [ ] Jugador con 30+ niveles sin cuenta: actualiza, sigue igual
 - [ ] Jugador vincula Google: merge correcto
 - [ ] Sin red: juega offline; sync al volver
+- [ ] Tras actualizar a v1.2.0: aparece modal «Novedades» una sola vez
 - [ ] `npm run validate:levels` y `npm run build` OK
+- [ ] Modal «Novedades» (v1.2.0) probado tras actualizar desde beta
 
 ### Verificación
 
@@ -257,6 +268,8 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 - [ ] Toggle opt-in "Aparecer en el ranking" (default off)
 - [ ] Badge en Home con posición
 - [ ] Feed reciente (últimos eventos)
+- [ ] Columna `last_played_at` en `nb_player_profiles` (o `nb_player_progress`) — alimenta re-engagement en Prompt 8
+- [ ] Hook en eventos `rank_up` de `nb_leaderboard_events` — punto de enganche para push en Prompt 7
 
 ### Verificación
 
@@ -267,26 +280,193 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 
 ---
 
+## Prompt 7 — Push: infraestructura + ranking
+
+**Comando en chat:** `Ejecuta el Prompt 7`
+
+**Versión:** v1.3.1 (release separada de v1.3.0; requiere Prompt 6 completado)
+
+**Objetivo:** Notificaciones push nativas en Android (bandeja del sistema) con infraestructura FCM + Supabase. Primer caso de uso: aviso cuando otro jugador te supera en el ranking.
+
+**Coste:** $0 en beta — FCM gratis; tablas y Edge Functions dentro del free tier de Supabase. **No requiere servidor/VPS adicional.**
+
+### Requisitos técnicos (checklist)
+
+#### Firebase / Google (gratis)
+
+- [ ] Proyecto en [Firebase Console](https://console.firebase.google.com/) vinculado a `com.nutsandbolts.puzzle`
+- [ ] Descargar `google-services.json` → `android/app/` (activa el plugin ya preparado en `android/app/build.gradle`)
+- [ ] Service Account JSON para envío server-side (API HTTP v1 de FCM)
+- [ ] Secret en Supabase: `FCM_SERVICE_ACCOUNT` (o equivalente) para Edge Functions
+
+#### Cliente Capacitor
+
+- [ ] `npm install @capacitor/push-notifications`
+- [ ] `npx cap sync`
+- [ ] Permiso `POST_NOTIFICATIONS` en `AndroidManifest.xml` (Android 13+)
+- [ ] `src/infrastructure/push/` — registro de token, listeners (`registration`, `pushNotificationReceived`, `pushNotificationActionPerformed`)
+- [ ] Contrato `PushRepository` en `src/infrastructure/contracts/` (dominio sin FCM)
+- [ ] Deep link al abrir notificación (ej. `LeaderboardScreen` si tipo `rank_overtaken`)
+
+#### Supabase (esquema + backend)
+
+- [ ] Tabla `nb_push_tokens`:
+  - `user_id`, `game_id`, `fcm_token`, `platform` (`android`), `updated_at`
+  - PK o unique en `(user_id, game_id, fcm_token)`; RLS: usuario solo escribe sus tokens
+- [ ] Tabla `nb_notification_preferences`:
+  - `user_id`, `game_id`
+  - `push_enabled` (master, default `false`)
+  - `rank_overtaken` (default `false`; requiere `show_in_leaderboard = true`)
+  - timestamps
+- [ ] Migración SQL en `docs/supabase/schema.sql` (o archivo `schema-push.sql`)
+- [ ] Edge Function `send-push` — recibe `{ userId, gameId, type, title, body, data }`, llama API FCM
+- [ ] Edge Function o trigger `on-rank-change` — al detectar bajada de posición, encola push a usuarios afectados
+- [ ] Borrar token en `signOut` y al desactivar notificaciones
+
+#### UI y permisos
+
+- [ ] Solicitud de permiso Android (diálogo del sistema) tras explicación en UI
+- [ ] Sección «Notificaciones» en `SettingsModal` — toggle master + toggle «Ranking»
+- [ ] Si no hay cuenta: CTA para vincular antes de activar push
+- [ ] i18n en `es.json` / `en.json`
+
+#### Legal y Play Console
+
+- [ ] Actualizar `files-test/privacy.html` → publicar en [nuts-and-bolts-web](https://github.com/marianorluna/nuts-and-bolts-web) — ver [PRIVACY_POLICY.md](./PRIVACY_POLICY.md)
+- [ ] Declarar en política: token FCM, Firebase/Google como procesador, finalidad, controles del usuario
+- [ ] Play Console → **Seguridad de los datos**: identificadores de dispositivo, actividad en app (si aplica)
+- [ ] `.env.example`: `VITE_FEATURE_PUSH_NOTIFICATIONS=false` → `true` en v1.3.1
+
+### Casos de uso (este prompt)
+
+| Tipo | Condición | Mensaje ejemplo | Frecuencia máx. |
+| ---- | --------- | --------------- | --------------- |
+| **Ranking: te superaron** | `show_in_leaderboard` + pref `rank_overtaken` + cuenta | «¡Ojo! @PlayerX te superó — ahora eres #47» | 1 por evento; máx. 3/día por usuario |
+
+### Qué NO se hace (Prompt 7)
+
+- [ ] ~~Re-engagement por inactividad~~ → Prompt 8
+- [ ] ~~Push de nueva versión en Play Store~~ → Prompt 8
+- [ ] ~~Notificaciones de contenido nuevo / racha / resumen semanal~~ → Prompt 8
+
+### Verificación
+
+- [ ] Dispositivo real: permiso concedido → token guardado en `nb_push_tokens`
+- [ ] Dos cuentas con opt-in ranking: A sube posición → B recibe push nativa en bandeja Android
+- [ ] Usuario sin opt-in ranking: no recibe push de ranking
+- [ ] Desactivar toggle en Ajustes: no más push; token eliminado o marcado inactivo
+- [ ] Cerrar sesión: token borrado del servidor
+- [ ] `npm run build` y `npx cap sync` OK
+- [ ] Revisión contigo → release v1.3.1
+
+### Entregable
+
+Infraestructura push reutilizable (FCM + Supabase + Capacitor) + primer caso de uso ranking; lista para extender en Prompt 8.
+
+---
+
+## Prompt 8 — Push: engagement y contenido
+
+**Comando en chat:** `Ejecuta el Prompt 8`
+
+**Versión:** v1.4.0 (release separada; requiere Prompt 7 completado)
+
+**Objetivo:** Resto de notificaciones push con preferencias granulares, jobs programados y límites anti-spam.
+
+**Coste:** $0 en beta — cron vía Supabase Scheduled Edge Functions, `pg_cron` o GitHub Actions (una llamada/día).
+
+### Requisitos técnicos adicionales
+
+- [ ] Columnas en `nb_notification_preferences`:
+  - `re_engagement` (default `false`)
+  - `app_updates` (default `false`)
+  - `new_content` (default `false`)
+  - `daily_streak` (default `false`)
+  - `weekly_summary` (default `false`)
+  - `milestones` (default `false`)
+  - `sync_reminder` (default `false`)
+- [ ] `last_played_at` actualizado en cada sync exitoso (`syncProgress.ts`)
+- [ ] Edge Function `cron-inactive-players` — usuarios con `last_played_at < now() - interval '2 days'` y `re_engagement = true`
+- [ ] Edge Function `notify-app-update` — script manual o GH Action al publicar AAB; topic FCM `app_updates` o broadcast filtrado
+- [ ] Tabla o flag `nb_content_announcements` (opcional) — niveles nuevos / changelog para push `new_content`
+- [ ] Tracking local de racha diaria (`localStorage` o columna `current_streak` en perfil) para `daily_streak`
+- [ ] Job semanal (`cron-weekly-ranking`) — resumen posición para usuarios con `weekly_summary` + opt-in ranking
+- [ ] Rate limit en `send-push`: máx. 2 push/semana/usuario (excepto transaccionales urgentes de ranking, máx. 3/día)
+- [ ] Toggles por categoría en `SettingsModal` (agrupados: Engagement / Ranking / Contenido)
+- [ ] Actualizar política de privacidad v1.4.0 y Seguridad de los datos en Play Console
+
+### Casos de uso (este prompt)
+
+| Tipo | Condición | Mensaje ejemplo | Frecuencia máx. |
+| ---- | --------- | --------------- | --------------- |
+| **Re-engagement** | Sin jugar 2+ días + `re_engagement` + cuenta | «¡Te extrañamos! Tienes niveles pendientes 🧩» | 1 cada 3 días |
+| **Nueva versión** | Versión Play Store > instalada + `app_updates` | «Nueva v1.4.0 — ranking, notificaciones y más» | 1 por release |
+| **Nuevos niveles** | Contenido publicado + `new_content` | «¡50 niveles nuevos disponibles!» | 1 por release de contenido |
+| **Racha diaria** | Racha activa + no jugó hoy + `daily_streak` | «Llevas 5 días seguidos — no rompas la racha» | 1/día |
+| **Resumen semanal** | Opt-in ranking + `weekly_summary` | «Esta semana subiste 12 puestos — sigue así» | 1/semana (lunes) |
+| **Hito / logro** | Umbral campaña (ej. 80 %) + `milestones` | «Completaste el 80 % de la campaña» | 1 por hito |
+| **Evento estacional** | Flag temporal en servidor + `new_content` | «Tema navideño disponible 7 días» | Bajo demanda |
+| **Sync pendiente** | Conflicto o sync fallido 24 h + `sync_reminder` | «Tu progreso no se guardó en la nube» | 1 cada 48 h |
+
+> **Nota:** La detección de actualización **in-app** (`appUpdateService.ts` + `UpdateAvailableModal`) se mantiene; la push complementa cuando el usuario no abre la app.
+
+### Qué NO se hace (Prompt 8)
+
+- [ ] ~~Notificaciones locales sin servidor~~ (`@capacitor/local-notifications`) — no cubren ranking ni broadcast
+- [ ] ~~OneSignal / Pusher~~ — duplica FCM + Supabase ya elegidos
+- [ ] ~~Push a usuarios sin cuenta~~ — sin `user_id` no hay personalización server-side
+
+### Verificación
+
+- [ ] Simular inactividad 2+ días → push de re-engagement (staging)
+- [ ] Publicar versión de prueba → push de actualización a quien tenga `app_updates`
+- [ ] Añadir niveles en changelog → push `new_content` solo a opt-in
+- [ ] Racha: día sin jugar → recordatorio único
+- [ ] Resumen semanal: job ejecuta solo para opt-in ranking
+- [ ] Usuario con todos los toggles off: cero push
+- [ ] Política de privacidad v1.4.0 publicada y verificada en URL pública
+- [ ] Revisión contigo → release v1.4.0
+
+### Entregable
+
+Suite completa de notificaciones push con preferencias granulares, cron jobs y política de privacidad actualizada.
+
+---
+
 ## Arquitectura de referencia
 
 ```mermaid
 flowchart TB
   subgraph client [Cliente React + Capacitor]
-    UI[Home / Campaign / Leaderboard]
+    UI[Home / Campaign / Leaderboard / Settings]
     Store[gameStore Zustand]
+    PushPlugin["@capacitor/push-notifications"]
   end
-  subgraph domain [Dominio - sin Supabase]
+  subgraph domain [Dominio - sin Supabase ni FCM]
     Merge[mergePlayerProgress]
     Rank[comparePlayerRank]
   end
   subgraph infra [Infrastructure]
-    Contracts[AuthRepository ProgressRepository]
+    Contracts[AuthRepository ProgressRepository PushRepository]
     Supabase[supabase client]
+  end
+  subgraph backend [Supabase - sin VPS adicional]
+    Tokens[nb_push_tokens]
+    Prefs[nb_notification_preferences]
+    EdgeFn[Edge Functions send-push cron-*]
+  end
+  subgraph google [Firebase - gratis]
+    FCM[FCM]
   end
   UI --> Store
   Store --> Merge
   Store --> Contracts
+  PushPlugin --> Contracts
   Contracts --> Supabase
+  Supabase --> Tokens
+  Supabase --> Prefs
+  EdgeFn --> FCM
+  FCM -->|notificación nativa Android| PushPlugin
 ```
 
 ---
@@ -299,6 +479,10 @@ flowchart TB
 | OAuth roto en Android     | Probar en Prompt 4 antes de Play Store        |
 | Hacer demasiado de golpe  | Un prompt = una verificación                  |
 | Trampas en ranking        | Validación servidor + rate limit (Prompt 6)   |
+| Spam de notificaciones    | Opt-in + toggles por categoría + rate limit (Prompt 8) |
+| Push sin permiso Android 13+ | Solicitar `POST_NOTIFICATIONS` con UX clara (Prompt 7) |
+| Privacidad / Play Console | Actualizar política y Seguridad de los datos (Prompt 7–8) |
+| Usuario sin cuenta y push   | Solo con cuenta vinculada; CTA en Settings (Prompt 7) |
 
 ---
 
@@ -316,9 +500,13 @@ flowchart TB
 | 2026-07-01 | 2      | Capa infrastructure: contracts, Supabase SDK, `authSession`, `test:supabase`.               |
 | 2026-07-01 | 3      | `syncProgress.ts`, merge al login, debounce post-victoria, retry offline.                   |
 | 2026-07-02 | 4      | UI cuenta: `AuthModal`, `LinkProgressModal`, OAuth Capacitor, deep link Android, `useAuth`. |
+| 2026-07-03 | —      | Prompts 7–8: push FCM + Supabase; v1.3.1 ranking, v1.4.0 engagement.                      |
+| 2026-07-03 | 5+     | CHANGELOG.md + modal «Novedades» + `npm run release:prepare`.                             |
 
 ---
 
 ## Próximo paso
 
 **Prompt 5:** Release v1.2.0 + migración beta. Di: _"Ejecuta el Prompt 5"_
+
+**Después:** Prompt 6 (ranking v1.3.0) → Prompt 7 (push ranking v1.3.1) → Prompt 8 (push engagement v1.4.0)

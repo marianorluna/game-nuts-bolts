@@ -34,13 +34,7 @@
 
 | Documento                                      | Descripción                                                       |
 | ---------------------------------------------- | ----------------------------------------------------------------- |
+| [SCRIPTS.md](./SCRIPTS.md)                     | **Referencia de comandos npm** — flujo de release y uso eventual  |
+| [CHANGELOG.md](./CHANGELOG.md)                 | **Releases de la app** (semver) — generado desde `release-notes.json` |
 | [PLAYSTORE.md](./PLAYSTORE.md)                 | Guía para publicar en Google Play                                 |
 | [PRIVACY_POLICY.md](./PRIVACY_POLICY.md)       | Dónde está la política de privacidad, URL pública y flujo de deploy |
-
-## Comandos útiles
-
-```bash
-npm run validate:levels   # validar todos los niveles hornados
-npm run bake:levels       # regenerar bakedLevels (usar append-only tras Fase 1)
-npm test                  # tests unitarios (dominio, merge de progreso)
-```

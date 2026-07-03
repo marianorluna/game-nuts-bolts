@@ -5,9 +5,11 @@ import { CampaignScreen } from './components/CampaignScreen'
 import { LevelScreen } from './components/LevelScreen'
 import { SplashScreen } from './components/SplashScreen'
 import { UpdateAvailableModal } from './components/UpdateAvailableModal'
+import { WhatsNewModal } from './components/WhatsNewModal'
 import { GameSessionGuard } from './components/GameSessionGuard'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { useAppUpdateCheck } from './hooks/useAppUpdateCheck'
+import { useWhatsNew } from './hooks/useWhatsNew'
 import { getThemeBackground, SECTION_1_FUNDAMENTOS } from './domain/content/campaignStructure'
 
 export default function App() {
@@ -16,7 +18,8 @@ export default function App() {
   const session = useGameStore((s) => s.session)
   const homeStageId = useGameStore((s) => s.homeStageId)
   const goHome = useGameStore((s) => s.goHome)
-  const { update, dismiss } = useAppUpdateCheck(!showSplash)
+  const whatsNew = useWhatsNew(!showSplash)
+  const { update, dismiss } = useAppUpdateCheck(!showSplash && !whatsNew.open)
 
   const homeStage =
     SECTION_1_FUNDAMENTOS.stages.find((s) => s.id === homeStageId) ??
@@ -50,6 +53,12 @@ export default function App() {
             onDismiss={dismiss}
           />
         )}
+
+        <WhatsNewModal
+          open={whatsNew.open}
+          content={whatsNew.content}
+          onDismiss={whatsNew.dismiss}
+        />
       </div>
     </ErrorBoundary>
   )
