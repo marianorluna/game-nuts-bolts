@@ -51,5 +51,7 @@
 | [SCRIPTS.md](./SCRIPTS.md)                     | **Referencia de comandos npm** — flujo de release y uso eventual  |
 | [CHANGELOG.md](./CHANGELOG.md)                 | **Releases de la app** (semver) — generado desde `release-notes.json` |
 | [PLAYSTORE.md](./PLAYSTORE.md)                 | Guía para publicar en Google Play                                 |
+| [PLAYSTORE_TESTER_FEEDBACK.md](./PLAYSTORE_TESTER_FEEDBACK.md) | Comentarios y respuestas de testers en la prueba cerrada de Google Play |
+| [PLAYSTORE_PRODUCTION_ACCESS.md](./PLAYSTORE_PRODUCTION_ACCESS.md) | Respuestas al cuestionario de solicitud de acceso a producción |
 | [PRIVACY_POLICY.md](./PRIVACY_POLICY.md)       | Dónde está la política de privacidad, URL pública y flujo de deploy |
 | [../LICENSE](../LICENSE)                       | Licencia propietaria del código y contenido (All Rights Reserved)   |
