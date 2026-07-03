@@ -21,6 +21,7 @@ keytool -genkey -v \
 ```
 
 Guarda:
+
 - `nuts-bolts-release.keystore` (fuera del repo)
 - Contraseña del keystore
 - Contraseña del alias
@@ -40,6 +41,7 @@ npm run cap:android
 ```
 
 En Android Studio:
+
 1. **Build → Generate Signed Bundle / APK**
 2. **Android App Bundle**
 3. Selecciona tu keystore
@@ -65,20 +67,20 @@ cd android
 
 ### Textos
 
-| Campo | Valor |
-|-------|-------|
-| Título | Nuts & Bolts - Sort Puzzle |
+| Campo             | Valor                                               |
+| ----------------- | --------------------------------------------------- |
+| Título            | Nuts & Bolts - Sort Puzzle                          |
 | Descripción corta | Ordena tuercas de colores en este puzzle relajante. |
-| Categoría | Puzzle |
+| Categoría         | Puzzle                                              |
 
 ### Assets requeridos
 
-| Asset | Especificación |
-|-------|----------------|
-| Ícono de app | 512×512 PNG, 32-bit |
-| Feature graphic | 1024×500 JPG o PNG |
+| Asset                | Especificación                   |
+| -------------------- | -------------------------------- |
+| Ícono de app         | 512×512 PNG, 32-bit              |
+| Feature graphic      | 1024×500 JPG o PNG               |
 | Screenshots teléfono | Mínimo 2, máximo 8 (16:9 o 9:16) |
-| Video (opcional) | YouTube URL |
+| Video (opcional)     | YouTube URL                      |
 
 **Tip:** Haz screenshots desde el emulador Android o Chrome DevTools en modo móvil.
 
@@ -107,10 +109,10 @@ Edita **solo** `package.json`:
 }
 ```
 
-| Campo | Uso |
-|-------|-----|
-| `version` | Semver visible en la app (splash, créditos) y `versionName` de Android |
-| `versionCode` | Entero que **debe incrementarse** en cada upload a Play Store |
+| Campo         | Uso                                                                    |
+| ------------- | ---------------------------------------------------------------------- |
+| `version`     | Semver visible en la app (splash, créditos) y `versionName` de Android |
+| `versionCode` | Entero que **debe incrementarse** en cada upload a Play Store          |
 
 La app lee `version` vía `src/config/version.ts`. Android se sincroniza automáticamente al ejecutar `npm run cap:sync` (o manualmente con `npm run sync:version`).
 
@@ -130,6 +132,7 @@ La app lee `version` vía `src/config/version.ts`. Android se sincroniza automá
 **Español** (pegar en Play Console):
 
 ```
+<es-ES>
 • Cuenta opcional con Google o correo — guarda tu progreso en la nube
 • Juega sin conexión; sincronización automática al volver a tener red
 • Retos en niveles 20, 40, 60, 80 y 100 con reglas de examen
@@ -137,11 +140,13 @@ La app lee `version` vía `src/config/version.ts`. Android se sincroniza automá
 • 3 intentos por reto; recuperas 1 cada 8 horas
 • Con 1–2 estrellas avanzas; con 3 superas el reto y ganas la medalla
 • Sin deshacer en retos hasta superarlos con 3 estrellas
+</es-ES>
 ```
 
 **English** (si añades idioma en la ficha):
 
 ```
+</en-US>
 • Optional account with Google or email — save your progress to the cloud
 • Play offline; automatic sync when you're back online
 • Challenges on levels 20, 40, 60, 80 and 100 with exam-style rules
@@ -149,15 +154,16 @@ La app lee `version` vía `src/config/version.ts`. Android se sincroniza automá
 • 3 attempts per challenge; regain 1 every 8 hours
 • 1–2 stars unlock the next level; 3 stars beat the challenge and earn the medal
 • No undo on challenges until you beat them with 3 stars
+</en-US>
 ```
 
 ### Changelog y modal «Novedades»
 
-| Recurso | Descripción |
-| ------- | ----------- |
-| `src/data/release-notes.json` | Fuente de verdad — `highlights` (modal), `playStoreNotes` (Play Console) |
-| [CHANGELOG.md](./CHANGELOG.md) | Historial de releases (generado automáticamente) |
-| `npm run release:prepare` | Ejecutar antes de cada release en Play Store |
+| Recurso                        | Descripción                                                              |
+| ------------------------------ | ------------------------------------------------------------------------ |
+| `src/data/release-notes.json`  | Fuente de verdad — `highlights` (modal), `playStoreNotes` (Play Console) |
+| [CHANGELOG.md](./CHANGELOG.md) | Historial de releases (generado automáticamente)                         |
+| `npm run release:prepare`      | Ejecutar antes de cada release en Play Store                             |
 
 Flujo: sube versión en `package.json` → edita `release-notes.json` → `npm run release:prepare` → build AAB.
 
@@ -167,11 +173,11 @@ Al abrir la app tras actualizar, el jugador ve un modal con los `highlights` de 
 
 El juego comprueba automáticamente si hay una versión nueva en Play Store al abrir la app (solo en Android/iOS nativo, no en navegador).
 
-| Acción del jugador | Comportamiento |
-|--------------------|----------------|
+| Acción del jugador   | Comportamiento                                                       |
+| -------------------- | -------------------------------------------------------------------- |
 | **Actualizar ahora** | In-app update flexible (descarga en segundo plano) o abre Play Store |
-| **Más tarde** | Cierra el modal; no vuelve a mostrarse para esa misma versión |
-| **Reiniciar app** | Aparece cuando la descarga flexible terminó |
+| **Más tarde**        | Cierra el modal; no vuelve a mostrarse para esa misma versión        |
+| **Reiniciar app**    | Aparece cuando la descarga flexible terminó                          |
 
 ### Probar antes de producción
 
