@@ -10,15 +10,16 @@ import { MovesCoachMark } from './MovesCoachMark'
 import { MultiNutCoachMark } from './MultiNutCoachMark'
 import { LockedBoltCoachMark } from './LockedBoltCoachMark'
 import { SettingsModal } from './SettingsModal'
-import { BackArrowIcon, UndoArrowIcon, LevelHomeIcon } from './icons/GameIcons'
+import { BackArrowIcon, UndoArrowIcon, LevelHomeIcon, InfoCircleIcon } from './icons/GameIcons'
 import { getStarThresholds } from '../domain/gameEngine'
 import { MAX_LEVEL_ID } from '../domain/levels'
-import { getStageForLevel } from '../domain/content/campaignStructure'
-import { getDifficultyLabel, getStageName } from '../i18n/campaignLabels'
+import { getStageForLevel, isChallengeLevel } from '../domain/content/campaignStructure'
+import { getDifficultyLabel, getStageName, getChallengeLabel } from '../i18n/campaignLabels'
 import { useTranslation } from '../i18n/useTranslation'
 import { MAX_UNDOS } from '../domain/types'
 import { useMechanicCoachMarks } from '../hooks/useMechanicCoachMarks'
 import { EndOfContentModal } from './EndOfContentModal'
+import { ChallengeIntroModal } from './ChallengeIntroModal'
 import {
   hasSeenEndOfContentModal,
   markEndOfContentModalSeen,
@@ -32,9 +33,14 @@ export function LevelScreen() {
   const [movesInfoOpen, setMovesInfoOpen] = useState(false)
   const [endOfContentOpen, setEndOfContentOpen] = useState(false)
   const [winOverlayOpen, setWinOverlayOpen] = useState(false)
+  const [challengeIntroOpen, setChallengeIntroOpen] = useState(false)
+  const [challengeIntroFirstTime, setChallengeIntroFirstTime] = useState(false)
   const pendingWinAction = useRef<(() => void) | null>(null)
   const pendingWinOverlayAction = useRef<(() => void) | null>(null)
   const soundEnabled = useGameStore((s) => s.settings.soundEnabled)
+  const getChallengeMapState = useGameStore((s) => s.getChallengeMapState)
+  const getChallengeAttemptsDisplay = useGameStore((s) => s.getChallengeAttemptsDisplay)
+  const needsChallengeIntro = useGameStore((s) => s.needsChallengeIntro)
   const { session, level, selectBolt, undo, resetLevel, startLevel, setScreen } =
     useGameLogic()
   const {
@@ -45,6 +51,13 @@ export function LevelScreen() {
     dismissMultiNutCoach,
     dismissLockedBoltCoach,
   } = useMechanicCoachMarks(level?.id)
+
+  useEffect(() => {
+    if (session?.levelId === 20 && needsChallengeIntro(20)) {
+      setChallengeIntroFirstTime(true)
+      setChallengeIntroOpen(true)
+    }
+  }, [session?.levelId, needsChallengeIntro])
 
   useEffect(() => {
     if (session?.isWon) {
@@ -116,16 +129,26 @@ export function LevelScreen() {
 
   if (!session || !level) return null
 
-  const maxUndos = MAX_UNDOS[level.difficulty]
+  const isChallenge = isChallengeLevel(level.id)
+  const challengeMastered = isChallenge && getChallengeMapState(level.id) === 'mastered'
+  const maxUndos = challengeMastered || !isChallenge ? MAX_UNDOS[level.difficulty] : 0
   const undosRemaining = maxUndos - session.undosUsed
   const stage = getStageForLevel(level.id)
   const canUndo =
-    session.history.length > 0 && !session.isWon && undosRemaining > 0
+    !isChallenge || challengeMastered
+      ? session.history.length > 0 && !session.isWon && undosRemaining > 0
+      : false
   const { threeStars } = getStarThresholds(level.minMoves)
   const onTrackForThreeStars = session.moves <= threeStars
   const stageLabel = stage
     ? getStageName(t, stage.id)
     : getDifficultyLabel(t, level.difficulty)
+  const challengeName = isChallenge ? getChallengeLabel(t, level.id) : undefined
+  const attempts = isChallenge && !challengeMastered
+    ? getChallengeAttemptsDisplay(level.id)
+    : null
+  const showLowAttempts =
+    attempts !== null && attempts.available > 0 && attempts.available <= 1
 
   return (
     <div className="flex h-dvh max-h-dvh flex-col overflow-hidden">
@@ -158,8 +181,24 @@ export function LevelScreen() {
             className="text-3xl font-black text-white md:text-4xl"
             style={{ textShadow: '0 2px 10px rgba(0,0,0,0.45)' }}
           >
-            {t('level.levelNumber', { level: level.id })}
+            {isChallenge && challengeName
+              ? t('level.challengeTitle', { name: challengeName })
+              : t('level.levelNumber', { level: level.id })}
           </h1>
+          {attempts && (
+            <p className="mt-1 text-sm font-semibold text-amber-300/90">
+              {t('level.challengeAttempts', {
+                available: attempts.available,
+                max: attempts.max,
+              })}
+            </p>
+          )}
+          {isChallenge && !challengeMastered && (
+            <p className="mt-0.5 text-[11px] text-purple-300/80">{t('level.challengeNoUndo')}</p>
+          )}
+          {showLowAttempts && (
+            <p className="mt-0.5 text-xs font-bold text-amber-400">{t('level.challengeLowAttempts')}</p>
+          )}
         </header>
       </div>
 
@@ -180,6 +219,7 @@ export function LevelScreen() {
         style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom, 16px))' }}
       >
         <div className="flex w-[4.5rem] justify-start md:w-[5.5rem]">
+          {(!isChallenge || challengeMastered) && (
           <button
             type="button"
             onClick={undo}
@@ -192,6 +232,20 @@ export function LevelScreen() {
               {undosRemaining}
             </span>
           </button>
+          )}
+          {isChallenge && !challengeMastered && (
+            <button
+              type="button"
+              onClick={() => {
+                setChallengeIntroFirstTime(false)
+                setChallengeIntroOpen(true)
+              }}
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-white transition active:scale-95 hover:bg-white/25 md:h-14 md:w-14"
+              aria-label={t('level.challengeInfoAria')}
+            >
+              <InfoCircleIcon className="h-6 w-6 md:h-7 md:w-7" />
+            </button>
+          )}
         </div>
 
         <div className="relative overflow-visible">
@@ -272,6 +326,12 @@ export function LevelScreen() {
       </AnimatePresence>
 
       <EndOfContentModal open={endOfContentOpen} onClose={dismissEndOfContent} />
+      <ChallengeIntroModal
+        open={challengeIntroOpen}
+        levelId={20}
+        isFirstTime={challengeIntroFirstTime}
+        onClose={() => setChallengeIntroOpen(false)}
+      />
     </div>
   )
 }

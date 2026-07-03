@@ -1,5 +1,7 @@
 # Documentación — Nuts & Bolts
 
+Índice: [Contenido](#contenido-del-juego-campañas-niveles-mecánicas) · [Social](#funciones-sociales-y-ranking-v120) · [Audio](#audio-y-música-ambiente-v121) · [Publicación](#publicación) ([Play Store](./PLAYSTORE.md))
+
 ## Contenido del juego (campañas, niveles, mecánicas)
 
 | Documento                                            | Descripción                                                          |
@@ -27,8 +29,9 @@
 | [RANKING_RULES.md](./RANKING_RULES.md)                     | Criterios de orden del leaderboard (6 niveles de desempate)     |
 | [BACKEND_DECISION.md](./BACKEND_DECISION.md)               | Por qué Supabase y alternativas descartadas                     |
 | [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md)           | Migración segura jugadores beta _(Prompt 5)_                    |
+| [PLAYSTORE.md](./PLAYSTORE.md)                             | Guía paso a paso para publicar en Google Play _(Prompt 5)_     |
 
-**Estado:** Prompt 0 ✅ · Prompts 1–4 ✅ · Prompt 5 pendiente · Backend: Supabase
+**Estado:** Prompt 0 ✅ · Prompts 1–4 ✅ · Prompt 5 pendiente → [PLAYSTORE.md](./PLAYSTORE.md) · Backend: Supabase
 
 ## Audio y música ambiente (v1.2.1+)
 

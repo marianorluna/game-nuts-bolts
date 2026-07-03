@@ -21,8 +21,10 @@ interface ReleaseNote {
   versionCode: number
   date: string | null
   published: boolean
+  mergedInto?: string
   title: LocalizedText
   highlights: LocalizedStrings
+  playStoreNotes?: LocalizedStrings
   added?: LocalizedStrings
   changed?: LocalizedStrings
   fixed?: LocalizedStrings
@@ -74,11 +76,31 @@ function sectionEsEn(
   return out
 }
 
-function renderRelease(release: ReleaseNote): string {
+function getMergedVersions(
+  catalog: ReleaseNotesCatalog,
+  version: string,
+): ReleaseNote[] {
+  return catalog.releases.filter((r) => r.mergedInto === version)
+}
+
+function renderRelease(
+  release: ReleaseNote,
+  catalog: ReleaseNotesCatalog,
+): string {
   const dateSuffix = release.date ? ` — ${release.date}` : ''
   let body = `## [${release.version}]${dateSuffix} — ${release.title.es} / ${release.title.en}\n\n`
   body += `**versionCode:** ${release.versionCode}\n\n`
+
+  const merged = getMergedVersions(catalog, release.version)
+  if (merged.length > 0) {
+    const labels = merged
+      .map((r) => `v${r.version} (versionCode ${r.versionCode})`)
+      .join(', ')
+    body += `> **Play Store:** publicación única en esta versión. Incluye ${labels} — no publicadas por separado en Play.\n\n`
+  }
+
   body += sectionEsEn('Destacado (modal in-app)', release.highlights)
+  body += sectionEsEn('Notas Play Console (copiar y pegar)', release.playStoreNotes)
   body += sectionEsEn('Añadido', release.added)
   body += sectionEsEn('Cambiado', release.changed)
   body += sectionEsEn('Corregido', release.fixed)
@@ -92,7 +114,7 @@ function generateChangelog(catalog: ReleaseNotesCatalog): string {
     .sort((a, b) => b.version.localeCompare(a.version, undefined, { numeric: true }))
 
   const planned = catalog.releases
-    .filter((r) => !r.published)
+    .filter((r) => !r.published && !r.mergedInto)
     .sort((a, b) => a.version.localeCompare(b.version, undefined, { numeric: true }))
 
   let md = `# Changelog — Nuts & Bolts\n\n`
@@ -111,7 +133,7 @@ function generateChangelog(catalog: ReleaseNotesCatalog): string {
   md += `2. \`npm run changelog:scaffold\` (si la versión nueva no existe aún)\n`
   md += `3. Edita \`src/data/release-notes.json\` — \`highlights\`, secciones y \`published: true\`\n`
   md += `4. \`npm run release:prepare\`\n`
-  md += `5. Copia los \`highlights\` a las notas de la versión en Play Console\n\n`
+  md += `5. Copia \`playStoreNotes\` (ES/EN) de [CHANGELOG.md](./CHANGELOG.md) a las notas de la versión en Play Console\n\n`
   md += `---\n\n`
 
   if (planned.length > 0) {
@@ -125,7 +147,7 @@ function generateChangelog(catalog: ReleaseNotesCatalog): string {
   }
 
   for (const release of published) {
-    md += renderRelease(release)
+    md += renderRelease(release, catalog)
   }
 
   return md.trimEnd() + '\n'

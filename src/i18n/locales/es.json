@@ -21,7 +21,9 @@
   "home": {
     "comingSoon": "Próximamente",
     "enterCampaign": "Entrar a {{name}}",
-    "campaignLocked": "{{name}} — próximamente"
+    "campaignLocked": "{{name}} — próximamente",
+    "medals": "Medallas",
+    "medalsCount": "{{earned}}/{{total}}"
   },
   "campaign": {
     "backToCampaigns": "Volver a campañas",
@@ -35,6 +37,8 @@
     "challengeLevel": "Reto nivel {{level}}",
     "level": "Nivel {{level}}",
     "levelLocked": "Nivel {{level}} bloqueado",
+    "medals": "Medallas",
+    "challengeCooldown": "{{time}}",
     "campaigns": {
       "campaign-1-taller": {
         "name": "El Taller",
@@ -115,7 +119,12 @@
     "movesOneStar": "Si usas más movimientos, igual puedes completar el nivel y ganar 1 estrella ⭐.",
     "coachMoves": "Toca aquí para ver cómo ganar estrellas según tus movimientos.",
     "coachMultiNut": "Nueva regla: las tuercas del mismo color en la cima se mueven juntas.",
-    "coachLockedBolt": "Nueva regla: algunos bulones están bloqueados. Completa un bulón del color indicado para desbloquearlos."
+    "coachLockedBolt": "Nueva regla: algunos bulones están bloqueados. Completa un bulón del color indicado para desbloquearlos.",
+    "challengeTitle": "{{name}}",
+    "challengeAttempts": "Intentos: {{available}}/{{max}}",
+    "challengeNoUndo": "Sin deshacer en retos",
+    "challengeLowAttempts": "¡Quedan pocos intentos!",
+    "challengeInfoAria": "Ver reglas de los retos"
   },
   "win": {
     "completed": "¡Nivel completado!",
@@ -124,7 +133,30 @@
     "threeStarHint": "Para 3 estrellas necesitabas un máximo de {{count}} movimientos.",
     "nextLevel": "Siguiente nivel",
     "replay": "Volver a jugar",
-    "backToMenu": "Volver al menú"
+    "backToMenu": "Volver al menú",
+    "challengeMastered": "¡Reto superado!",
+    "challengeMasteredMessage": "Ganaste la medalla. Puedes repetir este reto cuando quieras.",
+    "challengePartial": "Nivel desbloqueado",
+    "challengePartialMessage": "Necesitas 3 estrellas para superar el reto y ganar la medalla.",
+    "challengeNoAttemptsLeft": "Sin intentos restantes. El próximo estará disponible en 8 horas."
+  },
+  "challenge": {
+    "introTitle": "¡Tu primer reto!",
+    "introLead": "Los retos son exámenes de etapa con reglas especiales:",
+    "introRule1": "Tienes 3 intentos por ciclo. Mover una tuerca o reiniciar cuenta como intento.",
+    "introRule2": "Con 1 o 2 estrellas desbloqueas el siguiente nivel, pero no ganas la medalla.",
+    "introRule3": "Necesitas 3 estrellas para superar el reto y ganar la medalla.",
+    "introRule4": "Sin deshacer. Si agotas los intentos, recuperas 1 cada 8 horas (máx. 3).",
+    "introCta": "¡Acepto el reto!",
+    "blockedTitle": "Sin intentos",
+    "blockedMessage": "Agotaste los intentos de este ciclo. Puedes seguir jugando otros niveles mientras esperas.",
+    "nextAttemptIn": "Próximo intento en {{time}}"
+  },
+  "medals": {
+    "galleryTitle": "Medallero",
+    "gallerySubtitle": "{{earned}} de {{total}} medallas conseguidas",
+    "locked": "Por conseguir",
+    "unknown": "Medalla"
   },
   "endOfContent": {
     "title": "¡Llegaste al final del taller!",
@@ -152,11 +184,6 @@
   "author": {
     "role": "Desarrollador de software",
     "bio": "Desarrollo software y disfruto explorar ideas en formato mobile. Nuts & Bolts nació como un puzzle de lógica y color, pensado para partidas cortas."
-  },
-  "whatsNew": {
-    "versionBadge": "Novedades v{{version}}",
-    "subtitle": "Qué hay de nuevo en esta actualización:",
-    "continue": "¡Genial!"
   },
   "whatsNew": {
     "versionBadge": "Novedades v{{version}}",

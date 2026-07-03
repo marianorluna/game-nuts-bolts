@@ -10,7 +10,9 @@ import {
   getUnlockedStageIndices,
   SECTION_1_FUNDAMENTOS,
 } from '../domain/content/campaignStructure'
-import { DEV_UNLOCK_ALL_LEVELS } from '../config/dev'
+import { CHALLENGE_LEVEL_ORDER } from '../domain/challenges/challengeConstants'
+import { countEarnedMedals } from '../domain/challenges'
+import { DEV_UNLOCK_ALL_LEVELS, DEV_PREVIEW_ALL_MEDALS } from '../config/dev'
 import {
   getCampaignName,
   getChallengeLabel,
@@ -18,10 +20,13 @@ import {
   getStageName,
 } from '../i18n/campaignLabels'
 import { useTranslation } from '../i18n/useTranslation'
+import { formatCountdown, msUntil } from '../hooks/useCountdown'
 import { BackArrowIcon, ChevronLeftIcon, ChevronRightIcon } from './icons/GameIcons'
 import { SettingsModal } from './SettingsModal'
 import { AppFooter } from './AppFooter'
 import { EndOfContentModal } from './EndOfContentModal'
+import { ChallengeBlockedModal } from './ChallengeBlockedModal'
+import { MedalGalleryModal } from './MedalGalleryModal'
 import { MAX_LEVEL_ID } from '../domain/levels'
 import {
   hasSeenEndOfContentModal,
@@ -32,6 +37,9 @@ export function CampaignScreen() {
   const { t } = useTranslation()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [endOfContentOpen, setEndOfContentOpen] = useState(false)
+  const [medalsOpen, setMedalsOpen] = useState(false)
+  const [blockedLevelId, setBlockedLevelId] = useState<number | null>(null)
+  const [tick, setTick] = useState(() => Date.now())
   const startLevel = useGameStore((s) => s.startLevel)
   const goHome = useGameStore((s) => s.goHome)
   const isLevelUnlocked = useGameStore((s) => s.isLevelUnlocked)
@@ -40,6 +48,18 @@ export function CampaignScreen() {
   const homeStageId = useGameStore((s) => s.homeStageId)
   const setHomeStageId = useGameStore((s) => s.setHomeStageId)
   const soundEnabled = useGameStore((s) => s.settings.soundEnabled)
+  const getChallengeMapState = useGameStore((s) => s.getChallengeMapState)
+  const getNextChallengeAttemptAt = useGameStore((s) => s.getNextChallengeAttemptAt)
+  const canStartChallengeLevel = useGameStore((s) => s.canStartChallengeLevel)
+
+  const earnedMedals = DEV_PREVIEW_ALL_MEDALS
+    ? CHALLENGE_LEVEL_ORDER.length
+    : countEarnedMedals(progress.challenges)
+
+  useEffect(() => {
+    const id = window.setInterval(() => setTick(Date.now()), 1000)
+    return () => window.clearInterval(id)
+  }, [])
 
   const campaign = CAMPAIGN_1_TALLER
   const section = SECTION_1_FUNDAMENTOS
@@ -149,6 +169,15 @@ export function CampaignScreen() {
     setEndOfContentOpen(false)
   }
 
+  const handleLevelClick = (levelId: number, isChallenge: boolean) => {
+    if (!isLevelUnlocked(levelId)) return
+    if (isChallenge && !canStartChallengeLevel(levelId)) {
+      setBlockedLevelId(levelId)
+      return
+    }
+    startLevel(levelId)
+  }
+
   return (
     <div className="flex h-dvh max-h-dvh flex-col overflow-hidden px-4 pt-safe sm:px-6 md:px-8">
       <header className="relative shrink-0 py-4 text-center md:py-5">
@@ -159,6 +188,20 @@ export function CampaignScreen() {
           aria-label={t('campaign.backToCampaigns')}
         >
           <BackArrowIcon className="h-6 w-6 md:h-7 md:w-7" />
+        </button>
+        <button
+          type="button"
+          onClick={() => setMedalsOpen(true)}
+          className="absolute right-14 top-4 flex h-11 min-w-11 items-center justify-center gap-1 rounded-full bg-amber-500/20 px-2 text-xs font-bold text-amber-100 ring-1 ring-amber-400/40 transition active:scale-95 hover:bg-amber-500/30 md:top-5 md:h-12 md:min-w-12 md:px-2.5 md:text-sm"
+          aria-label={t('campaign.medals')}
+        >
+          <span aria-hidden="true">🏅</span>
+          <span>
+            {t('home.medalsCount', {
+              earned: earnedMedals,
+              total: CHALLENGE_LEVEL_ORDER.length,
+            })}
+          </span>
         </button>
         <button
           type="button"
@@ -272,13 +315,20 @@ export function CampaignScreen() {
             const stars = getLevelStars(level.id)
             const isChallenge = level.isChallenge ?? false
             const challengeLabel = isChallenge ? getChallengeLabel(t, level.id) : undefined
+            const mapState = isChallenge ? getChallengeMapState(level.id) : null
+            const nextAttempt = isChallenge ? getNextChallengeAttemptAt(level.id) : null
+            const cooldownLabel =
+              mapState === 'cooldown' && nextAttempt
+                ? formatCountdown(msUntil(nextAttempt, tick))
+                : null
+            const isMastered = mapState === 'mastered'
 
             return (
               <button
                 key={level.id}
                 type="button"
                 disabled={!unlocked}
-                onClick={() => startLevel(level.id)}
+                onClick={() => handleLevelClick(level.id, isChallenge)}
                 aria-label={
                   unlocked
                     ? isChallenge
@@ -293,7 +343,11 @@ export function CampaignScreen() {
                   ${
                     unlocked
                       ? isChallenge
-                        ? 'bg-amber-500/25 text-amber-100 ring-1 ring-amber-400/40 hover:bg-amber-500/35'
+                        ? isMastered
+                          ? 'bg-emerald-500/20 text-emerald-100 ring-1 ring-emerald-400/50 hover:bg-emerald-500/30'
+                          : mapState === 'cooldown'
+                            ? 'bg-amber-500/10 text-amber-200/50 ring-1 ring-amber-400/20'
+                            : 'bg-amber-500/25 text-amber-100 ring-1 ring-amber-400/40 hover:bg-amber-500/35'
                         : 'bg-white/15 text-white hover:bg-white/25'
                       : 'bg-white/5 text-white/30'
                   }
@@ -304,9 +358,14 @@ export function CampaignScreen() {
                 ) : isChallenge ? (
                   <>
                     <span className="text-2xl leading-none md:text-3xl" aria-hidden="true">
-                      ⚡
+                      {isMastered ? '✓' : '⚡'}
                     </span>
-                    {stars > 0 && (
+                    {cooldownLabel && (
+                      <span className="absolute bottom-1 text-[9px] font-medium text-amber-300/80 md:text-[10px]">
+                        {cooldownLabel}
+                      </span>
+                    )}
+                    {!cooldownLabel && stars > 0 && !isMastered && (
                       <span className="absolute bottom-1 text-[10px] text-amber-300">
                         {'⭐'.repeat(stars)}
                       </span>
@@ -333,6 +392,14 @@ export function CampaignScreen() {
 
       <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
       <EndOfContentModal open={endOfContentOpen} onClose={dismissEndOfContent} />
+      <MedalGalleryModal open={medalsOpen} onClose={() => setMedalsOpen(false)} />
+      {blockedLevelId !== null && (
+        <ChallengeBlockedModal
+          open
+          levelId={blockedLevelId}
+          onClose={() => setBlockedLevelId(null)}
+        />
+      )}
     </div>
   )
 }

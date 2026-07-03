@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { mergePlayerProgress } from './mergePlayerProgress'
+import { createInitialChallenge, onChallengeVictory } from '../challenges/challengeProgress'
 import type { PlayerProgress } from '../types'
 
 const level = (
@@ -116,5 +117,29 @@ describe('mergePlayerProgress', () => {
     const merged = mergePlayerProgress(local, remote)
 
     expect(merged.levels[7]).toEqual({ stars: 2, bestMoves: 9, completed: true })
+  })
+
+  it('fusiona challenges sin regalar intentos extra', () => {
+    const t0 = new Date('2026-07-01T12:00:00.000Z')
+    const mastered = onChallengeVictory(createInitialChallenge(), 3, t0)
+    const local: PlayerProgress = {
+      unlockedLevel: 21,
+      levels: {},
+      challenges: {
+        20: { ...createInitialChallenge(), attemptsAvailable: 1 },
+      },
+    }
+    const remote: PlayerProgress = {
+      unlockedLevel: 21,
+      levels: {},
+      challenges: {
+        20: mastered,
+      },
+    }
+
+    const merged = mergePlayerProgress(local, remote)
+
+    expect(merged.challenges?.[20]?.outcome).toBe('mastered')
+    expect(merged.challenges?.[20]?.attemptsAvailable).toBe(3)
   })
 })

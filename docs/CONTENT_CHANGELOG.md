@@ -8,6 +8,32 @@ Entradas más recientes arriba. Cada fase o release de contenido debe añadir un
 
 ---
 
+## [Fase 1.2] — 2026-07-03 — Modo reto jugable y medallas
+
+### Añadido
+
+- Modo reto en niveles 20, 40, 60, 80, 100: intentos, regeneración 8 h, sin deshacer
+- Medallas coleccionables y medallero (`MedalGalleryModal`) en inicio y campaña
+- Modal tutorial al primer reto (nivel 20)
+- Icono ✓ verde al superar reto con 3 estrellas
+- Dominio `src/domain/challenges/` + tests
+- Migración automática de saves existentes (`migratePlayerProgressChallenges`)
+- Sync de `challenges` en merge local ↔ nube
+
+### Compatibilidad
+
+- Retos completados con 3★ → `mastered` + medalla
+- Completados con 1–2★ → `approved` + 3 intentos para perseguir medalla
+- Layouts de niveles **sin cambios**
+
+### Decisiones
+
+- Separar **avanzar campaña** (≥1★) de **superar reto** (3★ + medalla)
+- Cooldown solo en el reto afectado; resto del juego sin bloqueo
+- Tras `mastered`, rejuego ilimitado sin consumir intentos
+
+---
+
 ## [Fase 1.1] — 2026-06-26 — Nomenclatura jugable (lore del taller)
 
 ### Cambiado

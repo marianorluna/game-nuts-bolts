@@ -3,7 +3,10 @@ import { motion } from 'framer-motion'
 import { useGameStore } from '../store/gameStore'
 import { getStarThresholds } from '../domain/gameEngine'
 import { getLevelById, MAX_LEVEL_ID } from '../domain/levels'
-import { getMilestoneForLevel } from '../domain/content/campaignStructure'
+import {
+  getMilestoneForLevel,
+  isChallengeLevel,
+} from '../domain/content/campaignStructure'
 import {
   getDifficultyLabel,
   getMilestoneMessage,
@@ -23,6 +26,8 @@ interface WinModalProps {
 export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalProps) {
   const { t } = useTranslation()
   const getLevelStars = useGameStore((s) => s.getLevelStars)
+  const getChallengeProgress = useGameStore((s) => s.getChallengeProgress)
+  const getChallengeAttemptsDisplay = useGameStore((s) => s.getChallengeAttemptsDisplay)
   const level = getLevelById(levelId)
   const stars = getLevelStars(levelId)
   const hasNext = levelId < MAX_LEVEL_ID
@@ -30,6 +35,26 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
   const milestoneTitle = milestone ? getMilestoneTitle(t, levelId) : undefined
   const milestoneMessage = milestone ? getMilestoneMessage(t, levelId) : undefined
   const threeStarTarget = level ? getStarThresholds(level.minMoves).threeStars : null
+  const isChallenge = isChallengeLevel(levelId)
+  const challengeProgress = isChallenge ? getChallengeProgress(levelId) : undefined
+  const challengeMastered = challengeProgress?.outcome === 'mastered'
+  const attempts = isChallenge ? getChallengeAttemptsDisplay(levelId) : null
+
+  const title = isChallenge
+    ? challengeMastered
+      ? t('win.challengeMastered')
+      : stars >= 1
+        ? t('win.challengePartial')
+        : milestoneTitle ?? t('win.completed')
+    : milestoneTitle ?? t('win.completed')
+
+  const challengeMessage = isChallenge
+    ? challengeMastered
+      ? t('win.challengeMasteredMessage')
+      : stars >= 1
+        ? t('win.challengePartialMessage')
+        : undefined
+    : undefined
 
   useEffect(() => {
     const timers = [1, 2, 3]
@@ -60,12 +85,13 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
             transition={{ delay: 0.15, type: 'spring' }}
             className="mb-2 text-5xl"
           >
-            {milestone?.emoji ?? '🎉'}
+            {isChallenge && challengeMastered ? '🏅' : milestone?.emoji ?? '🎉'}
           </motion.div>
-          <h2 className="mb-1 text-2xl font-bold text-white">
-            {milestoneTitle ?? t('win.completed')}
-          </h2>
-          {milestoneMessage && (
+          <h2 className="mb-1 text-2xl font-bold text-white">{title}</h2>
+          {challengeMessage && (
+            <p className="mb-3 text-sm text-amber-200">{challengeMessage}</p>
+          )}
+          {!challengeMessage && milestoneMessage && (
             <p className="mb-3 text-sm text-amber-200">{milestoneMessage}</p>
           )}
           {level && (
@@ -96,6 +122,14 @@ export function WinModal({ levelId, moves, onNext, onReplay, onHome }: WinModalP
             {threeStarTarget !== null && stars < 3 && (
               <span className="block mt-2 text-sm text-amber-300/90">
                 {t('win.threeStarHint', { count: threeStarTarget })}
+              </span>
+            )}
+            {isChallenge
+              && !challengeMastered
+              && attempts
+              && attempts.available === 0 && (
+              <span className="block mt-2 text-sm text-amber-300/90">
+                {t('win.challengeNoAttemptsLeft')}
               </span>
             )}
           </p>

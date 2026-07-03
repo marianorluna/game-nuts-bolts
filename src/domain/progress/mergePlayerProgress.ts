@@ -1,4 +1,5 @@
-import type { LevelProgress, PlayerProgress } from '../types'
+import type { ChallengeProgress, LevelProgress, PlayerProgress } from '../types'
+import { mergeChallengeProgress } from '../challenges/challengeProgress'
 
 function mergeLevelProgress(
   local: LevelProgress | undefined,
@@ -44,8 +45,22 @@ export function mergePlayerProgress(
     }
   }
 
+  const challengeIds = new Set([
+    ...Object.keys(local.challenges ?? {}).map(Number),
+    ...Object.keys(remote.challenges ?? {}).map(Number),
+  ])
+
+  const challenges: Record<number, ChallengeProgress> = {}
+  for (const id of challengeIds) {
+    const merged = mergeChallengeProgress(local.challenges?.[id], remote.challenges?.[id])
+    if (merged) {
+      challenges[id] = merged
+    }
+  }
+
   return {
     unlockedLevel: Math.max(local.unlockedLevel, remote.unlockedLevel),
     levels,
+    challenges: Object.keys(challenges).length > 0 ? challenges : undefined,
   }
 }

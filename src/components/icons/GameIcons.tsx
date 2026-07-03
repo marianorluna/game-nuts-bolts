@@ -99,3 +99,23 @@ export function LevelHomeIcon({ className }: IconProps) {
     </svg>
   )
 }
+
+/** Círculo con «i»: información / ayuda. */
+export function InfoCircleIcon({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+      <path
+        d="M12 11v5M12 8h.01"
+        stroke="currentColor"
+        strokeWidth="2.25"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}

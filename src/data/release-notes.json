@@ -4,7 +4,8 @@
       "version": "1.2.0",
       "versionCode": 3,
       "date": "2026-07-03",
-      "published": true,
+      "published": false,
+      "mergedInto": "1.2.1",
       "title": {
         "es": "Cuenta y guardado en la nube",
         "en": "Account and cloud save"
@@ -55,6 +56,98 @@
         ],
         "en": [
           "Proprietary license (`LICENSE`) at the repository root"
+        ]
+      }
+    },
+    {
+      "version": "1.2.1",
+      "versionCode": 4,
+      "date": "2026-07-03",
+      "published": true,
+      "title": {
+        "es": "Cuenta en la nube y retos con medallas",
+        "en": "Cloud save and challenge medals"
+      },
+      "highlights": {
+        "es": [
+          "Vincula tu progreso con Google o correo — totalmente opcional",
+          "Tu avance se guarda en la nube al completar niveles",
+          "Si ya jugaste sin cuenta, tu progreso local se conserva al vincular",
+          "Los retos (niveles 20, 40, 60, 80 y 100) tienen reglas propias de examen",
+          "Medallas coleccionables y medallero en inicio y campaña",
+          "3 intentos por reto; recuperas 1 cada 8 horas (máx. 3 en reserva)",
+          "Juega sin conexión; la sincronización ocurre al volver a tener red"
+        ],
+        "en": [
+          "Link your progress with Google or email — completely optional",
+          "Your progress is saved to the cloud when you complete levels",
+          "If you played without an account, your local progress is kept when you link",
+          "Challenges (levels 20, 40, 60, 80 and 100) now play as stage exams",
+          "Collectible medals and medal gallery on home and campaign screens",
+          "3 attempts per challenge; regain 1 every 8 hours (max 3 banked)",
+          "Play offline; sync happens when you're back online"
+        ]
+      },
+      "playStoreNotes": {
+        "es": [
+          "Cuenta opcional con Google o correo — guarda tu progreso en la nube",
+          "Juega sin conexión; sincronización automática al volver a tener red",
+          "Retos en niveles 20, 40, 60, 80 y 100 con reglas de examen",
+          "Medallas coleccionables y medallero en inicio y campaña",
+          "3 intentos por reto; recuperas 1 cada 8 horas",
+          "Con 1–2 estrellas avanzas; con 3 superas el reto y ganas la medalla",
+          "Sin deshacer en retos hasta superarlos con 3 estrellas"
+        ],
+        "en": [
+          "Optional account with Google or email — save your progress to the cloud",
+          "Play offline; automatic sync when you're back online",
+          "Challenges on levels 20, 40, 60, 80 and 100 with exam-style rules",
+          "Collectible medals and medal gallery on home and campaign screens",
+          "3 attempts per challenge; regain 1 every 8 hours",
+          "1–2 stars unlock the next level; 3 stars beat the challenge and earn the medal",
+          "No undo on challenges until you beat them with 3 stars"
+        ]
+      },
+      "added": {
+        "es": [
+          "Cuenta opcional con Google OAuth y correo + contraseña",
+          "Sincronización de progreso vía Supabase (offline-first)",
+          "Merge automático local ↔ nube al iniciar sesión",
+          "Modal para vincular progreso tras el nivel 5",
+          "Sección Cuenta en Configuración",
+          "Modo reto: intentos, regeneración 8 h, sin deshacer",
+          "Medallero con 5 medallas temáticas por etapa",
+          "Modal tutorial al primer reto (nivel 20)",
+          "Icono ✓ verde al superar un reto con 3 estrellas",
+          "Migración automática de progreso en retos ya completados"
+        ],
+        "en": [
+          "Optional account with Google OAuth and email + password",
+          "Progress sync via Supabase (offline-first)",
+          "Automatic local ↔ cloud merge on sign-in",
+          "Link-progress prompt after level 5",
+          "Account section in Settings",
+          "Challenge mode: attempts, 8 h regen, no undo",
+          "Medal gallery with 5 stage-themed medals",
+          "Tutorial modal on first challenge (level 20)",
+          "Green ✓ icon when a challenge is beaten with 3 stars",
+          "Automatic migration for already-completed challenges"
+        ]
+      },
+      "compatibility": {
+        "es": [
+          "Sin cuenta: el juego funciona igual que antes",
+          "Los saves locales existentes no se pierden al actualizar ni al vincular",
+          "Retos ya completados con 3★ quedan como superados con medalla",
+          "Con 1–2★ conservas el desbloqueo y puedes perseguir la medalla",
+          "El progreso de retos se sincroniza al vincular cuenta"
+        ],
+        "en": [
+          "Without an account: the game works exactly as before",
+          "Existing local saves are not lost when updating or linking an account",
+          "Challenges already cleared with 3★ count as mastered with medal",
+          "With 1–2★ you keep unlock progress and can still chase the medal",
+          "Challenge progress syncs when you link an account"
         ]
       }
     },
@@ -160,7 +253,7 @@
     },
     {
       "version": "1.3.0",
-      "versionCode": 4,
+      "versionCode": 5,
       "date": null,
       "published": false,
       "title": {
@@ -194,7 +287,7 @@
     },
     {
       "version": "1.3.1",
-      "versionCode": 5,
+      "versionCode": 6,
       "date": null,
       "published": false,
       "title": {
@@ -214,7 +307,7 @@
     },
     {
       "version": "1.4.0",
-      "versionCode": 6,
+      "versionCode": 7,
       "date": null,
       "published": false,
       "title": {

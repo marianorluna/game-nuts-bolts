@@ -21,13 +21,13 @@ Historial de **releases de la app** (semver + `versionCode`).
 2. `npm run changelog:scaffold` (si la versión nueva no existe aún)
 3. Edita `src/data/release-notes.json` — `highlights`, secciones y `published: true`
 4. `npm run release:prepare`
-5. Copia los `highlights` a las notas de la versión en Play Console
+5. Copia `playStoreNotes` (ES/EN) de [CHANGELOG.md](./CHANGELOG.md) a las notas de la versión en Play Console
 
 ---
 
 ## [Unreleased] — Planificado
 
-### v1.3.0 (versionCode 4) — Ranking global
+### v1.3.0 (versionCode 5) — Ranking global
 
 ### Previsto
 
@@ -57,7 +57,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Recent events feed
 - Supabase Realtime
 
-### v1.3.1 (versionCode 5) — Notificaciones de ranking
+### v1.3.1 (versionCode 6) — Notificaciones de ranking
 
 ### Previsto
 
@@ -71,7 +71,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Push alert when another player overtakes you on the leaderboard
 - Native Android notifications (opt-in)
 
-### v1.4.0 (versionCode 6) — Notificaciones y recordatorios
+### v1.4.0 (versionCode 7) — Notificaciones y recordatorios
 
 ### Previsto
 
@@ -89,9 +89,11 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 ---
 
-## [1.2.0] — 2026-07-03 — Cuenta y guardado en la nube / Account and cloud save
+## [1.2.1] — 2026-07-03 — Cuenta en la nube y retos con medallas / Cloud save and challenge medals
 
-**versionCode:** 3
+**versionCode:** 4
+
+> **Play Store:** publicación única en esta versión. Incluye v1.2.0 (versionCode 3) — no publicadas por separado en Play.
 
 ### Destacado (modal in-app)
 
@@ -100,6 +102,9 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Vincula tu progreso con Google o correo — totalmente opcional
 - Tu avance se guarda en la nube al completar niveles
 - Si ya jugaste sin cuenta, tu progreso local se conserva al vincular
+- Los retos (niveles 20, 40, 60, 80 y 100) tienen reglas propias de examen
+- Medallas coleccionables y medallero en inicio y campaña
+- 3 intentos por reto; recuperas 1 cada 8 horas (máx. 3 en reserva)
 - Juega sin conexión; la sincronización ocurre al volver a tener red
 
 **EN**
@@ -107,7 +112,32 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Link your progress with Google or email — completely optional
 - Your progress is saved to the cloud when you complete levels
 - If you played without an account, your local progress is kept when you link
+- Challenges (levels 20, 40, 60, 80 and 100) now play as stage exams
+- Collectible medals and medal gallery on home and campaign screens
+- 3 attempts per challenge; regain 1 every 8 hours (max 3 banked)
 - Play offline; sync happens when you're back online
+
+### Notas Play Console (copiar y pegar)
+
+**ES**
+
+- Cuenta opcional con Google o correo — guarda tu progreso en la nube
+- Juega sin conexión; sincronización automática al volver a tener red
+- Retos en niveles 20, 40, 60, 80 y 100 con reglas de examen
+- Medallas coleccionables y medallero en inicio y campaña
+- 3 intentos por reto; recuperas 1 cada 8 horas
+- Con 1–2 estrellas avanzas; con 3 superas el reto y ganas la medalla
+- Sin deshacer en retos hasta superarlos con 3 estrellas
+
+**EN**
+
+- Optional account with Google or email — save your progress to the cloud
+- Play offline; automatic sync when you're back online
+- Challenges on levels 20, 40, 60, 80 and 100 with exam-style rules
+- Collectible medals and medal gallery on home and campaign screens
+- 3 attempts per challenge; regain 1 every 8 hours
+- 1–2 stars unlock the next level; 3 stars beat the challenge and earn the medal
+- No undo on challenges until you beat them with 3 stars
 
 ### Añadido
 
@@ -118,6 +148,11 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Merge automático local ↔ nube al iniciar sesión
 - Modal para vincular progreso tras el nivel 5
 - Sección Cuenta en Configuración
+- Modo reto: intentos, regeneración 8 h, sin deshacer
+- Medallero con 5 medallas temáticas por etapa
+- Modal tutorial al primer reto (nivel 20)
+- Icono ✓ verde al superar un reto con 3 estrellas
+- Migración automática de progreso en retos ya completados
 
 **EN**
 
@@ -126,28 +161,29 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Automatic local ↔ cloud merge on sign-in
 - Link-progress prompt after level 5
 - Account section in Settings
-
-### Cambiado
-
-**ES**
-
-- Licencia propietaria (`LICENSE`) en la raíz del repositorio
-
-**EN**
-
-- Proprietary license (`LICENSE`) at the repository root
+- Challenge mode: attempts, 8 h regen, no undo
+- Medal gallery with 5 stage-themed medals
+- Tutorial modal on first challenge (level 20)
+- Green ✓ icon when a challenge is beaten with 3 stars
+- Automatic migration for already-completed challenges
 
 ### Compatibilidad
 
 **ES**
 
 - Sin cuenta: el juego funciona igual que antes
-- Los saves locales existentes no se pierden al actualizar
+- Los saves locales existentes no se pierden al actualizar ni al vincular
+- Retos ya completados con 3★ quedan como superados con medalla
+- Con 1–2★ conservas el desbloqueo y puedes perseguir la medalla
+- El progreso de retos se sincroniza al vincular cuenta
 
 **EN**
 
 - Without an account: the game works exactly as before
-- Existing local saves are not lost when updating
+- Existing local saves are not lost when updating or linking an account
+- Challenges already cleared with 3★ count as mastered with medal
+- With 1–2★ you keep unlock progress and can still chase the medal
+- Challenge progress syncs when you link an account
 
 ---
 

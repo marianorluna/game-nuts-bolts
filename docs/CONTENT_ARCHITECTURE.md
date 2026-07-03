@@ -115,15 +115,30 @@ Primer arco: del primer día en el taller hasta dominar el banco principal.
 
 #### Retos especiales (Sección 1)
 
-Niveles con `isChallenge: true` — layout más exigente + celebración UI.
+Niveles con `isChallenge: true` en `CHALLENGE_LEVEL_IDS` (20, 40, 60, 80, 100).  
+Desde release **1.2.1** aplican **modo reto** (`challengeMode` — ver [MECHANICS_REGISTRY.md](./MECHANICS_REGISTRY.md)).
 
 | Nivel | Nombre jugable         | Tipo                      |
 | ----- | ---------------------- | ------------------------- |
 | 20    | Inspección de la caja  | Mini-hito Etapa 1         |
 | 40    | Prueba de torque       | Reto Etapa 2              |
 | 60    | Cierre del garaje      | Cierre Etapa 2            |
-| 80    | Control de calidad     | Reto Etapa 3 (Fase 2)     |
+| 80    | Control de calidad     | Reto Etapa 3              |
 | 100   | Graduación de aprendiz | Cierre Sección 1          |
+
+#### Modo reto — reglas (1.2.1+)
+
+| Resultado | Desbloquea N+1 | Medalla | Icono mapa |
+| --------- | -------------- | ------- | ---------- |
+| 3 estrellas | Sí | Sí | ✓ verde |
+| 1–2 estrellas | Sí | No | ⚡ |
+| Sin completar en 3 intentos | No | No | ⚡ + cooldown |
+
+- **Intentos:** mover tuerca o reiniciar = 1 intento; salir sin mover = gratis
+- **Regeneración:** 1 intento / 8 h, máx. 3 en reserva; solo bloquea ese reto
+- **Sin deshacer** hasta superar con 3★; luego rejuego libre
+- **Medallero:** 5 slots en inicio y campaña (`MedalGalleryModal`)
+- **Persistencia:** `PlayerProgress.challenges` + migración desde `levels[id]`
 
 #### Curva de dificultad (patrón ola)
 

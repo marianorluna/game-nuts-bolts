@@ -18,7 +18,8 @@ Actualizar este archivo **antes** de implementar una mecánica nueva y marcarla 
 | Bulón color fijo | `fixedColorBolt` | planificada | — | Sección 2 |
 | Tuerca oculta | `hiddenNut` | planificada | — | Sección 2–3 |
 | Tuerca pegajosa | `stickyNut` | planificada | — | Campaña 2 |
-| Límite de movimientos | `moveLimit` | planificada | — | Retos / diarios |
+| Modo reto | `challengeMode` | **activa** | 20, 40, 60, 80, 100 | Retos de etapa |
+| Límite de movimientos | `moveLimit` | planificada | — | Retos futuros / diarios |
 
 ### Regla de cadencia
 
@@ -135,6 +136,25 @@ interface BoltConfig {
 
 ---
 
+### challengeMode — Modo reto (examen de etapa)
+
+- **Estado:** activa
+- **Introducida en:** Release 1.2.1 — niveles 20, 40, 60, 80, 100
+- **Reglas:**
+  - 3 intentos por ciclo; mover una tuerca o reiniciar consume 1 intento
+  - Entrar y salir sin mover no consume intento
+  - Regeneración: 1 intento cada 8 h (máx. 3 en reserva)
+  - Sin deshacer hasta superar el reto con 3 estrellas
+  - 1–2 estrellas: desbloquea siguiente nivel; reto no superado; sin medalla
+  - 3 estrellas: reto superado; medalla; icono ✓ verde; rejuego ilimitado sin límite de intentos
+  - Agotar 3 intentos sin completar el puzzle: no desbloquea siguiente nivel; cooldown solo en ese reto
+- **Motor:** `src/domain/challenges/challengeProgress.ts`
+- **Persistencia:** `PlayerProgress.challenges` (local + sync Supabase)
+- **UI:** `CampaignScreen`, `LevelScreen`, `WinModal`, `MedalGalleryModal`, `ChallengeIntroModal`
+- **Flag:** `isChallenge` en `LevelDefinition` + `CHALLENGE_LEVEL_IDS`
+
+---
+
 ### moveLimit — Límite de movimientos (derrota)
 
 - **Estado:** planificada
@@ -161,4 +181,5 @@ interface BoltConfig {
 
 | Fecha | Cambio |
 |-------|--------|
+| 2026-07-03 | Modo reto (`challengeMode`) activo en niveles 20/40/60/80/100. |
 | 2026-06-26 | Creación inicial (Fase 0). 8 mecánicas catalogadas. |

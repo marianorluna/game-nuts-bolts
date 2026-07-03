@@ -3,6 +3,8 @@ import {
   mergePlayerProgress,
   shouldUpdateRankSnapshot,
 } from '../domain/progress'
+import { challengesEqual } from '../domain/challenges'
+import { migratePlayerProgressChallenges } from '../domain/challenges/migratePlayerProgress'
 import type { PlayerProgress } from '../domain/types'
 import type { Infrastructure } from '../infrastructure'
 import { getCurrentAuthUser } from '../infrastructure/authSession'
@@ -56,6 +58,8 @@ function progressEquals(a: PlayerProgress, b: PlayerProgress): boolean {
       return false
     }
   }
+
+  if (!challengesEqual(a.challenges, b.challenges)) return false
 
   return true
 }
@@ -135,7 +139,9 @@ export async function mergeProgressOnSession(userId: string): Promise<void> {
       return
     }
 
-    const merged = mergePlayerProgress(local, remote.progress)
+    const merged = migratePlayerProgressChallenges(
+      mergePlayerProgress(local, remote.progress),
+    )
 
     if (!progressEquals(local, merged)) {
       applyLocalProgress(merged)

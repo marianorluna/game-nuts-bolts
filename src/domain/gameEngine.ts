@@ -169,6 +169,8 @@ export function createSessionFromLevel(level: LevelDefinition) {
     isWon: false,
     shakeBoltIndex: null as number | null,
     playContext: getPlayContext(level),
+    challengeAttemptPending: true,
+    challengeAttemptCharged: false,
   }
 }
 

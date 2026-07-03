@@ -51,6 +51,17 @@ export interface MoveRecord {
   count: number
 }
 
+export type ChallengeOutcome = 'none' | 'approved' | 'mastered'
+
+export interface ChallengeProgress {
+  outcome: ChallengeOutcome
+  bestStars: number
+  attemptsAvailable: number
+  regenDueAt: string[]
+  medalEarnedAt?: string
+  introSeen?: boolean
+}
+
 export interface GameSession {
   levelId: number
   bolts: Bolt[]
@@ -62,6 +73,8 @@ export interface GameSession {
   isWon: boolean
   shakeBoltIndex: number | null
   playContext: GamePlayContext
+  challengeAttemptPending: boolean
+  challengeAttemptCharged: boolean
 }
 
 export interface LevelProgress {
@@ -73,6 +86,7 @@ export interface LevelProgress {
 export interface PlayerProgress {
   unlockedLevel: number
   levels: Record<number, LevelProgress>
+  challenges?: Record<number, ChallengeProgress>
 }
 
 /** Metadatos para desempate temporal en ranking (criterio 6). */

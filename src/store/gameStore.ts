@@ -13,13 +13,33 @@ import { DEV_UNLOCK_ALL_LEVELS } from '../config/dev'
 import {
   CAMPAIGN_1_TALLER,
   getStageForLevel,
+  isChallengeLevel,
   isStageComplete,
   isStageUnlocked,
   isStageUnlockedForLevel,
   SECTION_1_FUNDAMENTOS,
 } from '../domain/content/campaignStructure'
+import {
+  canStartChallenge,
+  consumeChallengeAttempt,
+  createInitialChallenge,
+  getAttemptsDisplay,
+  getChallengeMapState as resolveChallengeMapState,
+  getNextAttemptAt,
+  isChallengeMastered,
+  onChallengeVictory,
+  shouldUnlockNextOnChallenge,
+  tickChallengeRegen,
+  type ChallengeMapState,
+} from '../domain/challenges'
+import { migratePlayerProgressChallenges } from '../domain/challenges/migratePlayerProgress'
 import { getLevelById } from '../domain/levels'
-import type { GameSession, GameSettings, PlayerProgress } from '../domain/types'
+import type {
+  ChallengeProgress,
+  GameSession,
+  GameSettings,
+  PlayerProgress,
+} from '../domain/types'
 import type { LocalePreference } from '../i18n/types'
 import { MAX_UNDOS } from '../domain/types'
 import { soundService } from '../services/soundService'
@@ -37,7 +57,7 @@ interface GameStore {
   openCampaign: (campaignId: string) => void
   goHome: () => void
   setHomeStageId: (stageId: string) => void
-  startLevel: (levelId: number) => void
+  startLevel: (levelId: number) => boolean
   selectBolt: (boltIndex: number) => void
   undo: () => void
   resetLevel: () => void
@@ -47,6 +67,13 @@ interface GameStore {
   getLevelStars: (levelId: number) => number
   isLevelUnlocked: (levelId: number) => boolean
   replaceProgress: (progress: PlayerProgress) => void
+  getChallengeProgress: (levelId: number) => ChallengeProgress | undefined
+  getChallengeMapState: (levelId: number) => ChallengeMapState
+  getNextChallengeAttemptAt: (levelId: number) => Date | null
+  getChallengeAttemptsDisplay: (levelId: number) => { available: number; max: number }
+  canStartChallengeLevel: (levelId: number) => boolean
+  markChallengeIntroSeen: (levelId: number) => void
+  needsChallengeIntro: (levelId: number) => boolean
 }
 
 const defaultProgress: PlayerProgress = {
@@ -57,6 +84,64 @@ const defaultProgress: PlayerProgress = {
 const defaultSettings: GameSettings = {
   soundEnabled: true,
   locale: 'auto',
+}
+
+function now(): Date {
+  return new Date()
+}
+
+function getChallengeState(
+  progress: PlayerProgress,
+  levelId: number,
+): ChallengeProgress {
+  const existing = progress.challenges?.[levelId]
+  if (existing) {
+    return tickChallengeRegen(existing, now())
+  }
+  return createInitialChallenge()
+}
+
+function withChallengeUpdate(
+  progress: PlayerProgress,
+  levelId: number,
+  nextChallenge: ChallengeProgress,
+): PlayerProgress {
+  return {
+    ...progress,
+    challenges: {
+      ...progress.challenges,
+      [levelId]: nextChallenge,
+    },
+  }
+}
+
+function chargeChallengeAttemptIfNeeded(
+  progress: PlayerProgress,
+  levelId: number,
+  session: GameSession,
+): { progress: PlayerProgress; session: GameSession } {
+  if (!isChallengeLevel(levelId)) {
+    return { progress, session }
+  }
+
+  const state = getChallengeState(progress, levelId)
+  if (isChallengeMastered(state)) {
+    return { progress, session }
+  }
+
+  if (session.challengeAttemptCharged) {
+    return { progress, session }
+  }
+
+  const nextChallenge = consumeChallengeAttempt(state, now())
+  return {
+    progress: withChallengeUpdate(progress, levelId, nextChallenge),
+    session: {
+      ...session,
+      challengeAttemptCharged: true,
+      challengeAttemptPending: false,
+    },
+  }
 }
 
 export const useGameStore = create<GameStore>()(
@@ -84,13 +169,19 @@ export const useGameStore = create<GameStore>()(
       setHomeStageId: (stageId) => set({ homeStageId: stageId }),
 
       startLevel: (levelId) => {
-        if (!get().isLevelUnlocked(levelId)) return
+        if (!get().isLevelUnlocked(levelId)) return false
         const level = getLevelById(levelId)
-        if (!level) return
+        if (!level) return false
+
+        if (isChallengeLevel(levelId) && !get().canStartChallengeLevel(levelId)) {
+          return false
+        }
+
         set({
           screen: 'game',
           session: createSessionFromLevel(level),
         })
+        return true
       },
 
       selectBolt: (boltIndex) => {
@@ -133,46 +224,81 @@ export const useGameStore = create<GameStore>()(
           return
         }
 
+        let workingProgress = progress
+        let workingSession = session
+
+        if (
+          isChallengeLevel(session.levelId)
+          && !workingSession.challengeAttemptCharged
+        ) {
+          const charged = chargeChallengeAttemptIfNeeded(
+            workingProgress,
+            session.levelId,
+            workingSession,
+          )
+          workingProgress = charged.progress
+          workingSession = charged.session
+        }
+
         const result = moveNuts(
-          bolts,
+          workingSession.bolts,
           selectedBoltIndex,
           boltIndex,
           capacity,
-          session.playContext,
+          workingSession.playContext,
         )
         if (!result) return
 
         soundService.play('move')
 
-        const nextMoves = session.moves + 1
-        const nextHistory = [...session.history, result.record]
+        const nextMoves = workingSession.moves + 1
+        const nextHistory = [...workingSession.history, result.record]
         const won = isSolved(result.bolts, capacity)
 
-        let nextProgress = progress
+        let nextProgress = workingProgress
         let nextHomeStageId = get().homeStageId
         if (won) {
           soundService.play('win')
           const stars = calculateStars(nextMoves, level.minMoves)
-          const existing = progress.levels[session.levelId]
+          const existing = workingProgress.levels[session.levelId]
           const bestStars = Math.max(existing?.stars ?? 0, stars)
           const bestMoves = Math.min(
             existing?.bestMoves ?? Number.POSITIVE_INFINITY,
             nextMoves,
           )
 
+          const isChallenge = isChallengeLevel(session.levelId)
+          let challengeState = getChallengeState(workingProgress, session.levelId)
+
+          if (isChallenge) {
+            challengeState = onChallengeVictory(challengeState, stars, now())
+          }
+
+          let nextUnlocked = workingProgress.unlockedLevel
+          if (isChallenge) {
+            if (shouldUnlockNextOnChallenge(stars)) {
+              nextUnlocked = Math.max(nextUnlocked, session.levelId + 1)
+            }
+          } else {
+            nextUnlocked = Math.max(nextUnlocked, session.levelId + 1)
+          }
+
           nextProgress = {
-            unlockedLevel: Math.max(
-              progress.unlockedLevel,
-              session.levelId + 1,
-            ),
+            unlockedLevel: nextUnlocked,
             levels: {
-              ...progress.levels,
+              ...workingProgress.levels,
               [session.levelId]: {
                 stars: bestStars,
                 bestMoves,
                 completed: true,
               },
             },
+            challenges: isChallenge
+              ? {
+                  ...workingProgress.challenges,
+                  [session.levelId]: challengeState,
+                }
+              : workingProgress.challenges,
           }
 
           const isCompleted = (id: number) =>
@@ -184,8 +310,8 @@ export const useGameStore = create<GameStore>()(
             )
             const nextStage = SECTION_1_FUNDAMENTOS.stages[stageIndex + 1]
             if (
-              nextStage &&
-              isStageUnlocked(stageIndex + 1, SECTION_1_FUNDAMENTOS, isCompleted)
+              nextStage
+              && isStageUnlocked(stageIndex + 1, SECTION_1_FUNDAMENTOS, isCompleted)
             ) {
               nextHomeStageId = nextStage.id
             }
@@ -196,7 +322,7 @@ export const useGameStore = create<GameStore>()(
           progress: nextProgress,
           homeStageId: nextHomeStageId,
           session: {
-            ...session,
+            ...workingSession,
             bolts: result.bolts,
             moves: nextMoves,
             history: nextHistory,
@@ -213,6 +339,14 @@ export const useGameStore = create<GameStore>()(
 
         const level = getLevelById(session.levelId)
         if (!level) return
+
+        if (isChallengeLevel(session.levelId)) {
+          const state = getChallengeState(get().progress, session.levelId)
+          if (!isChallengeMastered(state)) {
+            soundService.play('error')
+            return
+          }
+        }
 
         const maxUndos = MAX_UNDOS[level.difficulty]
         if (session.undosUsed >= maxUndos) {
@@ -239,11 +373,27 @@ export const useGameStore = create<GameStore>()(
       },
 
       resetLevel: () => {
-        const { session } = get()
+        const { session, progress } = get()
         if (!session) return
         const level = getLevelById(session.levelId)
         if (!level) return
-        set({ session: createSessionFromLevel(level) })
+
+        let nextProgress = progress
+        const freshSession = createSessionFromLevel(level)
+
+        if (isChallengeLevel(session.levelId)) {
+          const state = getChallengeState(progress, session.levelId)
+          if (!isChallengeMastered(state)) {
+            const nextChallenge = consumeChallengeAttempt(state, now())
+            nextProgress = withChallengeUpdate(
+              progress,
+              session.levelId,
+              nextChallenge,
+            )
+          }
+        }
+
+        set({ progress: nextProgress, session: freshSession })
       },
 
       clearShake: () => {
@@ -278,7 +428,53 @@ export const useGameStore = create<GameStore>()(
         )
       },
 
-      replaceProgress: (progress) => set({ progress }),
+      replaceProgress: (progress) => {
+        set({ progress: migratePlayerProgressChallenges(progress) })
+      },
+
+      getChallengeProgress: (levelId) => {
+        if (!isChallengeLevel(levelId)) return undefined
+        const state = get().progress.challenges?.[levelId]
+        return state ? tickChallengeRegen(state, now()) : createInitialChallenge()
+      },
+
+      getChallengeMapState: (levelId) => {
+        if (!isChallengeLevel(levelId)) return 'active'
+        return resolveChallengeMapState(get().getChallengeProgress(levelId), now())
+      },
+
+      getNextChallengeAttemptAt: (levelId) => {
+        return getNextAttemptAt(get().getChallengeProgress(levelId), now())
+      },
+
+      getChallengeAttemptsDisplay: (levelId) => {
+        return getAttemptsDisplay(get().getChallengeProgress(levelId), now())
+      },
+
+      canStartChallengeLevel: (levelId) => {
+        if (!isChallengeLevel(levelId)) return true
+        const state = getChallengeState(get().progress, levelId)
+        return canStartChallenge(state, now())
+      },
+
+      markChallengeIntroSeen: (levelId) => {
+        if (!isChallengeLevel(levelId)) return
+        const state = getChallengeState(get().progress, levelId)
+        if (state.introSeen) return
+        set({
+          progress: withChallengeUpdate(get().progress, levelId, {
+            ...state,
+            introSeen: true,
+          }),
+        })
+      },
+
+      needsChallengeIntro: (levelId) => {
+        if (levelId !== 20) return false
+        const state = get().progress.challenges?.[levelId]
+        if (!state) return true
+        return !state.introSeen
+      },
     }),
     {
       name: 'nuts-bolts-progress',
@@ -293,6 +489,7 @@ export const useGameStore = create<GameStore>()(
           if (!state.settings.locale) {
             state.settings.locale = 'auto'
           }
+          state.progress = migratePlayerProgressChallenges(state.progress)
         }
       },
     },

@@ -21,7 +21,9 @@
   "home": {
     "comingSoon": "Coming soon",
     "enterCampaign": "Enter {{name}}",
-    "campaignLocked": "{{name}} — coming soon"
+    "campaignLocked": "{{name}} — coming soon",
+    "medals": "Medals",
+    "medalsCount": "{{earned}}/{{total}}"
   },
   "campaign": {
     "backToCampaigns": "Back to campaigns",
@@ -35,6 +37,8 @@
     "challengeLevel": "Challenge level {{level}}",
     "level": "Level {{level}}",
     "levelLocked": "Level {{level}} locked",
+    "medals": "Medals",
+    "challengeCooldown": "{{time}}",
     "campaigns": {
       "campaign-1-taller": {
         "name": "The Workshop",
@@ -115,7 +119,12 @@
     "movesOneStar": "If you use more moves, you can still finish the level and earn 1 star ⭐.",
     "coachMoves": "Tap here to see how to earn stars based on your moves.",
     "coachMultiNut": "New rule: same-color nuts on top move together.",
-    "coachLockedBolt": "New rule: some bolts are locked. Complete a full stack of the shown color to unlock them."
+    "coachLockedBolt": "New rule: some bolts are locked. Complete a full stack of the shown color to unlock them.",
+    "challengeTitle": "{{name}}",
+    "challengeAttempts": "Attempts: {{available}}/{{max}}",
+    "challengeNoUndo": "No undo on challenges",
+    "challengeLowAttempts": "Few attempts left!",
+    "challengeInfoAria": "View challenge rules"
   },
   "win": {
     "completed": "Level complete!",
@@ -124,7 +133,30 @@
     "threeStarHint": "For 3 stars you needed at most {{count}} moves.",
     "nextLevel": "Next level",
     "replay": "Play again",
-    "backToMenu": "Back to menu"
+    "backToMenu": "Back to menu",
+    "challengeMastered": "Challenge complete!",
+    "challengeMasteredMessage": "You earned the medal. Replay this challenge anytime.",
+    "challengePartial": "Level unlocked",
+    "challengePartialMessage": "You need 3 stars to beat the challenge and earn the medal.",
+    "challengeNoAttemptsLeft": "No attempts left. The next one will be available in 8 hours."
+  },
+  "challenge": {
+    "introTitle": "Your first challenge!",
+    "introLead": "Challenges are stage exams with special rules:",
+    "introRule1": "You get 3 attempts per cycle. Moving a nut or restarting counts as an attempt.",
+    "introRule2": "With 1 or 2 stars you unlock the next level, but you do not earn the medal.",
+    "introRule3": "You need 3 stars to beat the challenge and earn the medal.",
+    "introRule4": "No undo. If you run out of attempts, you regain 1 every 8 hours (max 3).",
+    "introCta": "Bring it on!",
+    "blockedTitle": "No attempts left",
+    "blockedMessage": "You used all attempts in this cycle. Keep playing other levels while you wait.",
+    "nextAttemptIn": "Next attempt in {{time}}"
+  },
+  "medals": {
+    "galleryTitle": "Medal Gallery",
+    "gallerySubtitle": "{{earned}} of {{total}} medals earned",
+    "locked": "Not yet earned",
+    "unknown": "Medal"
   },
   "endOfContent": {
     "title": "You reached the end of the workshop!",

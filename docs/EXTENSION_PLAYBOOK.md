@@ -18,6 +18,20 @@ Checklists reutilizables para añadir niveles, mecánicas, secciones o campañas
 
 ---
 
+## Checklist: añadir un reto nuevo
+
+Cuando se añade un nivel reto (cada ~20 niveles por sección):
+
+- [ ] Añadir id a `CHALLENGE_LEVEL_IDS` en `campaignStructure.ts`
+- [ ] Nombre jugable en i18n (`campaign.challenges.{id}`)
+- [ ] Visual de medalla en `medalVisuals.ts` + slot en `MedalGalleryModal`
+- [ ] Casos de migración en `migrateChallengeFromLevelProgress` si aplica
+- [ ] Tests en `challengeProgress.test.ts`
+- [ ] Entrada en [MECHANICS_REGISTRY.md](./MECHANICS_REGISTRY.md) si cambian reglas
+- [ ] Actualizar [CONTENT_CHANGELOG.md](./CONTENT_CHANGELOG.md)
+
+---
+
 ## Checklist: añadir niveles a una sección existente
 
 Usar cuando se agregan niveles dentro de una sección ya definida (ej. 31–60 en Sección 1).

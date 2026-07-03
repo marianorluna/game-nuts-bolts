@@ -15,8 +15,10 @@ export interface ReleaseNote {
   versionCode: number
   date: string | null
   published: boolean
+  mergedInto?: string
   title: LocalizedText
   highlights: LocalizedStrings
+  playStoreNotes?: LocalizedStrings
   added?: LocalizedStrings
   changed?: LocalizedStrings
   fixed?: LocalizedStrings
