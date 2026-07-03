@@ -48,6 +48,14 @@
           "Without an account: the game works exactly as before",
           "Existing local saves are not lost when updating"
         ]
+      },
+      "changed": {
+        "es": [
+          "Licencia propietaria (`LICENSE`) en la raíz del repositorio"
+        ],
+        "en": [
+          "Proprietary license (`LICENSE`) at the repository root"
+        ]
       }
     },
     {

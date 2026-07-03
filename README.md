@@ -90,6 +90,7 @@ Documentación técnica, scripts de release y guía de Play Store:
 - [docs/README.md](docs/README.md) — índice de documentación
 - [docs/SCRIPTS.md](docs/SCRIPTS.md) — comandos npm y flujo de release
 - [docs/PLAYSTORE.md](docs/PLAYSTORE.md) — publicación en Android
+- [docs/AUDIO_ROADMAP.md](docs/AUDIO_ROADMAP.md) — plan de audio (v1.2.1 / v1.3.1)
 
 ### Stack
 
@@ -98,3 +99,5 @@ React 19 · Vite · TypeScript · Tailwind CSS 4 · Framer Motion · Zustand · 
 ## Autor
 
 **Mariano Luna** — [marianorluna.com](https://marianorluna.com) · [GitHub](https://github.com/marianorluna)
+
+© Mariano Luna. Código y contenido propietarios. Ver [LICENSE](LICENSE).

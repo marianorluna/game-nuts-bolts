@@ -2,7 +2,7 @@
 
 Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat (ej. _"Ejecuta el Prompt 0"_), se verifica contigo y solo entonces se pasa al siguiente.
 
-**Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) _(se crea en Prompt 5)_ · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md) · [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) _(actualizar en Prompts 7–8)_
+**Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) _(se crea en Prompt 5)_ · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md) · [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) _(actualizar en Prompts 7–8)_ · [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) _(v1.2.1 / v1.3.1)_
 
 ---
 
@@ -16,8 +16,10 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 | [3](#prompt-3--sync-offline-first)          | v1.2.0  | Sync al ganar nivel                       | ✅ Completado |
 | [4](#prompt-4--ui-de-cuenta)                | v1.2.0  | Auth + Google OAuth                       | ✅ Completado |
 | [5](#prompt-5--release-v120--migración-beta) | v1.2.0  | QA + Play Store + jugadores beta          | ⬜ Pendiente  |
+| [A1](#prompt-a1--audio-mvp-v121) | v1.2.1  | Audio MVP: SFX ampliados + música + toggles | ⬜ Pendiente  |
 | [6](#prompt-6--ranking-realtime)            | v1.3.0  | Leaderboard en vivo                       | ⬜ Pendiente  |
 | [7](#prompt-7--push-infraestructura--ranking) | v1.3.1 | FCM + tokens + push «te superaron»        | ⬜ Pendiente  |
+| [A2](#prompt-a2--ambiente-por-etapa-v131) | v1.3.1  | Ambiente por etapa + volumen + SFX sync   | ⬜ Pendiente  |
 | [8](#prompt-8--push-engagement--contenido)  | v1.4.0  | Re-engagement, updates, racha, hitos      | ⬜ Pendiente  |
 
 **Leyenda:** ⬜ Pendiente · 🔄 En curso · ✅ Completado
@@ -60,7 +62,7 @@ unlockedLevel = max(local, remoto);
 | Push notifications | **FCM** (Firebase Cloud Messaging) vía Capacitor        | [Prompt 7](#prompt-7--push-infraestructura--ranking)                     |
 | Envío de push     | Supabase Edge Functions (sin servidor adicional)         | Prompt 7–8                                                               |
 | Orden del ranking | 6 criterios — ver [RANKING_RULES.md](./RANKING_RULES.md) | Prompt 0                                                                 |
-| Releases          | v1.2.0 = cuenta + sync; v1.3.0 = ranking; v1.3.1 = push ranking; v1.4.0 = push engagement | —                                                         |
+| Releases          | v1.2.0 = cuenta + sync; **v1.2.1 = audio MVP** ([AUDIO_ROADMAP](./AUDIO_ROADMAP.md) A1); v1.3.0 = ranking; v1.3.1 = push ranking + **ambiente por etapa** (A2); v1.4.0 = push engagement | — |
 
 ---
 
@@ -253,6 +255,109 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 
 ---
 
+## Prompt A1 — Audio MVP (v1.2.1)
+
+**Comando en chat:** `Ejecuta el Prompt A1`
+
+**Versión:** v1.2.1 (`versionCode` 4)
+
+**Prerequisito:** Prompt 5 completado (v1.2.0 publicada o lista para publicar).
+
+**Objetivo:** Ampliar feedback sonoro sin inflar el APK; introducir música ambiente opcional con dos loops. Detalle ampliado en [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md).
+
+**Patrón de diseño:** **Strategy** — `musicService` separado de `soundService`; dominio aislado de infra de audio.
+
+### Texto para copiar en el chat
+
+```text
+Ejecuta el Prompt A1 (docs/SOCIAL_FEATURES_ROADMAP.md) — Audio MVP v1.2.1.
+
+Contexto: hoy los SFX son procedurales en src/services/soundService.ts; no hay archivos de audio. Solo existe soundEnabled en Settings.
+
+Implementa:
+1. musicService (HTMLAudioElement, loop, volumen) + pausa en background con @capacitor/app
+2. GameSettings: sfxEnabled + musicEnabled (migrar desde soundEnabled en persist)
+3. SettingsModal: dos toggles Sonidos / Música + i18n ES/EN
+4. public/audio/menu.ogg + gameplay.ogg (CC0) + docs/AUDIO_CREDITS.md
+5. Música: menu en Home/Campaña; gameplay en LevelScreen; crossfade al cambiar pantalla
+6. SFX procedurales nuevos en soundService: uiTap, modalOpen, modalClose, reset, locked, moveBlock, shake, star1/2/3, stageUnlock
+7. gameStore: toggleSfx + toggleMusic; disparar locked/moveBlock/reset donde corresponda
+8. Bump package.json → 1.2.1, versionCode 4, release-notes.json, npm run release:prepare
+
+Principios: offline-first, solo audio CC0/royalty-free, SFX procedural cuando sea posible, peso audio < 2 MB, dominio sin imports de audio.
+
+Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del roadmap. Revisión conmigo antes de Prompt A2.
+```
+
+### Qué se hace
+
+#### Infraestructura
+
+- [ ] `src/services/musicService.ts` — `HTMLAudioElement`, `loop`, play/pause/stop, volumen
+- [ ] Integrar `@capacitor/app` — pausar música en `appStateChange` (background)
+- [ ] Ampliar `GameSettings` en `src/domain/types.ts`:
+  - `sfxEnabled: boolean` (migrar desde `soundEnabled` o alias)
+  - `musicEnabled: boolean`
+- [ ] Migración en persist de Zustand: usuarios con `soundEnabled: true` → ambos `true`
+- [ ] `SettingsModal`: dos toggles (Sonidos / Música) + textos i18n ES/EN
+- [ ] `public/audio/menu.ogg` + `public/audio/gameplay.ogg` (CC0 documentados)
+- [ ] `docs/AUDIO_CREDITS.md` — licencias de los loops
+
+#### Música
+
+- [ ] Loop en **Home** y **Campaña** → `menu.ogg`
+- [ ] Loop en **partida** (`LevelScreen`) → `gameplay.ogg`
+- [ ] Crossfade o fade corto al cambiar pantalla (evitar cortes bruscos)
+- [ ] Respetar `musicEnabled`; primer gesto del usuario desbloquea autoplay (política móvil)
+
+#### SFX procedurales nuevos (`soundService.ts`)
+
+| Nuevo tipo | Dónde disparar | Notas |
+| ---------- | -------------- | ----- |
+| `uiTap` | Botones principales | Corto, bajo volumen |
+| `modalOpen` / `modalClose` | Settings, Win, WhatsNew | Suave |
+| `reset` | `resetLevel` en `gameStore` | Distinto de `undo` |
+| `locked` | Bulón bloqueado en `selectBolt` | Metálico; no reutilizar `error` |
+| `moveBlock` | Movimiento multi-tuerca | Más grave que `move` |
+| `shake` | Al setear `shakeBoltIndex` | Micro-sonido sordo |
+| `star1` / `star2` / `star3` | `WinModal` según estrellas | Reemplazar `star` aleatorio |
+| `stageUnlock` | Desbloqueo de etapa en campaña/home | Fanfarria corta |
+
+#### Refactor menor
+
+- [ ] `soundService.setEnabled` → `setSfxEnabled` (o mantener alias)
+- [ ] `toggleSound` → `toggleSfx` + `toggleMusic` en `gameStore`
+
+### Qué NO se hace (Prompt A1)
+
+- [ ] ~~Música distinta por etapa~~ → Prompt A2
+- [ ] ~~Sliders de volumen~~ → Prompt A2
+- [ ] ~~SFX de sync en la nube~~ → Prompt A2
+
+### Verificación
+
+- [ ] Con música ON: loop en menú; al entrar a nivel cambia a gameplay; al volver, menú
+- [ ] Con música OFF: silencio; SFX siguen si funcionan con SFX ON
+- [ ] Con SFX OFF: sin efectos; música independiente
+- [ ] App a segundo plano → música pausada; al volver → reanuda si `musicEnabled`
+- [ ] APK release: tamaño total sube < 2 MB vs build sin audio
+- [ ] `docs/AUDIO_CREDITS.md` completo
+- [ ] `npm run build` y prueba en dispositivo real (autoplay tras primer tap)
+- [ ] `release-notes.json` + `npm run release:prepare` para v1.2.1
+- [ ] Revisión contigo antes de Prompt A2
+
+### Highlights sugeridos (modal «Novedades»)
+
+**ES:** Música de fondo opcional · Sonidos y música por separado en Ajustes · Nuevos efectos (bulones bloqueados, bloques, estrellas…)
+
+**EN:** Optional background music · Separate sound/music toggles · New effects (locked bolts, blocks, stars…)
+
+### Entregable
+
+`musicService` + SFX ampliados + settings duales + 2 loops OGG documentados; release v1.2.1 lista.
+
+---
+
 ## Prompt 6 — Ranking realtime
 
 **Comando en chat:** `Ejecuta el Prompt 6`
@@ -362,6 +467,102 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 ### Entregable
 
 Infraestructura push reutilizable (FCM + Supabase + Capacitor) + primer caso de uso ranking; lista para extender en Prompt 8.
+
+---
+
+## Prompt A2 — Ambiente por etapa (v1.3.1)
+
+**Comando en chat:** `Ejecuta el Prompt A2`
+
+**Versión:** v1.3.1 (`versionCode` 6 — coordinar bump con Prompt 7)
+
+**Prerequisito:** Prompt A1 completado (v1.2.1 publicada). Puede ejecutarse en paralelo con Prompt 7 (releases independientes en código).
+
+**Objetivo:** Ambiente distinto por etapa de campaña, control de volumen y SFX de cuenta/sync. Detalle ampliado en [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md).
+
+**Patrón de diseño:** **Strategy** — selector de pista por `stageId` sin acoplar el dominio del puzzle.
+
+### Texto para copiar en el chat
+
+```text
+Ejecuta el Prompt A2 (docs/SOCIAL_FEATURES_ROADMAP.md) — Ambiente por etapa v1.3.1.
+
+Prerequisito: Prompt A1 completado (musicService, toggles sfx/music, menu.ogg + gameplay.ogg).
+
+Implementa:
+1. Música por etapa en musicService.playForStage(stageId) con crossfade ~300–500 ms:
+   - Caja de herramientas (1–30) → public/audio/stage-workshop.ogg
+   - El garaje apretado (31–60) → public/audio/stage-garage.ogg
+   - La línea de montaje (61–100) → public/audio/stage-factory.ogg
+2. En partida: pista según etapa del nivel; en Home/Campaña según etapa visible
+3. GameSettings: musicVolume + sfxVolume (0–1 o bajo/medio/alto) + UI en SettingsModal
+4. SFX procedurales: syncSuccess y syncError al completar sync / fallo
+5. Actualizar docs/AUDIO_CREDITS.md; peso total public/audio/ < 4 MB (OGG mono 64–96 kbps)
+6. Coordinar versionCode 6 con Prompt 7 si aplica; release-notes v1.3.1
+
+Principios: offline-first, solo CC0/royalty-free, sin regresión en toggles A1, dominio sin imports de audio.
+
+Verifica niveles 1 / 35 / 70 con pistas correctas. Marca checkboxes del roadmap. Revisión conmigo al cerrar audio.
+```
+
+### Qué se hace
+
+#### Música por etapa
+
+| Etapa | Niveles | Archivo | Ambiente |
+| ----- | ------- | ------- | -------- |
+| Caja de herramientas | 1–30 | `public/audio/stage-workshop.ogg` | Taller suave |
+| El garaje apretado | 31–60 | `public/audio/stage-garage.ogg` | Industrial ligero |
+| La línea de montaje | 61–100 | `public/audio/stage-factory.ogg` | Fábrica / ritmo |
+
+- [ ] `musicService.playForStage(stageId)` o equivalente
+- [ ] En partida: pista según etapa del nivel actual
+- [ ] En campaña/home: pista según etapa visible o última jugada
+- [ ] Crossfade entre pistas al cambiar etapa (~300–500 ms)
+- [ ] Actualizar `docs/AUDIO_CREDITS.md`
+
+#### Volumen
+
+- [ ] `GameSettings`: `musicVolume` y `sfxVolume` (0–1) o sliders discretos (bajo / medio / alto)
+- [ ] UI en `SettingsModal`
+- [ ] Persistencia en Zustand
+
+#### SFX adicionales
+
+| Tipo | Evento |
+| ---- | ------ |
+| `syncSuccess` | Sync completado tras victoria / login |
+| `syncError` | Fallo de sync (sutil, no intrusivo) |
+
+#### Optimización
+
+- [ ] Revisar peso total de `public/audio/` (< 4 MB recomendado)
+- [ ] Confirmar mono + OGG 64–96 kbps en todos los loops
+
+### Qué NO se hace (Prompt A2)
+
+- [ ] ~~Refactor completo de soundService~~ (ya hecho en A1)
+- [ ] ~~Primera introducción de música~~ (ya hecho en A1)
+
+### Verificación
+
+- [ ] Nivel 1 → taller; nivel 35 → garaje; nivel 70 → fábrica
+- [ ] Cambio de etapa en campaña actualiza música con crossfade
+- [ ] Sliders de volumen afectan en tiempo real
+- [ ] Sync exitoso/fallido audible solo con SFX ON
+- [ ] Sin regresión en toggles de A1
+- [ ] `release-notes.json` + release v1.3.1
+- [ ] Revisión contigo → cierre del roadmap de audio
+
+### Highlights sugeridos (modal «Novedades»)
+
+**ES:** Música distinta por etapa · Control de volumen música/efectos · Sonidos al sincronizar en la nube
+
+**EN:** Different music per stage · Music/SFX volume controls · Sounds when syncing cloud progress
+
+### Entregable
+
+Ambiente por etapa + volumen + SFX sync; 3 loops OGG documentados; roadmap de audio cerrado.
 
 ---
 
@@ -482,7 +683,9 @@ flowchart TB
 | Spam de notificaciones    | Opt-in + toggles por categoría + rate limit (Prompt 8) |
 | Push sin permiso Android 13+ | Solicitar `POST_NOTIFICATIONS` con UX clara (Prompt 7) |
 | Privacidad / Play Console | Actualizar política y Seguridad de los datos (Prompt 7–8) |
-| Usuario sin cuenta y push   | Solo con cuenta vinculada; CTA en Settings (Prompt 7) |
+| APK demasiado pesado (audio) | SFX procedural; OGG mono; loops cortos; ver [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) |
+| Autoplay bloqueado (audio) | Música tras primer tap; pausa en background (Prompt A1) |
+| Licencia audio incorrecta | Solo CC0/royalty-free; `AUDIO_CREDITS.md` obligatorio (A1–A2) |
 
 ---
 
@@ -502,6 +705,8 @@ flowchart TB
 | 2026-07-02 | 4      | UI cuenta: `AuthModal`, `LinkProgressModal`, OAuth Capacitor, deep link Android, `useAuth`. |
 | 2026-07-03 | —      | Prompts 7–8: push FCM + Supabase; v1.3.1 ranking, v1.4.0 engagement.                      |
 | 2026-07-03 | 5+     | CHANGELOG.md + modal «Novedades» + `npm run release:prepare`.                             |
+| 2026-07-03 | —      | [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md): audio MVP v1.2.1, ambiente por etapa v1.3.1.       |
+| 2026-07-03 | A1–A2  | Prompts A1 y A2 integrados en este roadmap con texto copiable para el chat.                  |
 
 ---
 
@@ -509,4 +714,6 @@ flowchart TB
 
 **Prompt 5:** Release v1.2.0 + migración beta. Di: _"Ejecuta el Prompt 5"_
 
-**Después:** Prompt 6 (ranking v1.3.0) → Prompt 7 (push ranking v1.3.1) → Prompt 8 (push engagement v1.4.0)
+**Después:** [Prompt A1 audio v1.2.1](#prompt-a1--audio-mvp-v121) (release independiente) → Prompt 6 (ranking v1.3.0) → Prompt 7 (push v1.3.1) + [Prompt A2 ambiente](#prompt-a2--ambiente-por-etapa-v131) → Prompt 8 (push engagement v1.4.0)
+
+**Copiar prompt:** cada prompt de audio incluye un bloque «Texto para copiar en el chat» listo para pegar.

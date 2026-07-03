@@ -127,6 +127,16 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Link-progress prompt after level 5
 - Account section in Settings
 
+### Cambiado
+
+**ES**
+
+- Licencia propietaria (`LICENSE`) en la raíz del repositorio
+
+**EN**
+
+- Proprietary license (`LICENSE`) at the repository root
+
 ### Compatibilidad
 
 **ES**
