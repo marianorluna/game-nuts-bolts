@@ -2,7 +2,7 @@
 
 Respuestas enviadas al cuestionario **«Solicitar acceso a producción»** de Google Play Console (julio 2026).
 
-**Documentación relacionada:** [PLAYSTORE.md](./PLAYSTORE.md) · [PLAYSTORE_TESTER_FEEDBACK.md](./PLAYSTORE_TESTER_FEEDBACK.md)
+**Documentación relacionada:** [PLAYSTORE.md](./PLAYSTORE.md) · [PLAYSTORE_TESTER_FEEDBACK.md](./PLAYSTORE_TESTER_FEEDBACK.md) · [TESTER_SURVEY.md](./TESTER_SURVEY.md)
 
 ## Paso 1 — Información sobre tu prueba cerrada
 

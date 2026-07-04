@@ -2,7 +2,7 @@
 
 Checklist paso a paso para publicar y obtener cuenta de developer habilitada.
 
-**Documentación relacionada:** [README.md](./README.md) (índice) · [SCRIPTS.md](./SCRIPTS.md) · [CHANGELOG.md](./CHANGELOG.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) · [PLAYSTORE_TESTER_FEEDBACK.md](./PLAYSTORE_TESTER_FEEDBACK.md) · [PLAYSTORE_PRODUCTION_ACCESS.md](./PLAYSTORE_PRODUCTION_ACCESS.md)
+**Documentación relacionada:** [README.md](./README.md) (índice) · [SCRIPTS.md](./SCRIPTS.md) · [CHANGELOG.md](./CHANGELOG.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) · [PLAYSTORE_TESTER_FEEDBACK.md](./PLAYSTORE_TESTER_FEEDBACK.md) · [PLAYSTORE_PRODUCTION_ACCESS.md](./PLAYSTORE_PRODUCTION_ACCESS.md) · [TESTER_SURVEY.md](./TESTER_SURVEY.md)
 
 ## 1. Cuenta Google Play Console
 

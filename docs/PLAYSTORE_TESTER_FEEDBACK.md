@@ -2,7 +2,7 @@
 
 Comentarios recopilados durante la prueba cerrada en Google Play Console (junio–julio 2026).
 
-**Documentación relacionada:** [PLAYSTORE.md](./PLAYSTORE.md) · [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md)
+**Documentación relacionada:** [PLAYSTORE.md](./PLAYSTORE.md) · [TESTER_SURVEY.md](./TESTER_SURVEY.md) · [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md)
 
 ## Resumen de reseñas
 
