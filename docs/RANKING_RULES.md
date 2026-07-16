@@ -93,6 +93,9 @@ Tablas: `nb_player_progress` — filtrar siempre por `game_id = 'nuts-and-bolts'
 | `moves_tiebreak_key` | 4 (clave ordenable por nivel, alto→bajo) |
 | `total_best_moves` | 5 |
 | `rank_snapshot_at` | 6 |
+| `last_played_at` | (Prompt 6/8) última sync — no entra en el orden del ranking |
+
+Migración incremental si el esquema Prompt 1 ya estaba aplicado: [schema-prompt6.sql](./supabase/schema-prompt6.sql).
 
 ---
 

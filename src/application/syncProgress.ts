@@ -10,6 +10,7 @@ import type { Infrastructure } from '../infrastructure'
 import { getCurrentAuthUser } from '../infrastructure/authSession'
 import type { UpsertProgressOptions } from '../infrastructure/contracts/ProgressRepository'
 import { useGameStore } from '../store/gameStore'
+import { emitRankUp } from './rankUpHooks'
 
 const SYNC_DEBOUNCE_MS = 800
 
@@ -87,14 +88,88 @@ async function upsertToCloud(
   userId: string,
   progress: PlayerProgress,
   options?: UpsertProgressOptions,
+  eventContext?: { before: PlayerProgress; after: PlayerProgress },
 ): Promise<void> {
   if (!infrastructure) return
+
+  let previousRank: number | null = null
+  if (eventContext && infrastructure.leaderboard) {
+    try {
+      const profile = await infrastructure.leaderboard.fetchProfile(userId)
+      if (profile?.showInLeaderboard) {
+        previousRank = await infrastructure.leaderboard.fetchOwnRank(userId)
+      }
+    } catch {
+      previousRank = null
+    }
+  }
 
   try {
     await infrastructure.progress.upsert(userId, progress, options)
     pendingUpsert = null
   } catch {
     pendingUpsert = { progress, options }
+    return
+  }
+
+  if (!eventContext || !infrastructure.leaderboard) return
+
+  const leaderboard = infrastructure.leaderboard
+  let profile
+  try {
+    profile = await leaderboard.fetchProfile(userId)
+  } catch {
+    return
+  }
+  if (!profile?.showInLeaderboard) return
+
+  const { before, after } = eventContext
+  const completedBefore = Object.values(before.levels).filter((l) => l.completed).length
+  const completedAfter = Object.values(after.levels).filter((l) => l.completed).length
+
+  if (completedAfter > completedBefore) {
+    try {
+      await leaderboard.insertEvent({
+        userId,
+        eventType: 'level_completed',
+        payload: {
+          unlockedLevel: after.unlockedLevel,
+          completedLevels: completedAfter,
+        },
+      })
+    } catch {
+      // ignore
+    }
+  }
+
+  let newRank: number | null = null
+  try {
+    newRank = await leaderboard.fetchOwnRank(userId)
+  } catch {
+    return
+  }
+
+  if (
+    previousRank !== null
+    && newRank !== null
+    && newRank < previousRank
+  ) {
+    try {
+      await leaderboard.insertEvent({
+        userId,
+        eventType: 'rank_up',
+        payload: { previousRank, newRank },
+      })
+    } catch {
+      // ignore
+    }
+
+    emitRankUp({
+      userId,
+      previousRank,
+      newRank,
+      displayName: profile.displayName,
+    })
   }
 }
 
@@ -108,7 +183,10 @@ async function flushVictorySync(): Promise<void> {
   if (!before || !user || !infrastructure) return
   if (!shouldSyncProgress(before, after)) return
 
-  await upsertToCloud(user.id, after, buildUpsertOptions(before, after))
+  await upsertToCloud(user.id, after, buildUpsertOptions(before, after), {
+    before,
+    after,
+  })
 }
 
 export async function flushPendingProgressSync(): Promise<void> {

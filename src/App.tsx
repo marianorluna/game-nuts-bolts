@@ -3,6 +3,7 @@ import { useGameStore } from './store/gameStore'
 import { HomeScreen } from './components/HomeScreen'
 import { CampaignScreen } from './components/CampaignScreen'
 import { LevelScreen } from './components/LevelScreen'
+import { LeaderboardScreen } from './components/LeaderboardScreen'
 import { SplashScreen } from './components/SplashScreen'
 import { UpdateAvailableModal } from './components/UpdateAvailableModal'
 import { WhatsNewModal } from './components/WhatsNewModal'
@@ -43,6 +44,7 @@ export default function App() {
         {screen === 'home' && <HomeScreen />}
         {screen === 'campaign' && <CampaignScreen />}
         {screen === 'game' && <LevelScreen />}
+        {screen === 'leaderboard' && <LeaderboardScreen />}
 
         {update?.available && update.info && update.currentVersion && update.availableVersion && (
           <UpdateAvailableModal

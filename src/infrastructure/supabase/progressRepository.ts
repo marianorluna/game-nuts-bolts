@@ -58,6 +58,7 @@ function buildProgressRow(
     weighted_tier_points: stats.weightedTierPoints,
     moves_tiebreak_key: buildMovesTiebreakKey(progress),
     total_best_moves: stats.totalBestMoves,
+    last_played_at: new Date().toISOString(),
   }
   if (options && 'rankSnapshotAt' in options) {
     row.rank_snapshot_at = options.rankSnapshotAt ?? null

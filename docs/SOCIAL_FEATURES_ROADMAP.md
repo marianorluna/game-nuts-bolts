@@ -4,25 +4,25 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 
 **Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md) · [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) _(actualizar en Prompts 7–8)_ · [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) _(v1.3.1 / v1.4.1 — después del ranking)_
 
-**Producción actual:** **v1.2.1** (`versionCode` 4) — cuenta/sync + retos con medallas.
+**Producción actual:** **v1.2.1** (`versionCode` 4) — cuenta/sync + retos. **Código listo:** v1.3.0 ranking (Prompt 6) pendiente de release.
 
 ---
 
 ## Avance general
 
-| Prompt                                      | Versión | Descripción                               | Estado        |
-| ------------------------------------------- | ------- | ----------------------------------------- | ------------- |
-| [0](#prompt-0--dominio-puro)                | —       | Merge + ranking 6 criterios (sin backend) | ✅ Completado |
-| [1](#prompt-1--backend-supabase)            | —       | Proyecto Supabase + esquema SQL + RLS     | ✅ Completado |
-| [2](#prompt-2--capa-infrastructure)         | —       | SDK + repositories (sin UI)               | ✅ Completado |
-| [3](#prompt-3--sync-offline-first)          | v1.2.0  | Sync al ganar nivel                       | ✅ Completado |
-| [4](#prompt-4--ui-de-cuenta)                | v1.2.0  | Auth + Google OAuth                       | ✅ Completado |
-| [5](#prompt-5--release-v120--migración-beta) | **v1.2.1** | QA + Play Store (cuenta + retos)       | ✅ Completado |
-| [6](#prompt-6--ranking-realtime)            | **v1.3.0** | Leaderboard en vivo                    | ⬜ **Siguiente** |
-| [A1](#prompt-a1--audio-mvp-v131)            | v1.3.1  | Audio MVP: SFX ampliados + música + toggles | ⬜ Pendiente  |
-| [7](#prompt-7--push-infraestructura--ranking) | v1.4.0 | FCM + tokens + push «te superaron»        | ⬜ Pendiente  |
-| [A2](#prompt-a2--ambiente-por-etapa-v141)   | v1.4.1  | Ambiente por etapa + volumen + SFX sync   | ⬜ Pendiente  |
-| [8](#prompt-8--push-engagement--contenido)  | v1.5.0  | Re-engagement, updates, racha, hitos      | ⬜ Pendiente  |
+| Prompt                                        | Versión    | Descripción                                 | Estado           |
+| --------------------------------------------- | ---------- | ------------------------------------------- | ---------------- |
+| [0](#prompt-0--dominio-puro)                  | —          | Merge + ranking 6 criterios (sin backend)   | ✅ Completado    |
+| [1](#prompt-1--backend-supabase)              | —          | Proyecto Supabase + esquema SQL + RLS       | ✅ Completado    |
+| [2](#prompt-2--capa-infrastructure)           | —          | SDK + repositories (sin UI)                 | ✅ Completado    |
+| [3](#prompt-3--sync-offline-first)            | v1.2.0     | Sync al ganar nivel                         | ✅ Completado    |
+| [4](#prompt-4--ui-de-cuenta)                  | v1.2.0     | Auth + Google OAuth                         | ✅ Completado    |
+| [5](#prompt-5--release-v120--migración-beta)  | **v1.2.1** | QA + Play Store (cuenta + retos)            | ✅ Completado    |
+| [6](#prompt-6--ranking-realtime)              | **v1.3.0** | Leaderboard en vivo                         | ✅ Completado    |
+| [A1](#prompt-a1--audio-mvp-v131)              | v1.3.1     | Audio MVP: SFX ampliados + música + toggles | ⬜ **Siguiente** |
+| [7](#prompt-7--push-infraestructura--ranking) | v1.4.0     | FCM + tokens + push «te superaron»          | ⬜ Pendiente     |
+| [A2](#prompt-a2--ambiente-por-etapa-v141)     | v1.4.1     | Ambiente por etapa + volumen + SFX sync     | ⬜ Pendiente     |
+| [8](#prompt-8--push-engagement--contenido)    | v1.5.0     | Re-engagement, updates, racha, hitos        | ⬜ Pendiente     |
 
 **Leyenda:** ⬜ Pendiente · 🔄 En curso · ✅ Completado
 
@@ -53,18 +53,18 @@ unlockedLevel = max(local, remoto);
 
 ## Decisiones tomadas
 
-| Decisión          | Elección                                                 | Documento                                                                |
-| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------------ |
-| Backend           | **Supabase**                                             | [BACKEND_DECISION.md](./BACKEND_DECISION.md)                             |
-| Auth (proveedor)  | **Supabase Auth**                                        | [BACKEND_DECISION.md](./BACKEND_DECISION.md#autenticación-supabase-auth) |
-| Login principal   | **Google**                                               | Prompt 4                                                                 |
-| Login alternativo | **Email + contraseña**                                   | Prompt 4                                                                 |
-| Facebook          | No en v1.2 (v1.4+ si hay demanda)                        | [BACKEND_DECISION.md](./BACKEND_DECISION.md#autenticación-supabase-auth) |
-| Ranking público   | Opt-in (`show_in_leaderboard`, default off)              | Prompt 6                                                                 |
-| Push notifications | **FCM** (Firebase Cloud Messaging) vía Capacitor        | [Prompt 7](#prompt-7--push-infraestructura--ranking)                     |
-| Envío de push     | Supabase Edge Functions (sin servidor adicional)         | Prompt 7–8                                                               |
-| Orden del ranking | 6 criterios — ver [RANKING_RULES.md](./RANKING_RULES.md) | Prompt 0                                                                 |
-| Releases          | **v1.2.1 ✅** = cuenta + sync + retos/medallas; **v1.3.0** = ranking (Prompt 6); **v1.3.1** = audio MVP (A1); **v1.4.0** = push ranking (Prompt 7); **v1.4.1** = ambiente por etapa (A2); **v1.5.0** = push engagement (Prompt 8) | — |
+| Decisión           | Elección                                                                                                                                                                                                                          | Documento                                                                |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Backend            | **Supabase**                                                                                                                                                                                                                      | [BACKEND_DECISION.md](./BACKEND_DECISION.md)                             |
+| Auth (proveedor)   | **Supabase Auth**                                                                                                                                                                                                                 | [BACKEND_DECISION.md](./BACKEND_DECISION.md#autenticación-supabase-auth) |
+| Login principal    | **Google**                                                                                                                                                                                                                        | Prompt 4                                                                 |
+| Login alternativo  | **Email + contraseña**                                                                                                                                                                                                            | Prompt 4                                                                 |
+| Facebook           | No en v1.2 (v1.4+ si hay demanda)                                                                                                                                                                                                 | [BACKEND_DECISION.md](./BACKEND_DECISION.md#autenticación-supabase-auth) |
+| Ranking público    | Opt-in (`show_in_leaderboard`, default off)                                                                                                                                                                                       | Prompt 6                                                                 |
+| Push notifications | **FCM** (Firebase Cloud Messaging) vía Capacitor                                                                                                                                                                                  | [Prompt 7](#prompt-7--push-infraestructura--ranking)                     |
+| Envío de push      | Supabase Edge Functions (sin servidor adicional)                                                                                                                                                                                  | Prompt 7–8                                                               |
+| Orden del ranking  | 6 criterios — ver [RANKING_RULES.md](./RANKING_RULES.md)                                                                                                                                                                          | Prompt 0                                                                 |
+| Releases           | **v1.2.1 ✅** = cuenta + sync + retos/medallas; **v1.3.0** = ranking (Prompt 6); **v1.3.1** = audio MVP (A1); **v1.4.0** = push ranking (Prompt 7); **v1.4.1** = ambiente por etapa (A2); **v1.5.0** = push engagement (Prompt 8) | —                                                                        |
 
 ---
 
@@ -268,13 +268,13 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 
 ### Qué se hace
 
-- [ ] Supabase Realtime en `player_progress` / `leaderboard_events`
-- [ ] `LeaderboardScreen` — top jugadores, posición propia
-- [ ] Toggle opt-in "Aparecer en el ranking" (default off)
-- [ ] Badge en Home con posición
-- [ ] Feed reciente (últimos eventos)
-- [ ] Columna `last_played_at` en `nb_player_profiles` (o `nb_player_progress`) — alimenta re-engagement en Prompt 8
-- [ ] Hook en eventos `rank_up` de `nb_leaderboard_events` — punto de enganche para push en Prompt 7
+- [x] Supabase Realtime en `nb_player_progress` / `nb_leaderboard_events`
+- [x] `LeaderboardScreen` — top jugadores, posición propia
+- [x] Toggle opt-in "Aparecer en el ranking" (default off)
+- [x] Badge en Home con posición
+- [x] Feed reciente (últimos eventos)
+- [x] Columna `last_played_at` en `nb_player_progress` — alimenta re-engagement en Prompt 8
+- [x] Hook en eventos `rank_up` de `nb_leaderboard_events` — punto de enganche para push en Prompt 7 (`src/application/rankUpHooks.ts`)
 
 ### Verificación
 
@@ -282,7 +282,7 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 - [ ] Jugador sin opt-in no aparece en ranking
 - [ ] Offline: último snapshot cacheado
 - [ ] Revisión contigo → release v1.3.0
-- [ ] Tras v1.3.0: **Prompt A1 (audio v1.3.1)** — no mezclar audio en el mismo release que ranking
+- [x] Tras v1.3.0: **Prompt A1 (audio v1.3.1)** — no mezclar audio en el mismo release que ranking
 
 ---
 
@@ -343,16 +343,16 @@ Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del ro
 
 #### SFX procedurales nuevos (`soundService.ts`)
 
-| Nuevo tipo | Dónde disparar | Notas |
-| ---------- | -------------- | ----- |
-| `uiTap` | Botones principales | Corto, bajo volumen |
-| `modalOpen` / `modalClose` | Settings, Win, WhatsNew | Suave |
-| `reset` | `resetLevel` en `gameStore` | Distinto de `undo` |
-| `locked` | Bulón bloqueado en `selectBolt` | Metálico; no reutilizar `error` |
-| `moveBlock` | Movimiento multi-tuerca | Más grave que `move` |
-| `shake` | Al setear `shakeBoltIndex` | Micro-sonido sordo |
-| `star1` / `star2` / `star3` | `WinModal` según estrellas | Reemplazar `star` aleatorio |
-| `stageUnlock` | Desbloqueo de etapa en campaña/home | Fanfarria corta |
+| Nuevo tipo                  | Dónde disparar                      | Notas                           |
+| --------------------------- | ----------------------------------- | ------------------------------- |
+| `uiTap`                     | Botones principales                 | Corto, bajo volumen             |
+| `modalOpen` / `modalClose`  | Settings, Win, WhatsNew             | Suave                           |
+| `reset`                     | `resetLevel` en `gameStore`         | Distinto de `undo`              |
+| `locked`                    | Bulón bloqueado en `selectBolt`     | Metálico; no reutilizar `error` |
+| `moveBlock`                 | Movimiento multi-tuerca             | Más grave que `move`            |
+| `shake`                     | Al setear `shakeBoltIndex`          | Micro-sonido sordo              |
+| `star1` / `star2` / `star3` | `WinModal` según estrellas          | Reemplazar `star` aleatorio     |
+| `stageUnlock`               | Desbloqueo de etapa en campaña/home | Fanfarria corta                 |
 
 #### Refactor menor
 
@@ -448,8 +448,8 @@ Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del ro
 
 ### Casos de uso (este prompt)
 
-| Tipo | Condición | Mensaje ejemplo | Frecuencia máx. |
-| ---- | --------- | --------------- | --------------- |
+| Tipo                      | Condición                                              | Mensaje ejemplo                             | Frecuencia máx.                      |
+| ------------------------- | ------------------------------------------------------ | ------------------------------------------- | ------------------------------------ |
 | **Ranking: te superaron** | `show_in_leaderboard` + pref `rank_overtaken` + cuenta | «¡Ojo! @PlayerX te superó — ahora eres #47» | 1 por evento; máx. 3/día por usuario |
 
 ### Qué NO se hace (Prompt 7)
@@ -513,11 +513,11 @@ Verifica niveles 1 / 35 / 70 con pistas correctas. Marca checkboxes del roadmap.
 
 #### Música por etapa
 
-| Etapa | Niveles | Archivo | Ambiente |
-| ----- | ------- | ------- | -------- |
-| Caja de herramientas | 1–30 | `public/audio/stage-workshop.ogg` | Taller suave |
-| El garaje apretado | 31–60 | `public/audio/stage-garage.ogg` | Industrial ligero |
-| La línea de montaje | 61–100 | `public/audio/stage-factory.ogg` | Fábrica / ritmo |
+| Etapa                | Niveles | Archivo                           | Ambiente          |
+| -------------------- | ------- | --------------------------------- | ----------------- |
+| Caja de herramientas | 1–30    | `public/audio/stage-workshop.ogg` | Taller suave      |
+| El garaje apretado   | 31–60   | `public/audio/stage-garage.ogg`   | Industrial ligero |
+| La línea de montaje  | 61–100  | `public/audio/stage-factory.ogg`  | Fábrica / ritmo   |
 
 - [ ] `musicService.playForStage(stageId)` o equivalente
 - [ ] En partida: pista según etapa del nivel actual
@@ -533,10 +533,10 @@ Verifica niveles 1 / 35 / 70 con pistas correctas. Marca checkboxes del roadmap.
 
 #### SFX adicionales
 
-| Tipo | Evento |
-| ---- | ------ |
+| Tipo          | Evento                                |
+| ------------- | ------------------------------------- |
 | `syncSuccess` | Sync completado tras victoria / login |
-| `syncError` | Fallo de sync (sutil, no intrusivo) |
+| `syncError`   | Fallo de sync (sutil, no intrusivo)   |
 
 #### Optimización
 
@@ -602,16 +602,16 @@ Ambiente por etapa + volumen + SFX sync; 3 loops OGG documentados; roadmap de au
 
 ### Casos de uso (este prompt)
 
-| Tipo | Condición | Mensaje ejemplo | Frecuencia máx. |
-| ---- | --------- | --------------- | --------------- |
-| **Re-engagement** | Sin jugar 2+ días + `re_engagement` + cuenta | «¡Te extrañamos! Tienes niveles pendientes 🧩» | 1 cada 3 días |
-| **Nueva versión** | Versión Play Store > instalada + `app_updates` | «Nueva v1.5.0 — recordatorios y más» | 1 por release |
-| **Nuevos niveles** | Contenido publicado + `new_content` | «¡50 niveles nuevos disponibles!» | 1 por release de contenido |
-| **Racha diaria** | Racha activa + no jugó hoy + `daily_streak` | «Llevas 5 días seguidos — no rompas la racha» | 1/día |
-| **Resumen semanal** | Opt-in ranking + `weekly_summary` | «Esta semana subiste 12 puestos — sigue así» | 1/semana (lunes) |
-| **Hito / logro** | Umbral campaña (ej. 80 %) + `milestones` | «Completaste el 80 % de la campaña» | 1 por hito |
-| **Evento estacional** | Flag temporal en servidor + `new_content` | «Tema navideño disponible 7 días» | Bajo demanda |
-| **Sync pendiente** | Conflicto o sync fallido 24 h + `sync_reminder` | «Tu progreso no se guardó en la nube» | 1 cada 48 h |
+| Tipo                  | Condición                                       | Mensaje ejemplo                                | Frecuencia máx.            |
+| --------------------- | ----------------------------------------------- | ---------------------------------------------- | -------------------------- |
+| **Re-engagement**     | Sin jugar 2+ días + `re_engagement` + cuenta    | «¡Te extrañamos! Tienes niveles pendientes 🧩» | 1 cada 3 días              |
+| **Nueva versión**     | Versión Play Store > instalada + `app_updates`  | «Nueva v1.5.0 — recordatorios y más»           | 1 por release              |
+| **Nuevos niveles**    | Contenido publicado + `new_content`             | «¡50 niveles nuevos disponibles!»              | 1 por release de contenido |
+| **Racha diaria**      | Racha activa + no jugó hoy + `daily_streak`     | «Llevas 5 días seguidos — no rompas la racha»  | 1/día                      |
+| **Resumen semanal**   | Opt-in ranking + `weekly_summary`               | «Esta semana subiste 12 puestos — sigue así»   | 1/semana (lunes)           |
+| **Hito / logro**      | Umbral campaña (ej. 80 %) + `milestones`        | «Completaste el 80 % de la campaña»            | 1 por hito                 |
+| **Evento estacional** | Flag temporal en servidor + `new_content`       | «Tema navideño disponible 7 días»              | Bajo demanda               |
+| **Sync pendiente**    | Conflicto o sync fallido 24 h + `sync_reminder` | «Tu progreso no se guardó en la nube»          | 1 cada 48 h                |
 
 > **Nota:** La detección de actualización **in-app** (`appUpdateService.ts` + `UpdateAvailableModal`) se mantiene; la push complementa cuando el usuario no abre la app.
 
@@ -678,48 +678,49 @@ flowchart TB
 
 ## Riesgos y mitigaciones
 
-| Riesgo                    | Mitigación                                    |
-| ------------------------- | --------------------------------------------- |
-| Pérdida de save al migrar | Merge "mejor gana"; local primario en partida |
-| OAuth roto en Android     | Probar en Prompt 4 antes de Play Store        |
-| Hacer demasiado de golpe  | Un prompt = una verificación                  |
-| Trampas en ranking        | Validación servidor + rate limit (Prompt 6)   |
-| Spam de notificaciones    | Opt-in + toggles por categoría + rate limit (Prompt 8) |
-| Push sin permiso Android 13+ | Solicitar `POST_NOTIFICATIONS` con UX clara (Prompt 7) |
-| Privacidad / Play Console | Actualizar política y Seguridad de los datos (Prompt 7–8) |
+| Riesgo                       | Mitigación                                                                         |
+| ---------------------------- | ---------------------------------------------------------------------------------- |
+| Pérdida de save al migrar    | Merge "mejor gana"; local primario en partida                                      |
+| OAuth roto en Android        | Probar en Prompt 4 antes de Play Store                                             |
+| Hacer demasiado de golpe     | Un prompt = una verificación                                                       |
+| Trampas en ranking           | Validación servidor + rate limit (Prompt 6)                                        |
+| Spam de notificaciones       | Opt-in + toggles por categoría + rate limit (Prompt 8)                             |
+| Push sin permiso Android 13+ | Solicitar `POST_NOTIFICATIONS` con UX clara (Prompt 7)                             |
+| Privacidad / Play Console    | Actualizar política y Seguridad de los datos (Prompt 7–8)                          |
 | APK demasiado pesado (audio) | SFX procedural; OGG mono; loops cortos; ver [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) |
-| Autoplay bloqueado (audio) | Música tras primer tap; pausa en background (Prompt A1) |
-| Licencia audio incorrecta | Solo CC0/royalty-free; `AUDIO_CREDITS.md` obligatorio (A1–A2) |
+| Autoplay bloqueado (audio)   | Música tras primer tap; pausa en background (Prompt A1)                            |
+| Licencia audio incorrecta    | Solo CC0/royalty-free; `AUDIO_CREDITS.md` obligatorio (A1–A2)                      |
 
 ---
 
 ## Historial
 
-| Fecha      | Prompt | Notas                                                                                       |
-| ---------- | ------ | ------------------------------------------------------------------------------------------- |
-| 2026-07-01 | —      | Roadmap creado. Backend: Supabase.                                                          |
-| 2026-07-01 | 0      | `mergePlayerProgress`, `comparePlayerRank`, vitest.                                         |
-| 2026-07-01 | 0+     | Sistema de puntos acumulativos — ver [RANKING_RULES.md](./RANKING_RULES.md).                |
-| 2026-07-01 | 0++    | Criterio 1 = niveles completados; snapshot solo al subir `unlockedLevel`.                   |
-| 2026-07-01 | —      | Roadmap alineado con dominio (tests ranking, RANKING_RULES, columnas Prompt 1).             |
-| 2026-07-01 | 1      | `docs/supabase/schema.sql` + `.env.example` con feature flags.                              |
-| 2026-07-01 | 1+     | Multi-juego: tablas `nb_*` + `game_id`; `src/config/game.ts`.                               |
-| 2026-07-01 | 2      | Capa infrastructure: contracts, Supabase SDK, `authSession`, `test:supabase`.               |
-| 2026-07-01 | 3      | `syncProgress.ts`, merge al login, debounce post-victoria, retry offline.                   |
-| 2026-07-02 | 4      | UI cuenta: `AuthModal`, `LinkProgressModal`, OAuth Capacitor, deep link Android, `useAuth`. |
-| 2026-07-03 | —      | Prompts 7–8: push FCM + Supabase (versiones replanificadas 2026-07-16).                      |
-| 2026-07-03 | 5+     | CHANGELOG.md + modal «Novedades» + `npm run release:prepare`.                             |
-| 2026-07-03 | —      | [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) creado (A1/A2; versiones replanificadas después).   |
-| 2026-07-03 | A1–A2  | Prompts A1 y A2 integrados en este roadmap con texto copiable para el chat.                  |
-| 2026-07-16 | 5      | **v1.2.1 en producción** (cuenta + retos). Prompt 5 ✅. Ranking = siguiente (Prompt 6).     |
-| 2026-07-16 | —      | Prioridad: ranking antes que audio. A1 → v1.3.1; push → v1.4.0; A2 → v1.4.1; engagement → v1.5.0. |
+| Fecha      | Prompt | Notas                                                                                                        |
+| ---------- | ------ | ------------------------------------------------------------------------------------------------------------ |
+| 2026-07-01 | —      | Roadmap creado. Backend: Supabase.                                                                           |
+| 2026-07-01 | 0      | `mergePlayerProgress`, `comparePlayerRank`, vitest.                                                          |
+| 2026-07-01 | 0+     | Sistema de puntos acumulativos — ver [RANKING_RULES.md](./RANKING_RULES.md).                                 |
+| 2026-07-01 | 0++    | Criterio 1 = niveles completados; snapshot solo al subir `unlockedLevel`.                                    |
+| 2026-07-01 | —      | Roadmap alineado con dominio (tests ranking, RANKING_RULES, columnas Prompt 1).                              |
+| 2026-07-01 | 1      | `docs/supabase/schema.sql` + `.env.example` con feature flags.                                               |
+| 2026-07-01 | 1+     | Multi-juego: tablas `nb_*` + `game_id`; `src/config/game.ts`.                                                |
+| 2026-07-01 | 2      | Capa infrastructure: contracts, Supabase SDK, `authSession`, `test:supabase`.                                |
+| 2026-07-01 | 3      | `syncProgress.ts`, merge al login, debounce post-victoria, retry offline.                                    |
+| 2026-07-02 | 4      | UI cuenta: `AuthModal`, `LinkProgressModal`, OAuth Capacitor, deep link Android, `useAuth`.                  |
+| 2026-07-03 | —      | Prompts 7–8: push FCM + Supabase (versiones replanificadas 2026-07-16).                                      |
+| 2026-07-03 | 5+     | CHANGELOG.md + modal «Novedades» + `npm run release:prepare`.                                                |
+| 2026-07-03 | —      | [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) creado (A1/A2; versiones replanificadas después).                     |
+| 2026-07-03 | A1–A2  | Prompts A1 y A2 integrados en este roadmap con texto copiable para el chat.                                  |
+| 2026-07-16 | 5      | **v1.2.1 en producción** (cuenta + retos). Prompt 5 ✅. Ranking = siguiente (Prompt 6).                      |
+| 2026-07-16 | —      | Prioridad: ranking antes que audio. A1 → v1.3.1; push → v1.4.0; A2 → v1.4.1; engagement → v1.5.0.            |
+| 2026-07-16 | 6      | Ranking realtime: LeaderboardScreen, opt-in, Realtime, feed, `last_played_at`, hook `rank_up`. v1.3.0 lista. |
 
 ---
 
 ## Próximo paso
 
-**Prompt 6:** Ranking realtime (v1.3.0). Di: _"Ejecuta el Prompt 6"_
+**Prompt A1:** Audio MVP (v1.3.1). Di: _"Ejecuta el Prompt A1"_ — o publica primero v1.3.0 (ranking) en Play Store.
 
-**Después:** [Prompt A1 audio v1.3.1](#prompt-a1--audio-mvp-v131) → Prompt 7 (push v1.4.0) → [Prompt A2 ambiente v1.4.1](#prompt-a2--ambiente-por-etapa-v141) → Prompt 8 (push engagement v1.5.0)
+**Después:** Prompt 7 (push v1.4.0) → [Prompt A2 ambiente v1.4.1](#prompt-a2--ambiente-por-etapa-v141) → Prompt 8 (push engagement v1.5.0)
 
-**Copiar prompt:** cada prompt de audio incluye un bloque «Texto para copiar en el chat» listo para pegar.
+**Antes de release v1.3.0:** aplicar `docs/supabase/schema-prompt6.sql` en el Dashboard y verificar Realtime en dos dispositivos.

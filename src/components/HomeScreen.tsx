@@ -6,6 +6,8 @@ import {
 } from '../domain/content/campaignStructure'
 import { useTranslation } from '../i18n/useTranslation'
 import { useAuth } from '../hooks/useAuth'
+import { useLeaderboard } from '../hooks/useLeaderboard'
+import { isLeaderboardEnabled } from '../infrastructure'
 import { SettingsModal } from './SettingsModal'
 import { CreditsModal } from './CreditsModal'
 import { AuthModal } from './AuthModal'
@@ -23,17 +25,21 @@ import {
 export function HomeScreen() {
   const { t } = useTranslation()
   const { cloudSyncEnabled, user, initialized } = useAuth()
+  const leaderboardEnabled = isLeaderboardEnabled()
+  const { cache } = useLeaderboard()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [creditsOpen, setCreditsOpen] = useState(false)
   const [authOpen, setAuthOpen] = useState(false)
   const [linkProgressOpen, setLinkProgressOpen] = useState(false)
   const openCampaign = useGameStore((s) => s.openCampaign)
+  const openLeaderboard = useGameStore((s) => s.openLeaderboard)
   const progress = useGameStore((s) => s.progress)
   const soundEnabled = useGameStore((s) => s.settings.soundEnabled)
 
   const isCompleted = (id: number) => (progress.levels[id]?.completed ?? false)
   const campaignCount = ALL_CAMPAIGNS.length
   const showSessionAvatar = cloudSyncEnabled && Boolean(user)
+  const ownRank = cache?.snapshot.ownRank ?? null
 
   useEffect(() => {
     if (!initialized) return
@@ -69,10 +75,27 @@ export function HomeScreen() {
             )}
           </button>
         )}
+        {leaderboardEnabled && (
+          <button
+            type="button"
+            onClick={openLeaderboard}
+            className={`absolute top-4 hidden h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:flex md:h-12 md:w-12 ${
+              cloudSyncEnabled ? 'left-14' : 'left-0'
+            }`}
+            aria-label={t('leaderboard.title')}
+          >
+            <span aria-hidden="true">🏆</span>
+            {ownRank !== null ? (
+              <span className="absolute -bottom-0.5 -right-0.5 rounded-full bg-amber-400 px-1 py-0.5 text-[10px] font-extrabold leading-none text-stone-900">
+                #{ownRank}
+              </span>
+            ) : null}
+          </button>
+        )}
         <button
           type="button"
           onClick={() => setSettingsOpen(true)}
-          className="absolute right-0 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12 md:text-2xl"
+          className="absolute right-0 top-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/15 text-xl text-white transition active:scale-95 hover:bg-white/25 md:top-5 md:h-12 md:w-12 md:text-2xl"
           aria-label={showSessionAvatar ? t('account.title') : t('common.settings')}
         >
           {showSessionAvatar ? (
@@ -117,6 +140,24 @@ export function HomeScreen() {
           )
         })}
       </main>
+
+      {leaderboardEnabled && (
+        <div className="relative z-10 flex shrink-0 justify-center pb-1 md:hidden">
+          <button
+            type="button"
+            onClick={openLeaderboard}
+            className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/15 text-2xl text-white transition active:scale-95 hover:bg-white/25"
+            aria-label={t('leaderboard.title')}
+          >
+            <span aria-hidden="true">🏆</span>
+            {ownRank !== null ? (
+              <span className="absolute -bottom-0.5 -right-0.5 rounded-full bg-amber-400 px-1 py-0.5 text-[10px] font-extrabold leading-none text-stone-900">
+                #{ownRank}
+              </span>
+            ) : null}
+          </button>
+        </div>
+      )}
 
       <div className="relative z-10">
         <AppFooter />

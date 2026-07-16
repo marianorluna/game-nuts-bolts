@@ -15,8 +15,10 @@
 ### Estado actual
 
 - **Producción:** **v1.2.1** (`versionCode` 4)
+- **Código listo:** **v1.3.0** ranking realtime (pendiente release Play Store)
 - **100 niveles** publicados — Campaña _El Taller_ (v1.1.0+)
 - **Cuenta y nube** opcionales + **retos con medallas** (v1.2.1) ✅
+- **Ranking global** con opt-in + Realtime (v1.3.0) ✅ código
 - **Fase 0:** documentación base ✅
 - **Fase 1:** 60 niveles + UI por etapas ✅
 - **Fase 2:** 100 niveles + multiNut + lockedBolt ✅
@@ -32,7 +34,7 @@
 | [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md)           | Migración jugadores beta (offline-first; planes A/B/C opcionales) |
 | [PLAYSTORE.md](./PLAYSTORE.md)                             | Guía paso a paso para publicar en Google Play                   |
 
-**Estado:** Prompts 0–5 ✅ · **Siguiente: Prompt 6 (ranking v1.3.0)** · Backend: Supabase
+**Estado:** Prompts 0–6 ✅ · **Siguiente: Prompt A1 (audio v1.3.1)** · Backend: Supabase
 
 ## Audio y música ambiente
 

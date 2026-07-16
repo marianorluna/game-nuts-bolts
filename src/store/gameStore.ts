@@ -44,7 +44,7 @@ import type { LocalePreference } from '../i18n/types'
 import { MAX_UNDOS } from '../domain/types'
 import { soundService } from '../services/soundService'
 
-type Screen = 'home' | 'campaign' | 'game'
+type Screen = 'home' | 'campaign' | 'game' | 'leaderboard'
 
 interface GameStore {
   screen: Screen
@@ -55,6 +55,7 @@ interface GameStore {
   selectedCampaignId: string | null
   setScreen: (screen: Screen) => void
   openCampaign: (campaignId: string) => void
+  openLeaderboard: () => void
   goHome: () => void
   setHomeStageId: (stageId: string) => void
   startLevel: (levelId: number) => boolean
@@ -163,6 +164,8 @@ export const useGameStore = create<GameStore>()(
       openCampaign: (campaignId) => {
         set({ selectedCampaignId: campaignId, screen: 'campaign' })
       },
+
+      openLeaderboard: () => set({ screen: 'leaderboard', session: null }),
 
       goHome: () => set({ screen: 'home', session: null }),
 

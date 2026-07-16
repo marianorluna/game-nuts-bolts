@@ -25,8 +25,15 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
    VITE_SUPABASE_ANON_KEY=eyJ...
    VITE_GAME_ID=nuts-and-bolts
    VITE_FEATURE_CLOUD_SYNC=true
-   VITE_FEATURE_LEADERBOARD=false
+   VITE_FEATURE_LEADERBOARD=true
    ```
+
+## Prompt 6 — Ranking realtime
+
+1. Si el esquema Prompt 1 ya estaba aplicado: ejecutar [schema-prompt6.sql](./schema-prompt6.sql) (añade `last_played_at` + Realtime).
+2. Proyecto nuevo: [schema.sql](./schema.sql) ya incluye Realtime y `last_played_at`.
+3. `.env.local`: `VITE_FEATURE_LEADERBOARD=true`.
+4. Verificar: dos cuentas con opt-in → completar nivel en una → la otra ve el cambio en <3 s.
 
 ## Verificación RLS
 

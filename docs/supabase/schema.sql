@@ -50,12 +50,16 @@ create table public.nb_player_progress (
   moves_tiebreak_key text not null default '' check (char_length(moves_tiebreak_key) <= 4096),
   total_best_moves integer not null default 0 check (total_best_moves >= 0),
   rank_snapshot_at timestamptz,
+  last_played_at timestamptz,
   updated_at timestamptz not null default now(),
   primary key (user_id, game_id),
   foreign key (user_id, game_id)
     references public.nb_player_profiles (user_id, game_id)
     on delete cascade
 );
+
+comment on column public.nb_player_progress.last_played_at is
+  'Última sync exitosa de progreso. Alimenta push re-engagement (Prompt 8).';
 
 comment on column public.nb_player_progress.levels is
   'Record<number, LevelProgress> — stars, bestMoves, completed por nivel.';
@@ -97,6 +101,9 @@ create index nb_leaderboard_events_game_created_idx
 
 create index nb_leaderboard_events_user_game_idx
   on public.nb_leaderboard_events (user_id, game_id);
+
+create index nb_player_progress_last_played_idx
+  on public.nb_player_progress (game_id, last_played_at asc nulls last);
 
 -- ---------------------------------------------------------------------------
 -- updated_at automático
@@ -223,7 +230,7 @@ create policy "nb_events_select_public_opt_in"
   );
 
 -- ---------------------------------------------------------------------------
--- Realtime (Prompt 6) — descomentar cuando activemos leaderboard
+-- Realtime (Prompt 6) — leaderboard en vivo
 -- ---------------------------------------------------------------------------
--- alter publication supabase_realtime add table public.nb_player_progress;
--- alter publication supabase_realtime add table public.nb_leaderboard_events;
+alter publication supabase_realtime add table public.nb_player_progress;
+alter publication supabase_realtime add table public.nb_leaderboard_events;

@@ -5,3 +5,11 @@ export function isCloudSyncEnabled(): boolean {
     && Boolean(import.meta.env.VITE_SUPABASE_ANON_KEY)
   )
 }
+
+/** Ranking público (Prompt 6). Requiere cloud sync activo. */
+export function isLeaderboardEnabled(): boolean {
+  return (
+    isCloudSyncEnabled()
+    && import.meta.env.VITE_FEATURE_LEADERBOARD === 'true'
+  )
+}

@@ -1,4 +1,6 @@
 import { useAuth } from '../hooks/useAuth'
+import { useLeaderboard } from '../hooks/useLeaderboard'
+import { isLeaderboardEnabled } from '../infrastructure'
 import { useTranslation } from '../i18n/useTranslation'
 import { UserAvatar } from './UserAvatar'
 
@@ -9,11 +11,14 @@ interface AccountSettingsSectionProps {
 export function AccountSettingsSection({ onOpenAuth }: AccountSettingsSectionProps) {
   const { t } = useTranslation()
   const { cloudSyncEnabled, user, busy, signOut } = useAuth()
+  const leaderboardEnabled = isLeaderboardEnabled()
+  const { profile, setShowInLeaderboard } = useLeaderboard()
 
   if (!cloudSyncEnabled) return null
 
   if (user) {
     const label = user.displayName ?? user.email ?? t('account.signedIn')
+    const optedIn = profile?.showInLeaderboard ?? false
 
     return (
       <div className="mt-3 rounded-xl bg-white/10 px-4 py-4">
@@ -26,6 +31,33 @@ export function AccountSettingsSection({ onOpenAuth }: AccountSettingsSectionPro
             <p className="text-sm text-emerald-300">{t('account.syncActive')}</p>
           </div>
         </div>
+
+        {leaderboardEnabled && (
+          <button
+            type="button"
+            onClick={() => void setShowInLeaderboard(!optedIn)}
+            className="mb-3 flex w-full items-center justify-between rounded-lg bg-white/10 px-3 py-3 transition active:scale-[0.98]"
+          >
+            <div className="text-left">
+              <p className="text-sm font-semibold text-white">{t('leaderboard.optIn')}</p>
+              <p className="text-xs text-purple-200">
+                {optedIn ? t('leaderboard.optInOn') : t('leaderboard.optInOff')}
+              </p>
+            </div>
+            <div
+              className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${
+                optedIn ? 'bg-amber-400' : 'bg-white/20'
+              }`}
+            >
+              <div
+                className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow transition-transform ${
+                  optedIn ? 'translate-x-5' : 'translate-x-0.5'
+                }`}
+              />
+            </div>
+          </button>
+        )}
+
         <button
           type="button"
           disabled={busy}
