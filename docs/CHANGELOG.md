@@ -57,7 +57,23 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Recent events feed
 - Supabase Realtime
 
-### v1.3.1 (versionCode 6) — Notificaciones de ranking
+### v1.3.1 (versionCode 6) — Audio y música ambiente
+
+### Previsto
+
+**ES**
+
+- Música de fondo opcional en menú y partida
+- Sonidos y música se configuran por separado en Ajustes
+- Nuevos efectos: bulones bloqueados, bloques, estrellas y más
+
+**EN**
+
+- Optional background music in menu and during levels
+- Sound effects and music can be toggled separately in Settings
+- New effects: locked bolts, nut blocks, stars, and more
+
+### v1.4.0 (versionCode 7) — Notificaciones de ranking
 
 ### Previsto
 
@@ -71,7 +87,23 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Push alert when another player overtakes you on the leaderboard
 - Native Android notifications (opt-in)
 
-### v1.4.0 (versionCode 7) — Notificaciones y recordatorios
+### v1.4.1 (versionCode 8) — Ambiente por etapa
+
+### Previsto
+
+**ES**
+
+- Música distinta para cada etapa del taller
+- Control de volumen de música y efectos
+- Sonidos al sincronizar tu progreso en la nube
+
+**EN**
+
+- Different music for each workshop stage
+- Music and sound effect volume controls
+- Sounds when syncing your cloud progress
+
+### v1.5.0 (versionCode 9) — Notificaciones y recordatorios
 
 ### Previsto
 

@@ -291,6 +291,28 @@
       "date": null,
       "published": false,
       "title": {
+        "es": "Audio y música ambiente",
+        "en": "Audio and background music"
+      },
+      "highlights": {
+        "es": [
+          "Música de fondo opcional en menú y partida",
+          "Sonidos y música se configuran por separado en Ajustes",
+          "Nuevos efectos: bulones bloqueados, bloques, estrellas y más"
+        ],
+        "en": [
+          "Optional background music in menu and during levels",
+          "Sound effects and music can be toggled separately in Settings",
+          "New effects: locked bolts, nut blocks, stars, and more"
+        ]
+      }
+    },
+    {
+      "version": "1.4.0",
+      "versionCode": 7,
+      "date": null,
+      "published": false,
+      "title": {
         "es": "Notificaciones de ranking",
         "en": "Ranking notifications"
       },
@@ -306,8 +328,30 @@
       }
     },
     {
-      "version": "1.4.0",
-      "versionCode": 7,
+      "version": "1.4.1",
+      "versionCode": 8,
+      "date": null,
+      "published": false,
+      "title": {
+        "es": "Ambiente por etapa",
+        "en": "Stage ambient music"
+      },
+      "highlights": {
+        "es": [
+          "Música distinta para cada etapa del taller",
+          "Control de volumen de música y efectos",
+          "Sonidos al sincronizar tu progreso en la nube"
+        ],
+        "en": [
+          "Different music for each workshop stage",
+          "Music and sound effect volume controls",
+          "Sounds when syncing your cloud progress"
+        ]
+      }
+    },
+    {
+      "version": "1.5.0",
+      "versionCode": 9,
       "date": null,
       "published": false,
       "title": {

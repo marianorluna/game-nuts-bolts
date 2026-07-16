@@ -2,7 +2,7 @@
 
 **Puzzle de ordenar tuercas por color** — disponible en Android.
 
-[![Versión](https://img.shields.io/badge/versión-1.2.0-blue)](docs/CHANGELOG.md)
+[![Versión](https://img.shields.io/badge/versión-1.2.1-blue)](docs/CHANGELOG.md)
 [![Niveles](https://img.shields.io/badge/niveles-100-orange)](docs/LEVELS.md)
 
 <p align="center">
@@ -70,7 +70,8 @@ La app incluye tutoriales contextuales (movimientos, bloques, bulones bloqueados
 
 | Versión | Fecha | Resumen |
 |---------|-------|---------|
-| **1.2.0** | 2026-07-03 | Cuenta opcional y guardado en la nube |
+| **1.2.1** | 2026-07-03 | Cuenta/nube + retos con medallas _(producción)_ |
+| **1.2.0** | — | Cuenta y sync _(fusionada en 1.2.1; no publicada sola)_ |
 | **1.1.0** | 2026-06-26 | 100 niveles, nuevas mecánicas, i18n ES/EN |
 | **1.0.0** | 2026-06-16 | Lanzamiento inicial (30 niveles) |
 
@@ -90,7 +91,8 @@ Documentación técnica, scripts de release y guía de Play Store:
 - [docs/README.md](docs/README.md) — índice de documentación
 - [docs/SCRIPTS.md](docs/SCRIPTS.md) — comandos npm y flujo de release
 - [docs/PLAYSTORE.md](docs/PLAYSTORE.md) — publicación en Android
-- [docs/AUDIO_ROADMAP.md](docs/AUDIO_ROADMAP.md) — plan de audio (v1.2.1 / v1.3.1)
+- [docs/SOCIAL_FEATURES_ROADMAP.md](docs/SOCIAL_FEATURES_ROADMAP.md) — ranking y social (siguiente: v1.3.0)
+- [docs/AUDIO_ROADMAP.md](docs/AUDIO_ROADMAP.md) — plan de audio (v1.3.1 / v1.4.1, tras ranking)
 
 ### Stack
 

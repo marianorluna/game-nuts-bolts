@@ -2,7 +2,9 @@
 
 Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md). Cada prompt se ejecuta en el chat (ej. _"Ejecuta el Prompt A1"_), se verifica contigo y solo entonces se pasa al siguiente.
 
-**Estado actual (v1.2.0):** todos los efectos son **procedurales** (Web Audio API) en [`src/services/soundService.ts`](../src/services/soundService.ts). No hay archivos `.mp3` / `.ogg` en el repo. Configuración: un único toggle `soundEnabled` en Ajustes.
+**Estado actual (v1.2.1 en producción):** todos los efectos son **procedurales** (Web Audio API) en [`src/services/soundService.ts`](../src/services/soundService.ts). No hay archivos `.mp3` / `.ogg` en el repo. Configuración: un único toggle `soundEnabled` en Ajustes.
+
+**Prioridad:** el audio va **después del ranking (Prompt 6 / v1.3.0)**. No empezar A1 hasta publicar el leaderboard.
 
 **Documentos relacionados:** [SCRIPTS.md](./SCRIPTS.md) (release) · [CHANGELOG.md](./CHANGELOG.md) · [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md)
 
@@ -12,8 +14,8 @@ Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROA
 
 | Prompt | Versión | Descripción | Estado |
 | ------ | ------- | ----------- | ------ |
-| [A1](#prompt-a1--audio-mvp-v121) | **v1.2.1** | SFX ampliados + música ambiente básica + toggles | ⬜ Pendiente |
-| [A2](#prompt-a2--ambiente-por-etapa-v131) | **v1.3.1** | Música por etapa + volumen + SFX de sync | ⬜ Pendiente |
+| [A1](#prompt-a1--audio-mvp-v131) | **v1.3.1** | SFX ampliados + música ambiente básica + toggles | ⬜ Pendiente _(tras ranking)_ |
+| [A2](#prompt-a2--ambiente-por-etapa-v141) | **v1.4.1** | Música por etapa + volumen + SFX de sync | ⬜ Pendiente |
 
 **Leyenda:** ⬜ Pendiente · 🔄 En curso · ✅ Completado
 
@@ -23,17 +25,16 @@ Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROA
 
 ## Calendario coordinado con otras features
 
-Para no sobrecargar un solo release ni chocar versiones:
-
 | Versión | Audio (este doc) | Social / otras ([SOCIAL_FEATURES_ROADMAP](./SOCIAL_FEATURES_ROADMAP.md)) |
 | ------- | ---------------- | ------------------------------------------------------------------------ |
-| **v1.2.0** | Sin cambios (SFX procedural actuales) | Cuenta + sync en la nube — Prompt 5 pendiente |
-| **v1.2.1** | **Prompt A1** — audio MVP | — |
-| **v1.3.0** | — | **Prompt 6** — ranking en vivo |
-| **v1.3.1** | **Prompt A2** — ambiente por etapa | **Prompt 7** — push «te superaron» |
-| **v1.4.0** | — | **Prompt 8** — push engagement |
+| **v1.2.1** ✅ | Sin assets (SFX procedural) | Cuenta + sync + retos/medallas — **publicado** |
+| **v1.3.0** | — | **Prompt 6** — ranking en vivo ← **siguiente** |
+| **v1.3.1** | **Prompt A1** — audio MVP | — |
+| **v1.4.0** | — | **Prompt 7** — push «te superaron» |
+| **v1.4.1** | **Prompt A2** — ambiente por etapa | — |
+| **v1.5.0** | — | **Prompt 8** — push engagement |
 
-> **Nota:** El ambiente por etapa se planificó inicialmente para v1.3.0, pero v1.3.0 queda reservada para ranking. El ambiente por etapa pasa a **v1.3.1** junto con push (releases independientes en código, misma ventana de publicación si conviene).
+> **Nota (2026-07-16):** A1 se planificó originalmente para v1.2.1; esa versión salió con cuenta + retos. Audio queda en **v1.3.1** tras el ranking.
 
 ---
 
@@ -78,64 +79,35 @@ Para no sobrecargar un solo release ni chocar versiones:
 - Tap en botones de UI (menú, campaña, modales)
 - Reiniciar nivel (`resetLevel`)
 - Bulón bloqueado (mismo `error` que movimiento inválido)
-- Bloque multi-tuerca (mismo `move` que una tuerca)
-- Shake visual del bulón
-- Estrellas 1 / 2 / 3 diferenciadas
-- Desbloqueo de etapa en campaña
-- Sync en la nube (éxito / error)
-- Música de fondo
 
----
+### Presupuesto de peso (APK)
 
-## Estrategia de peso (APK)
-
-| Contenido | Estrategia | Peso estimado |
-| --------- | ---------- | ------------- |
-| SFX nuevos (UI, mecánicas, etc.) | **Procedural** en `soundService.ts` | **0 KB** |
+| Concepto | Enfoque | Estimación |
+| -------- | ------- | ---------- |
+| SFX | Procedural (Web Audio) | ~0 MB assets |
 | Música menú + partida (A1) | 1–2 loops **OGG**, mono, 64–96 kbps, 45–90 s | **~0,6–1,6 MB** |
 | Música por etapa (A2) | +3 loops OGG optimizados | **~+1–2 MB** |
-| SFX en archivo (solo si hace falta) | WAV/OGG cortos, opcional | **~50–200 KB** |
-
-**Formato recomendado:** OGG Vorbis en `public/audio/`. Vite los empaqueta en `dist/` → Capacitor → APK.
-
-**Evitar:** WAV estéreo sin comprimir, loops largos (>2 min), una pista distinta por nivel.
-
----
-
-## Fuentes de audio libres (referencia)
-
-Usar solo tras verificar la licencia del archivo concreto:
-
-| Fuente | Licencia típica | Uso sugerido |
-| ------ | --------------- | ------------ |
-| [Kenney.nl](https://kenney.nl/assets) | CC0 | UI, impactos |
-| [OpenGameArt.org](https://opengameart.org) | Filtrar CC0 | Ambiente, SFX |
-| [Pixabay Music](https://pixabay.com/music/) | Pixabay License | Loops de menú / partida |
-| [Sonniss GDC bundles](https://sonniss.com/gameaudiogdc) | Royalty-free para juegos | Ambiente por etapa |
-| Composición propia (LMMS, Bosca Ceoil, Audacity) | Tuya | Sin restricciones |
-
-**Evitar:** «free for personal use», Epidemic Sound, Artlist y similares (suscripción, no empaquetable).
-
-Al añadir archivos, crear/actualizar [`docs/AUDIO_CREDITS.md`](./AUDIO_CREDITS.md).
 
 ---
 
 ## Cómo usar este documento
 
-1. Tras publicar **v1.2.0** (Prompt 5 del roadmap social), di: **"Ejecuta el Prompt A1"**
-2. O copia el bloque **«Texto para copiar en el chat»** de [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md#prompt-a1--audio-mvp-v121) (misma fuente que los prompts sociales 0–8)
+1. Tras publicar **v1.3.0** (Prompt 6 — ranking), di: **"Ejecuta el Prompt A1"**
+2. O copia el bloque **«Texto para copiar en el chat»** de [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md#prompt-a1--audio-mvp-v131)
 3. Al terminar, marca las checkboxes del prompt
 4. Cambia el estado en la tabla de avance (⬜ → ✅) en ambos roadmaps
-5. Bump `package.json` → `1.2.1`, `versionCode` 4, scaffold en `release-notes.json`, `npm run release:prepare`
+5. Bump `package.json` → `1.3.1`, `versionCode` 6, scaffold en `release-notes.json`, `npm run release:prepare`
 6. Añade fecha en la sección **Historial** al final
 
 ---
 
-## Prompt A1 — Audio MVP (v1.2.1)
+## Prompt A1 — Audio MVP (v1.3.1)
 
 **Comando en chat:** `Ejecuta el Prompt A1`
 
-**Versión:** v1.2.1 (`versionCode` 4)
+**Versión:** v1.3.1 (`versionCode` 6)
+
+**Prerequisito:** Ranking v1.3.0 publicado (Prompt 6).
 
 **Objetivo:** Ampliar feedback sonoro sin inflar el APK; introducir música ambiente opcional con dos loops.
 
@@ -191,7 +163,7 @@ Extender `SoundType` y llamadas desde store/UI:
 - [ ] APK release: tamaño total sube < 2 MB vs build sin audio
 - [ ] `docs/AUDIO_CREDITS.md` completo
 - [ ] `npm run build` y prueba en dispositivo real (autoplay tras primer tap)
-- [ ] `release-notes.json` + `npm run release:prepare` para v1.2.1
+- [ ] `release-notes.json` + `npm run release:prepare` para v1.3.1
 - [ ] Revisión contigo antes de Prompt A2
 
 ### Highlights sugeridos (modal «Novedades»)
@@ -210,11 +182,13 @@ Extender `SoundType` y llamadas desde store/UI:
 
 ---
 
-## Prompt A2 — Ambiente por etapa (v1.3.1)
+## Prompt A2 — Ambiente por etapa (v1.4.1)
 
 **Comando en chat:** `Ejecuta el Prompt A2`
 
-**Versión:** v1.3.1 (`versionCode` 6 — coordinar con bump de push en roadmap social)
+**Versión:** v1.4.1 (`versionCode` 8)
+
+**Prerequisito:** Prompt A1 completado (v1.3.1 publicada).
 
 **Objetivo:** Ambiente distinto por etapa de campaña, control de volumen y SFX de cuenta/sync.
 
@@ -263,7 +237,7 @@ Mapeo sugerido (Campaña *El Taller*):
 - [ ] Sliders de volumen afectan en tiempo real
 - [ ] Sync exitoso/fallido audible solo con SFX ON
 - [ ] Sin regresión en toggles de A1
-- [ ] `release-notes.json` + release v1.3.1
+- [ ] `release-notes.json` + release v1.4.1
 - [ ] Revisión contigo → cierre del roadmap de audio
 
 ### Highlights sugeridos (modal «Novedades»)
@@ -324,7 +298,7 @@ flowchart TB
 | Autoplay bloqueado en Android | Iniciar música tras primer `pointerdown` / tap del usuario |
 | Música + SFX compiten | Volumen música < SFX; ducking opcional al reproducir `win` |
 | Licencia incorrecta | Solo CC0/royalty-free; `AUDIO_CREDITS.md` obligatorio |
-| Solapamiento v1.3.0 ranking + audio | A1 en v1.2.1; A2 en v1.3.1 (no mezclar con Prompt 6) |
+| Solapamiento ranking + audio | Ranking en v1.3.0; A1 en v1.3.1 (releases separadas) |
 | Usuario legacy solo con `soundEnabled` | Migración en `persist` al hidratar settings |
 
 ---
@@ -333,12 +307,15 @@ flowchart TB
 
 | Fecha | Prompt | Notas |
 | ----- | ------ | ----- |
-| 2026-07-03 | — | Roadmap creado. Decisión: no incluir en v1.2.0; A1 → v1.2.1, A2 → v1.3.1. SFX procedural + música en archivos CC0. |
+| 2026-07-03 | — | Roadmap creado. Decisión original: A1 → v1.2.1, A2 → v1.3.1. |
+| 2026-07-16 | — | Replan: v1.2.1 = cuenta+retos (sin audio). A1 → **v1.3.1** tras ranking; A2 → **v1.4.1**. |
 
 ---
 
-## Próximo paso
+## Próximo paso (audio)
 
-Tras publicar **v1.2.0** (Prompt 5 del [roadmap social](./SOCIAL_FEATURES_ROADMAP.md)), di: _"Ejecuta el Prompt A1"_ o pega el texto de [Prompt A1](./SOCIAL_FEATURES_ROADMAP.md#prompt-a1--audio-mvp-v121).
+**Ahora no:** primero [Prompt 6 — ranking v1.3.0](./SOCIAL_FEATURES_ROADMAP.md#prompt-6--ranking-realtime).
 
-**Después:** [Prompt A2](./SOCIAL_FEATURES_ROADMAP.md#prompt-a2--ambiente-por-etapa-v131) (ambiente v1.3.1) — idealmente en la misma ventana que Prompt 7 (push), releases independientes.
+**Cuando toque audio:** di _"Ejecuta el Prompt A1"_ o pega el texto de [Prompt A1](./SOCIAL_FEATURES_ROADMAP.md#prompt-a1--audio-mvp-v131) (v1.3.1).
+
+**Después:** [Prompt A2](./SOCIAL_FEATURES_ROADMAP.md#prompt-a2--ambiente-por-etapa-v141) (ambiente v1.4.1).

@@ -37,7 +37,7 @@ flowchart TB
 
 ---
 
-## Estado actual (v1.2.0 — Fase 2)
+## Estado actual (v1.2.1 — Fase 2 + retos)
 
 | Métrica              | Valor                                                            |
 | -------------------- | ---------------------------------------------------------------- |

@@ -2,7 +2,9 @@
 
 Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat (ej. _"Ejecuta el Prompt 0"_), se verifica contigo y solo entonces se pasa al siguiente.
 
-**Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) _(se crea en Prompt 5)_ · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md) · [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) _(actualizar en Prompts 7–8)_ · [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) _(v1.2.1 / v1.3.1)_
+**Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md) · [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) _(actualizar en Prompts 7–8)_ · [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) _(v1.3.1 / v1.4.1 — después del ranking)_
+
+**Producción actual:** **v1.2.1** (`versionCode` 4) — cuenta/sync + retos con medallas.
 
 ---
 
@@ -15,12 +17,12 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 | [2](#prompt-2--capa-infrastructure)         | —       | SDK + repositories (sin UI)               | ✅ Completado |
 | [3](#prompt-3--sync-offline-first)          | v1.2.0  | Sync al ganar nivel                       | ✅ Completado |
 | [4](#prompt-4--ui-de-cuenta)                | v1.2.0  | Auth + Google OAuth                       | ✅ Completado |
-| [5](#prompt-5--release-v120--migración-beta) | v1.2.0  | QA + Play Store + jugadores beta          | ⬜ Pendiente  |
-| [A1](#prompt-a1--audio-mvp-v121) | v1.2.1  | Audio MVP: SFX ampliados + música + toggles | ⬜ Pendiente  |
-| [6](#prompt-6--ranking-realtime)            | v1.3.0  | Leaderboard en vivo                       | ⬜ Pendiente  |
-| [7](#prompt-7--push-infraestructura--ranking) | v1.3.1 | FCM + tokens + push «te superaron»        | ⬜ Pendiente  |
-| [A2](#prompt-a2--ambiente-por-etapa-v131) | v1.3.1  | Ambiente por etapa + volumen + SFX sync   | ⬜ Pendiente  |
-| [8](#prompt-8--push-engagement--contenido)  | v1.4.0  | Re-engagement, updates, racha, hitos      | ⬜ Pendiente  |
+| [5](#prompt-5--release-v120--migración-beta) | **v1.2.1** | QA + Play Store (cuenta + retos)       | ✅ Completado |
+| [6](#prompt-6--ranking-realtime)            | **v1.3.0** | Leaderboard en vivo                    | ⬜ **Siguiente** |
+| [A1](#prompt-a1--audio-mvp-v131)            | v1.3.1  | Audio MVP: SFX ampliados + música + toggles | ⬜ Pendiente  |
+| [7](#prompt-7--push-infraestructura--ranking) | v1.4.0 | FCM + tokens + push «te superaron»        | ⬜ Pendiente  |
+| [A2](#prompt-a2--ambiente-por-etapa-v141)   | v1.4.1  | Ambiente por etapa + volumen + SFX sync   | ⬜ Pendiente  |
+| [8](#prompt-8--push-engagement--contenido)  | v1.5.0  | Re-engagement, updates, racha, hitos      | ⬜ Pendiente  |
 
 **Leyenda:** ⬜ Pendiente · 🔄 En curso · ✅ Completado
 
@@ -62,7 +64,7 @@ unlockedLevel = max(local, remoto);
 | Push notifications | **FCM** (Firebase Cloud Messaging) vía Capacitor        | [Prompt 7](#prompt-7--push-infraestructura--ranking)                     |
 | Envío de push     | Supabase Edge Functions (sin servidor adicional)         | Prompt 7–8                                                               |
 | Orden del ranking | 6 criterios — ver [RANKING_RULES.md](./RANKING_RULES.md) | Prompt 0                                                                 |
-| Releases          | v1.2.0 = cuenta + sync; **v1.2.1 = audio MVP** ([AUDIO_ROADMAP](./AUDIO_ROADMAP.md) A1); v1.3.0 = ranking; v1.3.1 = push ranking + **ambiente por etapa** (A2); v1.4.0 = push engagement | — |
+| Releases          | **v1.2.1 ✅** = cuenta + sync + retos/medallas; **v1.3.0** = ranking (Prompt 6); **v1.3.1** = audio MVP (A1); **v1.4.0** = push ranking (Prompt 7); **v1.4.1** = ambiente por etapa (A2); **v1.5.0** = push engagement (Prompt 8) | — |
 
 ---
 
@@ -221,47 +223,76 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 
 ---
 
-## Prompt 5 — Release v1.2.0 + migración beta
+## Prompt 5 — Release v1.2.1 (cuenta + retos) + migración beta
 
-**Comando en chat:** `Ejecuta el Prompt 5`
+**Comando en chat:** `Ejecuta el Prompt 5` _(ya completado)_
 
-**Objetivo:** Publicar v1.2.0 en Play Store sin perder saves de los ~20 beta.
+**Versión publicada:** **v1.2.1** (`versionCode` 4) — consolida v1.2.0 (cuenta/sync, `versionCode` 3, no subida sola) + retos con medallas.
+
+**Objetivo:** Publicar en Play Store sin perder saves de los ~20 beta.
 
 ### Qué se hace
 
-- [ ] [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) — comunicación y planes A/B/C
-- [ ] Export manual de save (plan B para soporte)
-- [x] Bump versión en `package.json` / Android (`1.2.0`, `versionCode` 3)
-- [ ] Actualizar `src/data/release-notes.json` y ejecutar `npm run release:prepare`
-- [ ] Copiar `highlights` de v1.2.0 a notas de Play Console
-- [ ] Checklist QA completo
-- [ ] `npm run release:prepare` — validar `release-notes.json` y regenerar [CHANGELOG.md](./CHANGELOG.md)
+- [x] Release en producción: **v1.2.1** (cuenta opcional + sync + retos/medallas)
+- [x] Bump `package.json` / Android (`1.2.1`, `versionCode` 4)
+- [x] `src/data/release-notes.json` + `npm run release:prepare` / [CHANGELOG.md](./CHANGELOG.md)
+- [x] Notas de Play Console desde `playStoreNotes` de v1.2.1
+- [x] AAB subido a Play Store (producción)
+- [ ] [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) — planes A/B/C documentados (opcional; migración real = offline-first + merge al vincular)
+- [ ] Export manual de save (plan B para soporte) — pendiente si hace falta
 
-### Checklist QA v1.2.0
+### Checklist QA v1.2.1
 
-- [ ] Jugador nuevo sin cuenta: juega normal
-- [ ] Jugador con 30+ niveles sin cuenta: actualiza, sigue igual
-- [ ] Jugador vincula Google: merge correcto
-- [ ] Sin red: juega offline; sync al volver
-- [ ] Tras actualizar a v1.2.0: aparece modal «Novedades» una sola vez
-- [ ] `npm run validate:levels` y `npm run build` OK
-- [ ] Modal «Novedades» (v1.2.0) probado tras actualizar desde beta
+- [x] Jugador nuevo sin cuenta: juega normal
+- [x] Jugador con progreso previo sin cuenta: actualiza, sigue igual
+- [x] Sin red: juega offline; sync al volver (con cuenta)
+- [x] Modal «Novedades» (v1.2.1) tras actualizar
+- [x] `npm run build` OK / app en producción muestra v1.2.1
 
 ### Verificación
 
-- [ ] Mensaje enviado a jugadores beta (WhatsApp/email)
-- [ ] AAB subido a Play Store (o listo para subir)
-- [ ] Revisión contigo antes de Prompt 6
+- [x] AAB en Play Store (producción)
+- [x] Revisión → **siguiente: Prompt 6 (ranking v1.3.0)**
 
 ---
 
-## Prompt A1 — Audio MVP (v1.2.1)
+## Prompt 6 — Ranking realtime
+
+**Comando en chat:** `Ejecuta el Prompt 6`
+
+**Versión:** v1.3.0 (`versionCode` 5) — **siguiente release**
+
+**Prerequisito:** Prompt 5 completado (v1.2.1 en producción).
+
+**Objetivo:** Ranking global con actualizaciones en tiempo real.
+
+### Qué se hace
+
+- [ ] Supabase Realtime en `player_progress` / `leaderboard_events`
+- [ ] `LeaderboardScreen` — top jugadores, posición propia
+- [ ] Toggle opt-in "Aparecer en el ranking" (default off)
+- [ ] Badge en Home con posición
+- [ ] Feed reciente (últimos eventos)
+- [ ] Columna `last_played_at` en `nb_player_profiles` (o `nb_player_progress`) — alimenta re-engagement en Prompt 8
+- [ ] Hook en eventos `rank_up` de `nb_leaderboard_events` — punto de enganche para push en Prompt 7
+
+### Verificación
+
+- [ ] Dos dispositivos: uno completa nivel → otro ve cambio en <3 s
+- [ ] Jugador sin opt-in no aparece en ranking
+- [ ] Offline: último snapshot cacheado
+- [ ] Revisión contigo → release v1.3.0
+- [ ] Tras v1.3.0: **Prompt A1 (audio v1.3.1)** — no mezclar audio en el mismo release que ranking
+
+---
+
+## Prompt A1 — Audio MVP (v1.3.1)
 
 **Comando en chat:** `Ejecuta el Prompt A1`
 
-**Versión:** v1.2.1 (`versionCode` 4)
+**Versión:** v1.3.1 (`versionCode` 6)
 
-**Prerequisito:** Prompt 5 completado (v1.2.0 publicada o lista para publicar).
+**Prerequisito:** Prompt 6 completado (ranking v1.3.0 publicado). Audio **no** es prioridad antes del ranking.
 
 **Objetivo:** Ampliar feedback sonoro sin inflar el APK; introducir música ambiente opcional con dos loops. Detalle ampliado en [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md).
 
@@ -270,9 +301,9 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 ### Texto para copiar en el chat
 
 ```text
-Ejecuta el Prompt A1 (docs/SOCIAL_FEATURES_ROADMAP.md) — Audio MVP v1.2.1.
+Ejecuta el Prompt A1 (docs/SOCIAL_FEATURES_ROADMAP.md) — Audio MVP v1.3.1.
 
-Contexto: hoy los SFX son procedurales en src/services/soundService.ts; no hay archivos de audio. Solo existe soundEnabled en Settings.
+Contexto: hoy los SFX son procedurales en src/services/soundService.ts; no hay archivos de audio. Solo existe soundEnabled en Settings. Ranking v1.3.0 ya está publicado.
 
 Implementa:
 1. musicService (HTMLAudioElement, loop, volumen) + pausa en background con @capacitor/app
@@ -282,11 +313,11 @@ Implementa:
 5. Música: menu en Home/Campaña; gameplay en LevelScreen; crossfade al cambiar pantalla
 6. SFX procedurales nuevos en soundService: uiTap, modalOpen, modalClose, reset, locked, moveBlock, shake, star1/2/3, stageUnlock
 7. gameStore: toggleSfx + toggleMusic; disparar locked/moveBlock/reset donde corresponda
-8. Bump package.json → 1.2.1, versionCode 4, release-notes.json, npm run release:prepare
+8. Bump package.json → 1.3.1, versionCode 6, release-notes.json, npm run release:prepare
 
 Principios: offline-first, solo audio CC0/royalty-free, SFX procedural cuando sea posible, peso audio < 2 MB, dominio sin imports de audio.
 
-Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del roadmap. Revisión conmigo antes de Prompt A2.
+Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del roadmap. Revisión conmigo antes de Prompt 7 / A2.
 ```
 
 ### Qué se hace
@@ -343,8 +374,8 @@ Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del ro
 - [ ] APK release: tamaño total sube < 2 MB vs build sin audio
 - [ ] `docs/AUDIO_CREDITS.md` completo
 - [ ] `npm run build` y prueba en dispositivo real (autoplay tras primer tap)
-- [ ] `release-notes.json` + `npm run release:prepare` para v1.2.1
-- [ ] Revisión contigo antes de Prompt A2
+- [ ] `release-notes.json` + `npm run release:prepare` para v1.3.1
+- [ ] Revisión contigo antes de Prompt 7 / A2
 
 ### Highlights sugeridos (modal «Novedades»)
 
@@ -354,34 +385,7 @@ Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del ro
 
 ### Entregable
 
-`musicService` + SFX ampliados + settings duales + 2 loops OGG documentados; release v1.2.1 lista.
-
----
-
-## Prompt 6 — Ranking realtime
-
-**Comando en chat:** `Ejecuta el Prompt 6`
-
-**Versión:** v1.3.0 (release separada de v1.2.0)
-
-**Objetivo:** Ranking global con actualizaciones en tiempo real.
-
-### Qué se hace
-
-- [ ] Supabase Realtime en `player_progress` / `leaderboard_events`
-- [ ] `LeaderboardScreen` — top jugadores, posición propia
-- [ ] Toggle opt-in "Aparecer en el ranking" (default off)
-- [ ] Badge en Home con posición
-- [ ] Feed reciente (últimos eventos)
-- [ ] Columna `last_played_at` en `nb_player_profiles` (o `nb_player_progress`) — alimenta re-engagement en Prompt 8
-- [ ] Hook en eventos `rank_up` de `nb_leaderboard_events` — punto de enganche para push en Prompt 7
-
-### Verificación
-
-- [ ] Dos dispositivos: uno completa nivel → otro ve cambio en <3 s
-- [ ] Jugador sin opt-in no aparece en ranking
-- [ ] Offline: último snapshot cacheado
-- [ ] Revisión contigo → release v1.3.0
+`musicService` + SFX ampliados + settings duales + 2 loops OGG documentados; release v1.3.1 lista.
 
 ---
 
@@ -389,7 +393,7 @@ Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del ro
 
 **Comando en chat:** `Ejecuta el Prompt 7`
 
-**Versión:** v1.3.1 (release separada de v1.3.0; requiere Prompt 6 completado)
+**Versión:** v1.4.0 (`versionCode` 7; requiere Prompt 6 completado; idealmente tras A1 o en paralelo de código)
 
 **Objetivo:** Notificaciones push nativas en Android (bandeja del sistema) con infraestructura FCM + Supabase. Primer caso de uso: aviso cuando otro jugador te supera en el ranking.
 
@@ -440,7 +444,7 @@ Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del ro
 - [ ] Actualizar `files-test/privacy.html` → publicar en [nuts-and-bolts-web](https://github.com/marianorluna/nuts-and-bolts-web) — ver [PRIVACY_POLICY.md](./PRIVACY_POLICY.md)
 - [ ] Declarar en política: token FCM, Firebase/Google como procesador, finalidad, controles del usuario
 - [ ] Play Console → **Seguridad de los datos**: identificadores de dispositivo, actividad en app (si aplica)
-- [ ] `.env.example`: `VITE_FEATURE_PUSH_NOTIFICATIONS=false` → `true` en v1.3.1
+- [ ] `.env.example`: `VITE_FEATURE_PUSH_NOTIFICATIONS=false` → `true` en v1.4.0
 
 ### Casos de uso (este prompt)
 
@@ -462,7 +466,7 @@ Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del ro
 - [ ] Desactivar toggle en Ajustes: no más push; token eliminado o marcado inactivo
 - [ ] Cerrar sesión: token borrado del servidor
 - [ ] `npm run build` y `npx cap sync` OK
-- [ ] Revisión contigo → release v1.3.1
+- [ ] Revisión contigo → release v1.4.0
 
 ### Entregable
 
@@ -470,13 +474,13 @@ Infraestructura push reutilizable (FCM + Supabase + Capacitor) + primer caso de 
 
 ---
 
-## Prompt A2 — Ambiente por etapa (v1.3.1)
+## Prompt A2 — Ambiente por etapa (v1.4.1)
 
 **Comando en chat:** `Ejecuta el Prompt A2`
 
-**Versión:** v1.3.1 (`versionCode` 6 — coordinar bump con Prompt 7)
+**Versión:** v1.4.1 (`versionCode` 8)
 
-**Prerequisito:** Prompt A1 completado (v1.2.1 publicada). Puede ejecutarse en paralelo con Prompt 7 (releases independientes en código).
+**Prerequisito:** Prompt A1 completado (v1.3.1 publicada). Puede ejecutarse en paralelo con Prompt 8 en código si conviene.
 
 **Objetivo:** Ambiente distinto por etapa de campaña, control de volumen y SFX de cuenta/sync. Detalle ampliado en [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md).
 
@@ -485,7 +489,7 @@ Infraestructura push reutilizable (FCM + Supabase + Capacitor) + primer caso de 
 ### Texto para copiar en el chat
 
 ```text
-Ejecuta el Prompt A2 (docs/SOCIAL_FEATURES_ROADMAP.md) — Ambiente por etapa v1.3.1.
+Ejecuta el Prompt A2 (docs/SOCIAL_FEATURES_ROADMAP.md) — Ambiente por etapa v1.4.1.
 
 Prerequisito: Prompt A1 completado (musicService, toggles sfx/music, menu.ogg + gameplay.ogg).
 
@@ -498,7 +502,7 @@ Implementa:
 3. GameSettings: musicVolume + sfxVolume (0–1 o bajo/medio/alto) + UI en SettingsModal
 4. SFX procedurales: syncSuccess y syncError al completar sync / fallo
 5. Actualizar docs/AUDIO_CREDITS.md; peso total public/audio/ < 4 MB (OGG mono 64–96 kbps)
-6. Coordinar versionCode 6 con Prompt 7 si aplica; release-notes v1.3.1
+6. Bump package.json → 1.4.1, versionCode 8; release-notes v1.4.1
 
 Principios: offline-first, solo CC0/royalty-free, sin regresión en toggles A1, dominio sin imports de audio.
 
@@ -551,7 +555,7 @@ Verifica niveles 1 / 35 / 70 con pistas correctas. Marca checkboxes del roadmap.
 - [ ] Sliders de volumen afectan en tiempo real
 - [ ] Sync exitoso/fallido audible solo con SFX ON
 - [ ] Sin regresión en toggles de A1
-- [ ] `release-notes.json` + release v1.3.1
+- [ ] `release-notes.json` + release v1.4.1
 - [ ] Revisión contigo → cierre del roadmap de audio
 
 ### Highlights sugeridos (modal «Novedades»)
@@ -570,7 +574,7 @@ Ambiente por etapa + volumen + SFX sync; 3 loops OGG documentados; roadmap de au
 
 **Comando en chat:** `Ejecuta el Prompt 8`
 
-**Versión:** v1.4.0 (release separada; requiere Prompt 7 completado)
+**Versión:** v1.5.0 (`versionCode` 9; requiere Prompt 7 completado)
 
 **Objetivo:** Resto de notificaciones push con preferencias granulares, jobs programados y límites anti-spam.
 
@@ -594,14 +598,14 @@ Ambiente por etapa + volumen + SFX sync; 3 loops OGG documentados; roadmap de au
 - [ ] Job semanal (`cron-weekly-ranking`) — resumen posición para usuarios con `weekly_summary` + opt-in ranking
 - [ ] Rate limit en `send-push`: máx. 2 push/semana/usuario (excepto transaccionales urgentes de ranking, máx. 3/día)
 - [ ] Toggles por categoría en `SettingsModal` (agrupados: Engagement / Ranking / Contenido)
-- [ ] Actualizar política de privacidad v1.4.0 y Seguridad de los datos en Play Console
+- [ ] Actualizar política de privacidad v1.5.0 y Seguridad de los datos en Play Console
 
 ### Casos de uso (este prompt)
 
 | Tipo | Condición | Mensaje ejemplo | Frecuencia máx. |
 | ---- | --------- | --------------- | --------------- |
 | **Re-engagement** | Sin jugar 2+ días + `re_engagement` + cuenta | «¡Te extrañamos! Tienes niveles pendientes 🧩» | 1 cada 3 días |
-| **Nueva versión** | Versión Play Store > instalada + `app_updates` | «Nueva v1.4.0 — ranking, notificaciones y más» | 1 por release |
+| **Nueva versión** | Versión Play Store > instalada + `app_updates` | «Nueva v1.5.0 — recordatorios y más» | 1 por release |
 | **Nuevos niveles** | Contenido publicado + `new_content` | «¡50 niveles nuevos disponibles!» | 1 por release de contenido |
 | **Racha diaria** | Racha activa + no jugó hoy + `daily_streak` | «Llevas 5 días seguidos — no rompas la racha» | 1/día |
 | **Resumen semanal** | Opt-in ranking + `weekly_summary` | «Esta semana subiste 12 puestos — sigue así» | 1/semana (lunes) |
@@ -625,8 +629,8 @@ Ambiente por etapa + volumen + SFX sync; 3 loops OGG documentados; roadmap de au
 - [ ] Racha: día sin jugar → recordatorio único
 - [ ] Resumen semanal: job ejecuta solo para opt-in ranking
 - [ ] Usuario con todos los toggles off: cero push
-- [ ] Política de privacidad v1.4.0 publicada y verificada en URL pública
-- [ ] Revisión contigo → release v1.4.0
+- [ ] Política de privacidad v1.5.0 publicada y verificada en URL pública
+- [ ] Revisión contigo → release v1.5.0
 
 ### Entregable
 
@@ -703,17 +707,19 @@ flowchart TB
 | 2026-07-01 | 2      | Capa infrastructure: contracts, Supabase SDK, `authSession`, `test:supabase`.               |
 | 2026-07-01 | 3      | `syncProgress.ts`, merge al login, debounce post-victoria, retry offline.                   |
 | 2026-07-02 | 4      | UI cuenta: `AuthModal`, `LinkProgressModal`, OAuth Capacitor, deep link Android, `useAuth`. |
-| 2026-07-03 | —      | Prompts 7–8: push FCM + Supabase; v1.3.1 ranking, v1.4.0 engagement.                      |
+| 2026-07-03 | —      | Prompts 7–8: push FCM + Supabase (versiones replanificadas 2026-07-16).                      |
 | 2026-07-03 | 5+     | CHANGELOG.md + modal «Novedades» + `npm run release:prepare`.                             |
-| 2026-07-03 | —      | [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md): audio MVP v1.2.1, ambiente por etapa v1.3.1.       |
+| 2026-07-03 | —      | [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) creado (A1/A2; versiones replanificadas después).   |
 | 2026-07-03 | A1–A2  | Prompts A1 y A2 integrados en este roadmap con texto copiable para el chat.                  |
+| 2026-07-16 | 5      | **v1.2.1 en producción** (cuenta + retos). Prompt 5 ✅. Ranking = siguiente (Prompt 6).     |
+| 2026-07-16 | —      | Prioridad: ranking antes que audio. A1 → v1.3.1; push → v1.4.0; A2 → v1.4.1; engagement → v1.5.0. |
 
 ---
 
 ## Próximo paso
 
-**Prompt 5:** Release v1.2.0 + migración beta. Di: _"Ejecuta el Prompt 5"_
+**Prompt 6:** Ranking realtime (v1.3.0). Di: _"Ejecuta el Prompt 6"_
 
-**Después:** [Prompt A1 audio v1.2.1](#prompt-a1--audio-mvp-v121) (release independiente) → Prompt 6 (ranking v1.3.0) → Prompt 7 (push v1.3.1) + [Prompt A2 ambiente](#prompt-a2--ambiente-por-etapa-v131) → Prompt 8 (push engagement v1.4.0)
+**Después:** [Prompt A1 audio v1.3.1](#prompt-a1--audio-mvp-v131) → Prompt 7 (push v1.4.0) → [Prompt A2 ambiente v1.4.1](#prompt-a2--ambiente-por-etapa-v141) → Prompt 8 (push engagement v1.5.0)
 
 **Copiar prompt:** cada prompt de audio incluye un bloque «Texto para copiar en el chat» listo para pegar.

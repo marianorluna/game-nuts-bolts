@@ -1,6 +1,6 @@
 # Documentación — Nuts & Bolts
 
-Índice: [Contenido](#contenido-del-juego-campañas-niveles-mecánicas) · [Social](#funciones-sociales-y-ranking-v120) · [Audio](#audio-y-música-ambiente-v121) · [Publicación](#publicación) ([Play Store](./PLAYSTORE.md))
+Índice: [Contenido](#contenido-del-juego-campañas-niveles-mecánicas) · [Social](#funciones-sociales-y-ranking-v120) · [Audio](#audio-y-música-ambiente) · [Publicación](#publicación) ([Play Store](./PLAYSTORE.md))
 
 ## Contenido del juego (campañas, niveles, mecánicas)
 
@@ -14,8 +14,9 @@
 
 ### Estado actual
 
-- **100 niveles** publicados — Campaña *El Taller* (v1.1.0+)
-- **Cuenta y nube** opcionales (v1.2.0) ✅
+- **Producción:** **v1.2.1** (`versionCode` 4)
+- **100 niveles** publicados — Campaña _El Taller_ (v1.1.0+)
+- **Cuenta y nube** opcionales + **retos con medallas** (v1.2.1) ✅
 - **Fase 0:** documentación base ✅
 - **Fase 1:** 60 niveles + UI por etapas ✅
 - **Fase 2:** 100 niveles + multiNut + lockedBolt ✅
@@ -28,31 +29,31 @@
 | [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md) | **Prompts incrementales** — avance, checklists y verificaciones |
 | [RANKING_RULES.md](./RANKING_RULES.md)                     | Criterios de orden del leaderboard (6 niveles de desempate)     |
 | [BACKEND_DECISION.md](./BACKEND_DECISION.md)               | Por qué Supabase y alternativas descartadas                     |
-| [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md)           | Migración segura jugadores beta _(Prompt 5)_                    |
-| [PLAYSTORE.md](./PLAYSTORE.md)                             | Guía paso a paso para publicar en Google Play _(Prompt 5)_     |
+| [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md)           | Migración jugadores beta (offline-first; planes A/B/C opcionales) |
+| [PLAYSTORE.md](./PLAYSTORE.md)                             | Guía paso a paso para publicar en Google Play                   |
 
-**Estado:** Prompt 0 ✅ · Prompts 1–4 ✅ · Prompt 5 pendiente → [PLAYSTORE.md](./PLAYSTORE.md) · Backend: Supabase
+**Estado:** Prompts 0–5 ✅ · **Siguiente: Prompt 6 (ranking v1.3.0)** · Backend: Supabase
 
-## Audio y música ambiente (v1.2.1+)
+## Audio y música ambiente
 
-| Documento                                      | Descripción                                                       |
-| ---------------------------------------------- | ----------------------------------------------------------------- |
-| [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md)          | **Prompts A1–A2** — SFX ampliados, música ambiente, volumen, APK |
-| [AUDIO_CREDITS.md](./AUDIO_CREDITS.md)         | Licencias y procedencia de archivos en `public/audio/`            |
+| Documento                              | Descripción                                                      |
+| -------------------------------------- | ---------------------------------------------------------------- |
+| [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) | **Prompts A1–A2** — SFX ampliados, música ambiente, volumen, APK |
+| [AUDIO_CREDITS.md](./AUDIO_CREDITS.md) | Licencias y procedencia de archivos en `public/audio/`           |
 
-**Estado:** v1.2.0 sin assets de audio (SFX procedural) · Prompt A1 (v1.2.1) ⬜ · Prompt A2 (v1.3.1) ⬜
+**Estado:** v1.2.1 sin assets de audio (SFX procedural) · Prompt A1 (v1.3.1) ⬜ _tras ranking_ · Prompt A2 (v1.4.1) ⬜
 
-**Prompts copiables:** integrados en [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md) (secciones A1 y A2, bloque «Texto para copiar en el chat»). Este doc amplía contexto, peso APK y licencias.
+**Prompts copiables:** integrados en [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md) (secciones A1 y A2).
 
 ## Publicación
 
-| Documento                                      | Descripción                                                       |
-| ---------------------------------------------- | ----------------------------------------------------------------- |
-| [SCRIPTS.md](./SCRIPTS.md)                     | **Referencia de comandos npm** — flujo de release y uso eventual  |
-| [CHANGELOG.md](./CHANGELOG.md)                 | **Releases de la app** (semver) — generado desde `release-notes.json` |
-| [PLAYSTORE.md](./PLAYSTORE.md)                 | Guía para publicar en Google Play                                 |
-| [PLAYSTORE_TESTER_FEEDBACK.md](./PLAYSTORE_TESTER_FEEDBACK.md) | Comentarios y respuestas de testers en la prueba cerrada de Google Play |
-| [PLAYSTORE_PRODUCTION_ACCESS.md](./PLAYSTORE_PRODUCTION_ACCESS.md) | Respuestas al cuestionario de solicitud de acceso a producción |
-| [TESTER_SURVEY.md](./TESTER_SURVEY.md)         | Encuesta breve a testers (Google Forms) — permiso de contacto para futuras pruebas |
-| [PRIVACY_POLICY.md](./PRIVACY_POLICY.md)       | Dónde está la política de privacidad, URL pública y flujo de deploy |
-| [../LICENSE](../LICENSE)                       | Licencia propietaria del código y contenido (All Rights Reserved)   |
+| Documento                                                          | Descripción                                                                        |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| [SCRIPTS.md](./SCRIPTS.md)                                         | **Referencia de comandos npm** — flujo de release y uso eventual                   |
+| [CHANGELOG.md](./CHANGELOG.md)                                     | **Releases de la app** (semver) — generado desde `release-notes.json`              |
+| [PLAYSTORE.md](./PLAYSTORE.md)                                     | Guía para publicar en Google Play                                                  |
+| [PLAYSTORE_TESTER_FEEDBACK.md](./PLAYSTORE_TESTER_FEEDBACK.md)     | Comentarios y respuestas de testers en la prueba cerrada de Google Play            |
+| [PLAYSTORE_PRODUCTION_ACCESS.md](./PLAYSTORE_PRODUCTION_ACCESS.md) | Respuestas al cuestionario de solicitud de acceso a producción                     |
+| [TESTER_SURVEY.md](./TESTER_SURVEY.md)                             | Encuesta breve a testers (Google Forms) — permiso de contacto para futuras pruebas |
+| [PRIVACY_POLICY.md](./PRIVACY_POLICY.md)                           | Dónde está la política de privacidad, URL pública y flujo de deploy                |
+| [../LICENSE](../LICENSE)                                           | Licencia propietaria del código y contenido (All Rights Reserved)                  |

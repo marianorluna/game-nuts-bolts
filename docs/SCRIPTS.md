@@ -43,7 +43,7 @@ Para abrir Android Studio después del sync: `npm run cap:android` (equivale a `
 
 **Fuente única de versión:** solo editas `package.json`. El resto se propaga con estos scripts.
 
-**Documentación relacionada:** [PLAYSTORE.md](./PLAYSTORE.md) · [CHANGELOG.md](./CHANGELOG.md) · [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) (releases v1.2.1 / v1.3.1)
+**Documentación relacionada:** [PLAYSTORE.md](./PLAYSTORE.md) · [CHANGELOG.md](./CHANGELOG.md) · [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) (A1 v1.3.1 / A2 v1.4.1) · [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md) (siguiente: ranking v1.3.0)
 
 ---
 
