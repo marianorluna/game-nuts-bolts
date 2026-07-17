@@ -2,13 +2,20 @@ import { useAuth } from '../hooks/useAuth'
 import { useLeaderboard } from '../hooks/useLeaderboard'
 import { isLeaderboardEnabled } from '../infrastructure'
 import { useTranslation } from '../i18n/useTranslation'
+import { SettingsCollapsible } from './SettingsCollapsible'
 import { UserAvatar } from './UserAvatar'
 
 interface AccountSettingsSectionProps {
   onOpenAuth: () => void
+  open: boolean
+  onToggle: () => void
 }
 
-export function AccountSettingsSection({ onOpenAuth }: AccountSettingsSectionProps) {
+export function AccountSettingsSection({
+  onOpenAuth,
+  open,
+  onToggle,
+}: AccountSettingsSectionProps) {
   const { t } = useTranslation()
   const { cloudSyncEnabled, user, busy, signOut } = useAuth()
   const leaderboardEnabled = isLeaderboardEnabled()
@@ -21,17 +28,17 @@ export function AccountSettingsSection({ onOpenAuth }: AccountSettingsSectionPro
     const optedIn = profile?.showInLeaderboard ?? false
 
     return (
-      <div className="mt-3 rounded-xl bg-white/10 px-4 py-4">
-        <div className="mb-3 flex items-center gap-3">
-          <span className="flex h-10 w-10 overflow-hidden rounded-full bg-amber-400/25">
+      <SettingsCollapsible
+        title={label}
+        subtitle={t('account.syncActive')}
+        icon={
+          <span className="flex h-8 w-8 overflow-hidden rounded-full bg-amber-400/25 text-base">
             <UserAvatar user={user} className="text-base" />
           </span>
-          <div className="min-w-0 flex-1 text-left">
-            <p className="truncate font-semibold text-white">{label}</p>
-            <p className="text-sm text-emerald-300">{t('account.syncActive')}</p>
-          </div>
-        </div>
-
+        }
+        open={open}
+        onToggle={onToggle}
+      >
         {leaderboardEnabled && (
           <button
             type="button"
@@ -66,7 +73,7 @@ export function AccountSettingsSection({ onOpenAuth }: AccountSettingsSectionPro
         >
           {busy ? t('account.signingOut') : t('account.signOut')}
         </button>
-      </div>
+      </SettingsCollapsible>
     )
   }
 

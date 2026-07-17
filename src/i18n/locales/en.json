@@ -174,6 +174,21 @@
     "languageEs": "Español",
     "languageEn": "English"
   },
+  "push": {
+    "title": "Notifications",
+    "subtitle": "Alerts in the Android system tray (opt-in).",
+    "needAccount": "Link an account to enable notifications",
+    "master": "Allow notifications",
+    "masterOn": "Enabled on this device",
+    "masterOff": "Disabled",
+    "rank": "Ranking",
+    "rankOn": "Alert when someone overtakes you",
+    "rankOff": "No ranking alerts",
+    "rankNeedsMaster": "Enable notifications first",
+    "rankNeedsLeaderboard": "Turn on «Show on leaderboard» first",
+    "permissionDenied": "Permission denied. You can enable it in system Settings.",
+    "webUnsupported": "Push notifications are only available in the Android app."
+  },
   "credits": {
     "title": "Credits",
     "madeWith": "Made with 💜",
@@ -184,11 +199,6 @@
   "author": {
     "role": "Software Developer",
     "bio": "I build software and enjoy exploring ideas in mobile form. Nuts & Bolts started as a logic and color puzzle, designed for short play sessions."
-  },
-  "whatsNew": {
-    "versionBadge": "What's new in v{{version}}",
-    "subtitle": "Here's what's new in this update:",
-    "continue": "Great!"
   },
   "whatsNew": {
     "versionBadge": "What's new in v{{version}}",

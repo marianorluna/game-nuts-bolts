@@ -339,6 +339,22 @@
           "Push alert when another player overtakes you on the leaderboard",
           "Native Android notifications (opt-in)"
         ]
+      },
+      "playStoreNotes": {
+        "es": "Aviso push cuando te superan en el ranking (opt-in en Ajustes).",
+        "en": "Push alert when you are overtaken on the leaderboard (opt-in in Settings)."
+      },
+      "added": {
+        "es": [
+          "Infraestructura FCM + Capacitor + Supabase Edge Functions",
+          "Preferencias de notificaciones en Configuración",
+          "Push «te superaron» con rate limit 3/día"
+        ],
+        "en": [
+          "FCM + Capacitor + Supabase Edge Functions infrastructure",
+          "Notification preferences in Settings",
+          "«Overtaken» push with 3/day rate limit"
+        ]
       }
     },
     {

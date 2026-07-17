@@ -15,10 +15,11 @@
 ### Estado actual
 
 - **Producción:** **v1.2.1** (`versionCode` 4)
-- **Código listo:** **v1.3.0** ranking realtime (pendiente release Play Store)
+- **Código listo:** **v1.4.0** push ranking (Prompt 7); v1.3.0 ranking realtime
 - **100 niveles** publicados — Campaña _El Taller_ (v1.1.0+)
 - **Cuenta y nube** opcionales + **retos con medallas** (v1.2.1) ✅
 - **Ranking global** con opt-in + Realtime (v1.3.0) ✅ código
+- **Push FCM** «te superaron» + prefs (v1.4.0) ✅ código _(Firebase Console manual)_
 - **Fase 0:** documentación base ✅
 - **Fase 1:** 60 niveles + UI por etapas ✅
 - **Fase 2:** 100 niveles + multiNut + lockedBolt ✅
@@ -34,7 +35,7 @@
 | [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md)           | Migración jugadores beta (offline-first; planes A/B/C opcionales) |
 | [PLAYSTORE.md](./PLAYSTORE.md)                             | Guía paso a paso para publicar en Google Play                   |
 
-**Estado:** Prompts 0–6 ✅ · **Siguiente: Prompt 7 (push v1.4.0)** · Backend: Supabase
+**Estado:** Prompts 0–7 ✅ · **Siguiente: Prompt 8 (push engagement v1.5.0)** · Backend: Supabase
 
 ## Audio y música ambiente
 

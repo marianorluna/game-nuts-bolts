@@ -4,7 +4,7 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 
 **Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md) · [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) _(actualizar en Prompts 7–8)_ · [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) _(v1.6.0 / v1.6.1 — Prompts 9–10, tras push)_
 
-**Producción actual:** **v1.2.1** (`versionCode` 4) — cuenta/sync + retos. **Código listo:** v1.3.0 ranking (Prompt 6) pendiente de release.
+**Producción actual:** **v1.2.1** (`versionCode` 4) — cuenta/sync + retos. **Código listo:** v1.4.0 push ranking (Prompt 7); v1.3.0 ranking pendiente de release.
 
 ---
 
@@ -19,8 +19,8 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 | [4](#prompt-4--ui-de-cuenta)                  | v1.2.0     | Auth + Google OAuth                         | ✅ Completado    |
 | [5](#prompt-5--release-v120--migración-beta)  | **v1.2.1** | QA + Play Store (cuenta + retos)            | ✅ Completado    |
 | [6](#prompt-6--ranking-realtime)              | **v1.3.0** | Leaderboard en vivo                         | ✅ Completado    |
-| [7](#prompt-7--push-infraestructura--ranking) | **v1.4.0** | FCM + tokens + push «te superaron»          | ⬜ **Siguiente** |
-| [8](#prompt-8--push-engagement--contenido)    | v1.5.0     | Re-engagement, updates, racha, hitos        | ⬜ Pendiente     |
+| [7](#prompt-7--push-infraestructura--ranking) | **v1.4.0** | FCM + tokens + push «te superaron»          | ✅ Completado    |
+| [8](#prompt-8--push-engagement--contenido)    | v1.5.0     | Re-engagement, updates, racha, hitos        | ⬜ **Siguiente** |
 | [9](#prompt-9--audio-mvp-v160)                | v1.6.0     | Audio MVP: SFX ampliados + música + toggles | ⬜ Pendiente     |
 | [10](#prompt-10--ambiente-por-etapa-v161)     | v1.6.1     | Ambiente por etapa + volumen + SFX sync     | ⬜ Pendiente     |
 
@@ -300,48 +300,48 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 
 #### Firebase / Google (gratis)
 
-- [ ] Proyecto en [Firebase Console](https://console.firebase.google.com/) vinculado a `com.nutsandbolts.puzzle`
-- [ ] Descargar `google-services.json` → `android/app/` (activa el plugin ya preparado en `android/app/build.gradle`)
-- [ ] Service Account JSON para envío server-side (API HTTP v1 de FCM)
-- [ ] Secret en Supabase: `FCM_SERVICE_ACCOUNT` (o equivalente) para Edge Functions
+- [ ] Proyecto en [Firebase Console](https://console.firebase.google.com/) vinculado a `com.nutsandbolts.puzzle` _(manual)_
+- [ ] Descargar `google-services.json` → `android/app/` (activa el plugin ya preparado en `android/app/build.gradle`) _(manual; gitignored)_
+- [ ] Service Account JSON para envío server-side (API HTTP v1 de FCM) _(manual)_
+- [ ] Secret en Supabase: `FCM_SERVICE_ACCOUNT` (o equivalente) para Edge Functions _(manual)_
 
 #### Cliente Capacitor
 
-- [ ] `npm install @capacitor/push-notifications`
-- [ ] `npx cap sync`
-- [ ] Permiso `POST_NOTIFICATIONS` en `AndroidManifest.xml` (Android 13+)
-- [ ] `src/infrastructure/push/` — registro de token, listeners (`registration`, `pushNotificationReceived`, `pushNotificationActionPerformed`)
-- [ ] Contrato `PushRepository` en `src/infrastructure/contracts/` (dominio sin FCM)
-- [ ] Deep link al abrir notificación (ej. `LeaderboardScreen` si tipo `rank_overtaken`)
+- [x] `npm install @capacitor/push-notifications`
+- [x] `npx cap sync`
+- [x] Permiso `POST_NOTIFICATIONS` en `AndroidManifest.xml` (Android 13+)
+- [x] `src/infrastructure/push/` — registro de token, listeners (`registration`, `pushNotificationReceived`, `pushNotificationActionPerformed`)
+- [x] Contrato `PushRepository` en `src/infrastructure/contracts/` (dominio sin FCM)
+- [x] Deep link al abrir notificación (ej. `LeaderboardScreen` si tipo `rank_overtaken`)
 
 #### Supabase (esquema + backend)
 
-- [ ] Tabla `nb_push_tokens`:
+- [x] Tabla `nb_push_tokens`:
   - `user_id`, `game_id`, `fcm_token`, `platform` (`android`), `updated_at`
   - PK o unique en `(user_id, game_id, fcm_token)`; RLS: usuario solo escribe sus tokens
-- [ ] Tabla `nb_notification_preferences`:
+- [x] Tabla `nb_notification_preferences`:
   - `user_id`, `game_id`
   - `push_enabled` (master, default `false`)
   - `rank_overtaken` (default `false`; requiere `show_in_leaderboard = true`)
   - timestamps
-- [ ] Migración SQL en `docs/supabase/schema.sql` (o archivo `schema-push.sql`)
-- [ ] Edge Function `send-push` — recibe `{ userId, gameId, type, title, body, data }`, llama API FCM
-- [ ] Edge Function o trigger `on-rank-change` — al detectar bajada de posición, encola push a usuarios afectados
-- [ ] Borrar token en `signOut` y al desactivar notificaciones
+- [x] Migración SQL en `docs/supabase/schema.sql` (o archivo `schema-push.sql`)
+- [x] Edge Function `send-push` — recibe `{ userId, gameId, type, title, body, data }`, llama API FCM
+- [x] Edge Function o trigger `on-rank-change` — al detectar bajada de posición, encola push a usuarios afectados
+- [x] Borrar token en `signOut` y al desactivar notificaciones
 
 #### UI y permisos
 
-- [ ] Solicitud de permiso Android (diálogo del sistema) tras explicación en UI
-- [ ] Sección «Notificaciones» en `SettingsModal` — toggle master + toggle «Ranking»
-- [ ] Si no hay cuenta: CTA para vincular antes de activar push
-- [ ] i18n en `es.json` / `en.json`
+- [x] Solicitud de permiso Android (diálogo del sistema) tras explicación en UI
+- [x] Sección «Notificaciones» en `SettingsModal` — toggle master + toggle «Ranking»
+- [x] Si no hay cuenta: CTA para vincular antes de activar push
+- [x] i18n en `es.json` / `en.json`
 
 #### Legal y Play Console
 
-- [ ] Actualizar `files-test/privacy.html` → publicar en [nuts-and-bolts-web](https://github.com/marianorluna/nuts-and-bolts-web) — ver [PRIVACY_POLICY.md](./PRIVACY_POLICY.md)
-- [ ] Declarar en política: token FCM, Firebase/Google como procesador, finalidad, controles del usuario
-- [ ] Play Console → **Seguridad de los datos**: identificadores de dispositivo, actividad en app (si aplica)
-- [ ] `.env.example`: `VITE_FEATURE_PUSH_NOTIFICATIONS=false` → `true` en v1.4.0
+- [x] Actualizar `files-test/privacy.html` → publicar en [nuts-and-bolts-web](https://github.com/marianorluna/nuts-and-bolts-web) — ver [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) _(copiar a web repo al publicar)_
+- [x] Declarar en política: token FCM, Firebase/Google como procesador, finalidad, controles del usuario
+- [ ] Play Console → **Seguridad de los datos**: identificadores de dispositivo, actividad en app (si aplica) _(manual al release)_
+- [x] `.env.example`: `VITE_FEATURE_PUSH_NOTIFICATIONS=false` → `true` en v1.4.0
 
 ### Casos de uso (este prompt)
 
@@ -357,12 +357,12 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
 
 ### Verificación
 
-- [ ] Dispositivo real: permiso concedido → token guardado en `nb_push_tokens`
-- [ ] Dos cuentas con opt-in ranking: A sube posición → B recibe push nativa en bandeja Android
+- [ ] Dispositivo real: permiso concedido → token guardado en `nb_push_tokens` _(requiere Firebase)_
+- [ ] Dos cuentas con opt-in ranking: A sube posición → B recibe push nativa en bandeja Android _(requiere Firebase)_
 - [ ] Usuario sin opt-in ranking: no recibe push de ranking
 - [ ] Desactivar toggle en Ajustes: no más push; token eliminado o marcado inactivo
 - [ ] Cerrar sesión: token borrado del servidor
-- [ ] `npm run build` y `npx cap sync` OK
+- [x] `npm run build` y `npx cap sync` OK
 - [ ] Revisión contigo → release v1.4.0
 
 ### Entregable
@@ -715,13 +715,14 @@ flowchart TB
 | 2026-07-16 | —      | Prioridad: ranking antes que audio. (Orden intermedio luego replanificado el 2026-07-17.)                   |
 | 2026-07-16 | 6      | Ranking realtime: LeaderboardScreen, opt-in, Realtime, feed, `last_played_at`, hook `rank_up`. v1.3.0 lista. |
 | 2026-07-17 | —      | Replan: push primero (7→v1.4.0, 8→v1.5.0); audio al final como Prompts 9–10 (v1.6.0 / v1.6.1). Sin A1/A2. |
+| 2026-07-17 | 7      | Push FCM: tokens, prefs, Edge Functions, UI Ajustes, aviso «te superaron». v1.4.0 lista (Firebase manual pendiente). |
 
 ---
 
 ## Próximo paso
 
-**Prompt 7:** Push infraestructura + ranking (v1.4.0). Di: _"Ejecuta el Prompt 7"_ — o publica primero v1.3.0 (ranking) en Play Store.
+**Prompt 8:** Push engagement + contenido (v1.5.0). Di: _"Ejecuta el Prompt 8"_ — o completa Firebase/`google-services.json` + deploy de Edge Functions y publica v1.4.0.
 
-**Después:** Prompt 8 (push engagement v1.5.0) → [Prompt 9 audio MVP v1.6.0](#prompt-9--audio-mvp-v160) → [Prompt 10 ambiente v1.6.1](#prompt-10--ambiente-por-etapa-v161)
+**Después:** [Prompt 9 audio MVP v1.6.0](#prompt-9--audio-mvp-v160) → [Prompt 10 ambiente v1.6.1](#prompt-10--ambiente-por-etapa-v161)
 
-**Antes de release v1.3.0:** aplicar `docs/supabase/schema-prompt6.sql` en el Dashboard y verificar Realtime en dos dispositivos.
+**Antes de release v1.4.0:** aplicar `docs/supabase/schema-push.sql`, secret `FCM_SERVICE_ACCOUNT`, `google-services.json`, deploy `send-push` + `on-rank-change`, publicar política en nuts-and-bolts-web.

@@ -174,6 +174,21 @@
     "languageEs": "Español",
     "languageEn": "English"
   },
+  "push": {
+    "title": "Notificaciones",
+    "subtitle": "Avisos en la bandeja de Android (opt-in).",
+    "needAccount": "Vincula una cuenta para activar notificaciones",
+    "master": "Permitir notificaciones",
+    "masterOn": "Activadas en este dispositivo",
+    "masterOff": "Desactivadas",
+    "rank": "Ranking",
+    "rankOn": "Aviso cuando te superen",
+    "rankOff": "Sin avisos de ranking",
+    "rankNeedsMaster": "Activa primero las notificaciones",
+    "rankNeedsLeaderboard": "Activa «Aparecer en el ranking» primero",
+    "permissionDenied": "Permiso denegado. Puedes activarlo en Ajustes del sistema.",
+    "webUnsupported": "Las notificaciones push solo están disponibles en la app Android."
+  },
   "credits": {
     "title": "Créditos",
     "madeWith": "Hecho con 💜",

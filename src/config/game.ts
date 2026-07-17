@@ -8,4 +8,7 @@ export const SUPABASE_TABLES = {
   profiles: `${SUPABASE_TABLE_PREFIX}player_profiles`,
   progress: `${SUPABASE_TABLE_PREFIX}player_progress`,
   events: `${SUPABASE_TABLE_PREFIX}leaderboard_events`,
+  pushTokens: `${SUPABASE_TABLE_PREFIX}push_tokens`,
+  notificationPreferences: `${SUPABASE_TABLE_PREFIX}notification_preferences`,
+  pushLog: `${SUPABASE_TABLE_PREFIX}push_log`,
 } as const

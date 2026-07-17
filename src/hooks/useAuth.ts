@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { clearPushOnSignOut } from '../application/pushBootstrap'
 import type { AuthUser } from '../infrastructure/contracts/AuthRepository'
 import {
   getCurrentAuthUser,
@@ -97,6 +98,10 @@ export function useAuth(): UseAuthResult {
     () =>
       runAuthAction(async () => {
         if (!infra) return
+        const currentUser = getCurrentAuthUser()
+        if (currentUser) {
+          await clearPushOnSignOut(infra, currentUser.id)
+        }
         await infra.auth.signOut()
         setBusy(false)
       }),

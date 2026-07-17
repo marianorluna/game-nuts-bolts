@@ -8,4 +8,5 @@ interface ImportMetaEnv {
   readonly VITE_GAME_ID?: string
   readonly VITE_FEATURE_CLOUD_SYNC?: string
   readonly VITE_FEATURE_LEADERBOARD?: string
+  readonly VITE_FEATURE_PUSH_NOTIFICATIONS?: string
 }

@@ -4,3 +4,8 @@ export type {
   RemotePlayerProgress,
   UpsertProgressOptions,
 } from './ProgressRepository'
+export type {
+  PushRepository,
+  NotificationPreferences,
+  PushPlatform,
+} from './PushRepository'

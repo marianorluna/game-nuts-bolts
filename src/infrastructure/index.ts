@@ -1,18 +1,25 @@
 import type { AuthRepository } from './contracts/AuthRepository'
 import type { ProgressRepository } from './contracts/ProgressRepository'
 import type { LeaderboardRepository } from './contracts/LeaderboardRepository'
-import { isCloudSyncEnabled, isLeaderboardEnabled } from './config'
+import type { PushRepository } from './contracts/PushRepository'
+import {
+  isCloudSyncEnabled,
+  isLeaderboardEnabled,
+  isPushNotificationsEnabled,
+} from './config'
 import { registerInfrastructure } from './runtime'
 import {
   createSupabaseAuthRepository,
   createSupabaseProgressRepository,
   createSupabaseLeaderboardRepository,
+  createSupabasePushRepository,
 } from './supabase'
 
 export interface Infrastructure {
   auth: AuthRepository
   progress: ProgressRepository
   leaderboard: LeaderboardRepository | null
+  push: PushRepository | null
 }
 
 export function createInfrastructure(): Infrastructure | null {
@@ -24,12 +31,19 @@ export function createInfrastructure(): Infrastructure | null {
     leaderboard: isLeaderboardEnabled()
       ? createSupabaseLeaderboardRepository()
       : null,
+    push: isPushNotificationsEnabled()
+      ? createSupabasePushRepository()
+      : null,
   }
   registerInfrastructure(infra)
   return infra
 }
 
-export { isCloudSyncEnabled, isLeaderboardEnabled } from './config'
+export {
+  isCloudSyncEnabled,
+  isLeaderboardEnabled,
+  isPushNotificationsEnabled,
+} from './config'
 export { getRegisteredInfrastructure, registerInfrastructure } from './runtime'
 export {
   completeWebOAuthCallback,
@@ -57,3 +71,8 @@ export type {
   PlayerProfileSettings,
   RankUpPayload,
 } from './contracts/LeaderboardRepository'
+export type {
+  PushRepository,
+  NotificationPreferences,
+  PushPlatform,
+} from './contracts/PushRepository'

@@ -13,3 +13,11 @@ export function isLeaderboardEnabled(): boolean {
     && import.meta.env.VITE_FEATURE_LEADERBOARD === 'true'
   )
 }
+
+/** Push FCM (Prompt 7). Requiere cloud sync activo. */
+export function isPushNotificationsEnabled(): boolean {
+  return (
+    isCloudSyncEnabled()
+    && import.meta.env.VITE_FEATURE_PUSH_NOTIFICATIONS === 'true'
+  )
+}

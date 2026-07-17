@@ -60,3 +60,4 @@ Decisiones de privacidad del producto: [BACKEND_DECISION.md](./BACKEND_DECISION.
 | ----- | ------ |
 | 2026-06-16 | Política v1: sin cuentas ni recopilación en servidor |
 | 2026-07-02 | Política v1.2: sync opcional, Supabase, ranking próximo con opt-in |
+| 2026-07-17 | Política v1.4: push FCM opt-in, token, Firebase/Google como procesador, controles en Ajustes |

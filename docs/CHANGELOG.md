@@ -79,6 +79,20 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Push alert when another player overtakes you on the leaderboard
 - Native Android notifications (opt-in)
 
+### Añadido
+
+**ES**
+
+- Infraestructura FCM + Capacitor + Supabase Edge Functions
+- Preferencias de notificaciones en Configuración
+- Push «te superaron» con rate limit 3/día
+
+**EN**
+
+- FCM + Capacitor + Supabase Edge Functions infrastructure
+- Notification preferences in Settings
+- «Overtaken» push with 3/day rate limit
+
 ### v1.5.0 (versionCode 7) — Notificaciones y recordatorios
 
 ### Previsto

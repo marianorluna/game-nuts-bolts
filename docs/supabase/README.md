@@ -2,11 +2,14 @@
 
 Proyecto Supabase **multi-juego** (`games`): tablas con prefijo `nb_` y columna `game_id` para aislar datos por juego.
 
-| Tabla                   | PK                   | Notas                          |
-| ----------------------- | -------------------- | ------------------------------ |
-| `nb_player_profiles`    | `(user_id, game_id)` | Perfil y opt-in ranking        |
-| `nb_player_progress`    | `(user_id, game_id)` | Progreso + columnas de ranking |
-| `nb_leaderboard_events` | `id`                 | Feed por `game_id` (Prompt 6)  |
+| Tabla                          | PK                            | Notas                                |
+| ------------------------------ | ----------------------------- | ------------------------------------ |
+| `nb_player_profiles`           | `(user_id, game_id)`          | Perfil y opt-in ranking              |
+| `nb_player_progress`           | `(user_id, game_id)`          | Progreso + columnas de ranking       |
+| `nb_leaderboard_events`        | `id`                          | Feed por `game_id` (Prompt 6)        |
+| `nb_push_tokens`               | `(user_id, game_id, fcm_token)` | Tokens FCM (Prompt 7)              |
+| `nb_notification_preferences`  | `(user_id, game_id)`          | Opt-in push por categoría (Prompt 7) |
+| `nb_push_log`                  | `id`                          | Rate limit de envíos (Prompt 7–8)    |
 
 **game_id de este juego:** `nuts-and-bolts` → `VITE_GAME_ID` en `.env.local`
 
@@ -26,14 +29,35 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
    VITE_GAME_ID=nuts-and-bolts
    VITE_FEATURE_CLOUD_SYNC=true
    VITE_FEATURE_LEADERBOARD=true
+   VITE_FEATURE_PUSH_NOTIFICATIONS=true
    ```
-
+    30|
 ## Prompt 6 — Ranking realtime
 
 1. Si el esquema Prompt 1 ya estaba aplicado: ejecutar [schema-prompt6.sql](./schema-prompt6.sql) (añade `last_played_at` + Realtime).
 2. Proyecto nuevo: [schema.sql](./schema.sql) ya incluye Realtime y `last_played_at`.
 3. `.env.local`: `VITE_FEATURE_LEADERBOARD=true`.
 4. Verificar: dos cuentas con opt-in → completar nivel en una → la otra ve el cambio en <3 s.
+
+## Prompt 7 — Push FCM (ranking)
+
+1. Si el esquema anterior ya estaba aplicado: ejecutar [schema-push.sql](./schema-push.sql).
+2. Proyecto nuevo: [schema.sql](./schema.sql) ya incluye tablas push.
+3. **Firebase Console**
+   - Crear/vincular proyecto al package `com.nutsandbolts.puzzle`.
+   - Descargar `google-services.json` → `android/app/` (gitignored).
+   - Crear Service Account con rol Firebase Cloud Messaging Admin → JSON.
+4. **Supabase secrets** (Dashboard → Edge Functions → Secrets, o CLI):
+   ```
+   supabase secrets set FCM_SERVICE_ACCOUNT="$(cat path/to/service-account.json)"
+   ```
+5. **Deploy Edge Functions**:
+   ```
+   supabase functions deploy send-push
+   supabase functions deploy on-rank-change
+   ```
+6. `.env.local`: `VITE_FEATURE_PUSH_NOTIFICATIONS=true`.
+7. Verificar en dispositivo real: permiso → token en `nb_push_tokens`; dos cuentas con opt-in ranking + toggle Ranking → A sube → B recibe push.
 
 ## Verificación RLS
 
