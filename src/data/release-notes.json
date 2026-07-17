@@ -322,42 +322,50 @@
       }
     },
     {
-      "version": "1.3.0",
-      "versionCode": 5,
+      "version": "1.4.0",
+      "versionCode": 6,
       "date": null,
       "published": false,
       "title": {
-        "es": "Ranking global",
-        "en": "Global leaderboard"
+        "es": "Notificaciones de ranking",
+        "en": "Ranking notifications"
       },
       "highlights": {
         "es": [
-          "Ranking global en tiempo real",
-          "Opt-in para aparecer en la tabla (desactivado por defecto)",
-          "Tu posición en la pantalla de inicio"
+          "Aviso push cuando otro jugador te supera en el ranking",
+          "Notificaciones nativas de Android (opt-in)"
         ],
         "en": [
-          "Real-time global leaderboard",
-          "Opt-in to appear on the table (off by default)",
-          "Your rank on the home screen"
-        ]
-      },
-      "added": {
-        "es": [
-          "LeaderboardScreen con top jugadores",
-          "Feed de eventos recientes",
-          "Supabase Realtime"
-        ],
-        "en": [
-          "LeaderboardScreen with top players",
-          "Recent events feed",
-          "Supabase Realtime"
+          "Push alert when another player overtakes you on the leaderboard",
+          "Native Android notifications (opt-in)"
         ]
       }
     },
     {
-      "version": "1.3.1",
-      "versionCode": 6,
+      "version": "1.5.0",
+      "versionCode": 7,
+      "date": null,
+      "published": false,
+      "title": {
+        "es": "Notificaciones y recordatorios",
+        "en": "Notifications and reminders"
+      },
+      "highlights": {
+        "es": [
+          "Recordatorio si llevas días sin jugar",
+          "Aviso de nueva versión y contenido",
+          "Preferencias granulares en Configuración"
+        ],
+        "en": [
+          "Reminder if you have not played in a few days",
+          "New version and content alerts",
+          "Granular preferences in Settings"
+        ]
+      }
+    },
+    {
+      "version": "1.6.0",
+      "versionCode": 8,
       "date": null,
       "published": false,
       "title": {
@@ -378,28 +386,8 @@
       }
     },
     {
-      "version": "1.4.0",
-      "versionCode": 7,
-      "date": null,
-      "published": false,
-      "title": {
-        "es": "Notificaciones de ranking",
-        "en": "Ranking notifications"
-      },
-      "highlights": {
-        "es": [
-          "Aviso push cuando otro jugador te supera en el ranking",
-          "Notificaciones nativas de Android (opt-in)"
-        ],
-        "en": [
-          "Push alert when another player overtakes you on the leaderboard",
-          "Native Android notifications (opt-in)"
-        ]
-      }
-    },
-    {
-      "version": "1.4.1",
-      "versionCode": 8,
+      "version": "1.6.1",
+      "versionCode": 9,
       "date": null,
       "published": false,
       "title": {
@@ -416,28 +404,6 @@
           "Different music for each workshop stage",
           "Music and sound effect volume controls",
           "Sounds when syncing your cloud progress"
-        ]
-      }
-    },
-    {
-      "version": "1.5.0",
-      "versionCode": 9,
-      "date": null,
-      "published": false,
-      "title": {
-        "es": "Notificaciones y recordatorios",
-        "en": "Notifications and reminders"
-      },
-      "highlights": {
-        "es": [
-          "Recordatorio si llevas días sin jugar",
-          "Aviso de nueva versión y contenido",
-          "Preferencias granulares en Configuración"
-        ],
-        "en": [
-          "Reminder if you have not played in a few days",
-          "New version and content alerts",
-          "Granular preferences in Settings"
         ]
       }
     }

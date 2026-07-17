@@ -91,8 +91,8 @@ Documentación técnica, scripts de release y guía de Play Store:
 - [docs/README.md](docs/README.md) — índice de documentación
 - [docs/SCRIPTS.md](docs/SCRIPTS.md) — comandos npm y flujo de release
 - [docs/PLAYSTORE.md](docs/PLAYSTORE.md) — publicación en Android
-- [docs/SOCIAL_FEATURES_ROADMAP.md](docs/SOCIAL_FEATURES_ROADMAP.md) — ranking y social (siguiente: v1.3.0)
-- [docs/AUDIO_ROADMAP.md](docs/AUDIO_ROADMAP.md) — plan de audio (v1.3.1 / v1.4.1, tras ranking)
+- [docs/SOCIAL_FEATURES_ROADMAP.md](docs/SOCIAL_FEATURES_ROADMAP.md) — ranking y social (siguiente: Prompt 7 / push v1.4.0)
+- [docs/AUDIO_ROADMAP.md](docs/AUDIO_ROADMAP.md) — plan de audio (Prompts 9–10 / v1.6.0–v1.6.1, tras push)
 
 ### Stack
 

@@ -34,18 +34,18 @@
 | [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md)           | Migración jugadores beta (offline-first; planes A/B/C opcionales) |
 | [PLAYSTORE.md](./PLAYSTORE.md)                             | Guía paso a paso para publicar en Google Play                   |
 
-**Estado:** Prompts 0–6 ✅ · **Siguiente: Prompt A1 (audio v1.3.1)** · Backend: Supabase
+**Estado:** Prompts 0–6 ✅ · **Siguiente: Prompt 7 (push v1.4.0)** · Backend: Supabase
 
 ## Audio y música ambiente
 
 | Documento                              | Descripción                                                      |
 | -------------------------------------- | ---------------------------------------------------------------- |
-| [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) | **Prompts A1–A2** — SFX ampliados, música ambiente, volumen, APK |
+| [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) | **Prompts 9–10** — SFX ampliados, música ambiente, volumen, APK |
 | [AUDIO_CREDITS.md](./AUDIO_CREDITS.md) | Licencias y procedencia de archivos en `public/audio/`           |
 
-**Estado:** v1.2.1 sin assets de audio (SFX procedural) · Prompt A1 (v1.3.1) ⬜ _tras ranking_ · Prompt A2 (v1.4.1) ⬜
+**Estado:** v1.2.1 sin assets de audio (SFX procedural) · Prompt 9 (v1.6.0) ⬜ _tras push_ · Prompt 10 (v1.6.1) ⬜
 
-**Prompts copiables:** integrados en [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md) (secciones A1 y A2).
+**Prompts copiables:** integrados en [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md) (secciones Prompt 9 y 10).
 
 ## Publicación
 

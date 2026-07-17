@@ -1,10 +1,10 @@
 # Roadmap: audio y música ambiente
 
-Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md). Cada prompt se ejecuta en el chat (ej. _"Ejecuta el Prompt A1"_), se verifica contigo y solo entonces se pasa al siguiente.
+Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md). Cada prompt se ejecuta en el chat (ej. _"Ejecuta el Prompt 9"_), se verifica contigo y solo entonces se pasa al siguiente.
 
 **Estado actual (v1.2.1 en producción):** todos los efectos son **procedurales** (Web Audio API) en [`src/services/soundService.ts`](../src/services/soundService.ts). No hay archivos `.mp3` / `.ogg` en el repo. Configuración: un único toggle `soundEnabled` en Ajustes.
 
-**Prioridad:** el audio va **después del ranking (Prompt 6 / v1.3.0)**. No empezar A1 hasta publicar el leaderboard.
+**Prioridad:** el audio va **después del push** (tras Prompt 8 / v1.5.0). No empezar Prompt 9 hasta cerrar notificaciones.
 
 **Documentos relacionados:** [SCRIPTS.md](./SCRIPTS.md) (release) · [CHANGELOG.md](./CHANGELOG.md) · [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md)
 
@@ -14,8 +14,8 @@ Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROA
 
 | Prompt | Versión | Descripción | Estado |
 | ------ | ------- | ----------- | ------ |
-| [A1](#prompt-a1--audio-mvp-v131) | **v1.3.1** | SFX ampliados + música ambiente básica + toggles | ⬜ Pendiente _(tras ranking)_ |
-| [A2](#prompt-a2--ambiente-por-etapa-v141) | **v1.4.1** | Música por etapa + volumen + SFX de sync | ⬜ Pendiente |
+| [9](#prompt-9--audio-mvp-v160) | **v1.6.0** | SFX ampliados + música ambiente básica + toggles | ⬜ Pendiente _(tras push)_ |
+| [10](#prompt-10--ambiente-por-etapa-v161) | **v1.6.1** | Música por etapa + volumen + SFX de sync | ⬜ Pendiente |
 
 **Leyenda:** ⬜ Pendiente · 🔄 En curso · ✅ Completado
 
@@ -28,13 +28,13 @@ Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROA
 | Versión | Audio (este doc) | Social / otras ([SOCIAL_FEATURES_ROADMAP](./SOCIAL_FEATURES_ROADMAP.md)) |
 | ------- | ---------------- | ------------------------------------------------------------------------ |
 | **v1.2.1** ✅ | Sin assets (SFX procedural) | Cuenta + sync + retos/medallas — **publicado** |
-| **v1.3.0** | — | **Prompt 6** — ranking en vivo ← **siguiente** |
-| **v1.3.1** | **Prompt A1** — audio MVP | — |
-| **v1.4.0** | — | **Prompt 7** — push «te superaron» |
-| **v1.4.1** | **Prompt A2** — ambiente por etapa | — |
+| **v1.3.0** | — | **Prompt 6** — ranking en vivo |
+| **v1.4.0** | — | **Prompt 7** — push «te superaron» ← **siguiente** |
 | **v1.5.0** | — | **Prompt 8** — push engagement |
+| **v1.6.0** | **Prompt 9** — audio MVP | — |
+| **v1.6.1** | **Prompt 10** — ambiente por etapa | — |
 
-> **Nota (2026-07-16):** A1 se planificó originalmente para v1.2.1; esa versión salió con cuenta + retos. Audio queda en **v1.3.1** tras el ranking.
+> **Nota (2026-07-17):** Audio dejó de intercalarse entre ranking y push. Prompts 9–10 (antes A1/A2) quedan al final: **v1.6.0** / **v1.6.1**.
 
 ---
 
@@ -85,29 +85,29 @@ Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROA
 | Concepto | Enfoque | Estimación |
 | -------- | ------- | ---------- |
 | SFX | Procedural (Web Audio) | ~0 MB assets |
-| Música menú + partida (A1) | 1–2 loops **OGG**, mono, 64–96 kbps, 45–90 s | **~0,6–1,6 MB** |
-| Música por etapa (A2) | +3 loops OGG optimizados | **~+1–2 MB** |
+| Música menú + partida (Prompt 9) | 1–2 loops **OGG**, mono, 64–96 kbps, 45–90 s | **~0,6–1,6 MB** |
+| Música por etapa (Prompt 10) | +3 loops OGG optimizados | **~+1–2 MB** |
 
 ---
 
 ## Cómo usar este documento
 
-1. Tras publicar **v1.3.0** (Prompt 6 — ranking), di: **"Ejecuta el Prompt A1"**
-2. O copia el bloque **«Texto para copiar en el chat»** de [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md#prompt-a1--audio-mvp-v131)
+1. Tras publicar **v1.5.0** (Prompt 8 — push engagement), di: **"Ejecuta el Prompt 9"**
+2. O copia el bloque **«Texto para copiar en el chat»** de [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md#prompt-9--audio-mvp-v160)
 3. Al terminar, marca las checkboxes del prompt
 4. Cambia el estado en la tabla de avance (⬜ → ✅) en ambos roadmaps
-5. Bump `package.json` → `1.3.1`, `versionCode` 6, scaffold en `release-notes.json`, `npm run release:prepare`
+5. Bump `package.json` → `1.6.0`, `versionCode` 8, scaffold en `release-notes.json`, `npm run release:prepare`
 6. Añade fecha en la sección **Historial** al final
 
 ---
 
-## Prompt A1 — Audio MVP (v1.3.1)
+## Prompt 9 — Audio MVP (v1.6.0)
 
-**Comando en chat:** `Ejecuta el Prompt A1`
+**Comando en chat:** `Ejecuta el Prompt 9`
 
-**Versión:** v1.3.1 (`versionCode` 6)
+**Versión:** v1.6.0 (`versionCode` 8)
 
-**Prerequisito:** Ranking v1.3.0 publicado (Prompt 6).
+**Prerequisito:** Push engagement v1.5.0 publicado (Prompt 8).
 
 **Objetivo:** Ampliar feedback sonoro sin inflar el APK; introducir música ambiente opcional con dos loops.
 
@@ -163,8 +163,8 @@ Extender `SoundType` y llamadas desde store/UI:
 - [ ] APK release: tamaño total sube < 2 MB vs build sin audio
 - [ ] `docs/AUDIO_CREDITS.md` completo
 - [ ] `npm run build` y prueba en dispositivo real (autoplay tras primer tap)
-- [ ] `release-notes.json` + `npm run release:prepare` para v1.3.1
-- [ ] Revisión contigo antes de Prompt A2
+- [ ] `release-notes.json` + `npm run release:prepare` para v1.6.0
+- [ ] Revisión contigo antes de Prompt 10
 
 ### Highlights sugeridos (modal «Novedades»)
 
@@ -182,13 +182,13 @@ Extender `SoundType` y llamadas desde store/UI:
 
 ---
 
-## Prompt A2 — Ambiente por etapa (v1.4.1)
+## Prompt 10 — Ambiente por etapa (v1.6.1)
 
-**Comando en chat:** `Ejecuta el Prompt A2`
+**Comando en chat:** `Ejecuta el Prompt 10`
 
-**Versión:** v1.4.1 (`versionCode` 8)
+**Versión:** v1.6.1 (`versionCode` 9)
 
-**Prerequisito:** Prompt A1 completado (v1.3.1 publicada).
+**Prerequisito:** Prompt 9 completado (v1.6.0 publicada).
 
 **Objetivo:** Ambiente distinto por etapa de campaña, control de volumen y SFX de cuenta/sync.
 
@@ -236,8 +236,8 @@ Mapeo sugerido (Campaña *El Taller*):
 - [ ] Cambio de etapa en campaña actualiza música con crossfade
 - [ ] Sliders de volumen afectan en tiempo real
 - [ ] Sync exitoso/fallido audible solo con SFX ON
-- [ ] Sin regresión en toggles de A1
-- [ ] `release-notes.json` + release v1.4.1
+- [ ] Sin regresión en toggles de Prompt 9
+- [ ] `release-notes.json` + release v1.6.1
 - [ ] Revisión contigo → cierre del roadmap de audio
 
 ### Highlights sugeridos (modal «Novedades»)
@@ -256,7 +256,7 @@ Mapeo sugerido (Campaña *El Taller*):
 
 ---
 
-## Arquitectura objetivo (tras A2)
+## Arquitectura objetivo (tras Prompt 10)
 
 ```mermaid
 flowchart TB
@@ -298,7 +298,7 @@ flowchart TB
 | Autoplay bloqueado en Android | Iniciar música tras primer `pointerdown` / tap del usuario |
 | Música + SFX compiten | Volumen música < SFX; ducking opcional al reproducir `win` |
 | Licencia incorrecta | Solo CC0/royalty-free; `AUDIO_CREDITS.md` obligatorio |
-| Solapamiento ranking + audio | Ranking en v1.3.0; A1 en v1.3.1 (releases separadas) |
+| Solapamiento push + audio | Push en v1.4.0–v1.5.0; Prompt 9 en v1.6.0 (releases separadas) |
 | Usuario legacy solo con `soundEnabled` | Migración en `persist` al hidratar settings |
 
 ---
@@ -308,14 +308,15 @@ flowchart TB
 | Fecha | Prompt | Notas |
 | ----- | ------ | ----- |
 | 2026-07-03 | — | Roadmap creado. Decisión original: A1 → v1.2.1, A2 → v1.3.1. |
-| 2026-07-16 | — | Replan: v1.2.1 = cuenta+retos (sin audio). A1 → **v1.3.1** tras ranking; A2 → **v1.4.1**. |
+| 2026-07-16 | — | Replan intermedio: A1 → v1.3.1 tras ranking; A2 → v1.4.1. |
+| 2026-07-17 | — | Replan: audio al final como **Prompt 9** (v1.6.0) y **Prompt 10** (v1.6.1); sin A1/A2. Push primero. |
 
 ---
 
 ## Próximo paso (audio)
 
-**Ahora no:** primero [Prompt 6 — ranking v1.3.0](./SOCIAL_FEATURES_ROADMAP.md#prompt-6--ranking-realtime).
+**Ahora no:** primero [Prompt 7 — push v1.4.0](./SOCIAL_FEATURES_ROADMAP.md#prompt-7--push-infraestructura--ranking) y [Prompt 8 — engagement v1.5.0](./SOCIAL_FEATURES_ROADMAP.md#prompt-8--push-engagement--contenido).
 
-**Cuando toque audio:** di _"Ejecuta el Prompt A1"_ o pega el texto de [Prompt A1](./SOCIAL_FEATURES_ROADMAP.md#prompt-a1--audio-mvp-v131) (v1.3.1).
+**Cuando toque audio:** di _"Ejecuta el Prompt 9"_ o pega el texto de [Prompt 9](./SOCIAL_FEATURES_ROADMAP.md#prompt-9--audio-mvp-v160) (v1.6.0).
 
-**Después:** [Prompt A2](./SOCIAL_FEATURES_ROADMAP.md#prompt-a2--ambiente-por-etapa-v141) (ambiente v1.4.1).
+**Después:** [Prompt 10](./SOCIAL_FEATURES_ROADMAP.md#prompt-10--ambiente-por-etapa-v161) (ambiente v1.6.1).

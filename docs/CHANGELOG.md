@@ -27,37 +27,75 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 ## [Unreleased] — Planificado
 
-### v1.3.0 (versionCode 5) — Ranking global
+### v1.3.0 (versionCode 5) — Ranking global en vivo
 
 ### Previsto
 
 **ES**
 
-- Ranking global en tiempo real
-- Opt-in para aparecer en la tabla (desactivado por defecto)
-- Tu posición en la pantalla de inicio
+- Ranking global con actualizaciones en tiempo real
+- Aparece en el ranking solo si lo activas (privado por defecto)
+- Tu posición en el inicio y feed de actividad reciente
+- Sigue funcionando sin red con el último ranking guardado
 
 **EN**
 
-- Real-time global leaderboard
-- Opt-in to appear on the table (off by default)
-- Your rank on the home screen
+- Global leaderboard with real-time updates
+- Appear on the ranking only if you opt in (private by default)
+- Your position on Home plus a recent activity feed
+- Works offline with the last cached ranking
 
 ### Añadido
 
 **ES**
 
-- LeaderboardScreen con top jugadores
-- Feed de eventos recientes
-- Supabase Realtime
+- Pantalla de ranking con top jugadores y posición propia
+- Toggle «Aparecer en el ranking» (default off)
+- Supabase Realtime en progreso y eventos
+- Feed de eventos (nivel, subida de puesto, opt-in)
+- Columna last_played_at para re-engagement futuro
+- Hook rank_up preparado para notificaciones push
 
 **EN**
 
-- LeaderboardScreen with top players
-- Recent events feed
-- Supabase Realtime
+- Leaderboard screen with top players and your own rank
+- «Appear on the leaderboard» toggle (default off)
+- Supabase Realtime on progress and events
+- Event feed (level, rank up, opt-in)
+- last_played_at column for future re-engagement
+- rank_up hook ready for push notifications
 
-### v1.3.1 (versionCode 6) — Audio y música ambiente
+### v1.4.0 (versionCode 6) — Notificaciones de ranking
+
+### Previsto
+
+**ES**
+
+- Aviso push cuando otro jugador te supera en el ranking
+- Notificaciones nativas de Android (opt-in)
+
+**EN**
+
+- Push alert when another player overtakes you on the leaderboard
+- Native Android notifications (opt-in)
+
+### v1.5.0 (versionCode 7) — Notificaciones y recordatorios
+
+### Previsto
+
+**ES**
+
+- Recordatorio si llevas días sin jugar
+- Aviso de nueva versión y contenido
+- Preferencias granulares en Configuración
+
+**EN**
+
+- Reminder if you have not played in a few days
+- New version and content alerts
+- Granular preferences in Settings
+
+### v1.6.0 (versionCode 8) — Audio y música ambiente
 
 ### Previsto
 
@@ -73,21 +111,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Sound effects and music can be toggled separately in Settings
 - New effects: locked bolts, nut blocks, stars, and more
 
-### v1.4.0 (versionCode 7) — Notificaciones de ranking
-
-### Previsto
-
-**ES**
-
-- Aviso push cuando otro jugador te supera en el ranking
-- Notificaciones nativas de Android (opt-in)
-
-**EN**
-
-- Push alert when another player overtakes you on the leaderboard
-- Native Android notifications (opt-in)
-
-### v1.4.1 (versionCode 8) — Ambiente por etapa
+### v1.6.1 (versionCode 9) — Ambiente por etapa
 
 ### Previsto
 
@@ -102,22 +126,6 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Different music for each workshop stage
 - Music and sound effect volume controls
 - Sounds when syncing your cloud progress
-
-### v1.5.0 (versionCode 9) — Notificaciones y recordatorios
-
-### Previsto
-
-**ES**
-
-- Recordatorio si llevas días sin jugar
-- Aviso de nueva versión y contenido
-- Preferencias granulares en Configuración
-
-**EN**
-
-- Reminder if you have not played in a few days
-- New version and content alerts
-- Granular preferences in Settings
 
 ---
 

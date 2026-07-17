@@ -8,7 +8,7 @@ Solo se permiten archivos con licencia **CC0**, dominio público o **royalty-fre
 
 ## Archivos actuales
 
-_Ninguno — v1.2.1 usa únicamente sonidos procedurales en `src/services/soundService.ts` (sin assets). Audio MVP previsto en v1.3.1 (Prompt A1)._
+_Ninguno — v1.2.1 usa únicamente sonidos procedurales en `src/services/soundService.ts` (sin assets). Audio MVP previsto en v1.6.0 (Prompt 9)._
 
 ---
 
@@ -24,7 +24,7 @@ _Ninguno — v1.2.1 usa únicamente sonidos procedurales en `src/services/soundS
 | Fuente | URL |
 | Licencia | CC0 / … |
 | Fecha añadido | YYYY-MM-DD |
-| Prompt | A1 / A2 |
+| Prompt | 9 / 10 |
 ```
 
 ---

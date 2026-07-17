@@ -46,6 +46,7 @@ Edita aquí para probar el texto; cuando esté listo, copia el mismo contenido a
 | v1.2.1 | Cuenta opcional (Google / email), sync de progreso vía Supabase _(incluye v1.2.0)_ |
 | v1.3.0 | Ranking global con opt-in (`show_in_leaderboard`, default off) |
 | v1.4.0 | Push FCM opt-in (aviso «te superaron» en ranking) |
+| v1.5.0 | Push engagement (re-engagement, updates, racha, hitos; preferencias granulares) |
 
 Decisiones de privacidad del producto: [BACKEND_DECISION.md](./BACKEND_DECISION.md#privacidad-y-ranking) · Roadmap: [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md)
 
