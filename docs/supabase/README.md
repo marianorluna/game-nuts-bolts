@@ -91,9 +91,10 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
    **Secrets del repo** (Settings → Secrets and variables → Actions):
    - `SUPABASE_URL` — ej. `https://xxxx.supabase.co`
    - `CRON_SECRET` — el mismo valor que en Supabase Edge Function secrets
+   - `SUPABASE_SERVICE_ROLE_KEY` — Project Settings → API → `service_role` (el gateway exige JWT)
 
    Tras el push a `main`: Actions → **Push engagement crons** → **Run workflow** (prueba manual).
-   Body: `{ "gameId": "nuts-and-bolts" }` + header `x-cron-secret`.
+   Headers: `Authorization: Bearer …` + `x-cron-secret` + body `{ "gameId": "nuts-and-bolts" }`.
 
 6. **Tras publicar un AAB** — aviso de nueva versión (manual / GH Action):
    ```bash

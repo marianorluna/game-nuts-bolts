@@ -1,5 +1,5 @@
 # Invoca Edge Functions de engagement push (Prompt 8).
-# Requiere secrets del repo: SUPABASE_URL, CRON_SECRET (mismo valor que en Supabase).
+# Secrets del repo: SUPABASE_URL, CRON_SECRET, SUPABASE_SERVICE_ROLE_KEY
 name: Push engagement crons
 
 on:
@@ -44,13 +44,15 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           FN: ${{ steps.fn.outputs.name }}
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$CRON_SECRET" ]; then
-            echo "Missing SUPABASE_URL or CRON_SECRET repo secrets" >&2
+          if [ -z "$SUPABASE_URL" ] || [ -z "$CRON_SECRET" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "Missing SUPABASE_URL, CRON_SECRET or SUPABASE_SERVICE_ROLE_KEY repo secrets" >&2
             exit 1
           fi
           curl -fsS -X POST "${SUPABASE_URL%/}/functions/v1/${FN}" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
             -H "x-cron-secret: ${CRON_SECRET}" \
             -H "Content-Type: application/json" \
             -d '{"gameId":"nuts-and-bolts"}'
