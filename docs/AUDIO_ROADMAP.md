@@ -29,9 +29,9 @@ Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROA
 | ------- | ---------------- | ------------------------------------------------------------------------ |
 | **v1.2.1** ✅ | Sin assets (SFX procedural) | Cuenta + sync + retos/medallas — **publicado** |
 | **v1.3.0** | — | **Prompt 6** — ranking en vivo |
-| **v1.4.0** | — | **Prompt 7** — push «te superaron» ← **siguiente** |
-| **v1.5.0** | — | **Prompt 8** — push engagement |
-| **v1.6.0** | **Prompt 9** — audio MVP | — |
+| **v1.4.0** | — | **Prompt 7** — push «te superaron» |
+| **v1.5.0** | — | **Prompt 8** — push engagement ← **código listo; siguiente release** |
+| **v1.6.0** | **Prompt 9** — audio MVP ← **siguiente tras v1.5.0** | — |
 | **v1.6.1** | **Prompt 10** — ambiente por etapa | — |
 
 > **Nota (2026-07-17):** Audio dejó de intercalarse entre ranking y push. Prompts 9–10 (antes A1/A2) quedan al final: **v1.6.0** / **v1.6.1**.

@@ -5,6 +5,11 @@ import {
   parseServiceAccount,
   sendFcmMessage,
 } from '../_shared/fcm.ts'
+import {
+  evaluatePushRateLimit,
+  isEngagementType,
+  RANK_OVERTAKEN_TYPE,
+} from '../_shared/pushRateLimit.ts'
 
 interface SendPushBody {
   userId: string
@@ -15,54 +20,102 @@ interface SendPushBody {
   data?: Record<string, string>
 }
 
+function jsonResponse(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
+  })
+}
+
+function channelForType(type: string): string {
+  if (type === RANK_OVERTAKEN_TYPE || type === 'weekly_summary') {
+    return 'rank_alerts'
+  }
+  return 'engagement'
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders() })
   }
 
   try {
-    const authHeader = req.headers.get('Authorization')
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
-      })
-    }
+    const authHeader = req.headers.get('Authorization') ?? ''
+    const cronSecret = Deno.env.get('CRON_SECRET')
+    const cronHeader = req.headers.get('x-cron-secret')
+    const isCron = Boolean(cronSecret && cronHeader && cronHeader === cronSecret)
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!
 
-    // Verifica JWT del caller (usuario o service role interno)
-    const userClient = createClient(supabaseUrl, anonKey, {
-      global: { headers: { Authorization: authHeader } },
-    })
-    const { data: userData, error: userError } = await userClient.auth.getUser()
     const isServiceRole = authHeader.includes(serviceKey)
-    if (!isServiceRole && (userError || !userData.user)) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
+    let userIdFromJwt: string | null = null
+
+    if (!isCron && !isServiceRole) {
+      if (!authHeader) return jsonResponse({ error: 'Unauthorized' }, 401)
+      const userClient = createClient(supabaseUrl, anonKey, {
+        global: { headers: { Authorization: authHeader } },
       })
+      const { data: userData, error: userError } = await userClient.auth.getUser()
+      if (userError || !userData.user) {
+        return jsonResponse({ error: 'Unauthorized' }, 401)
+      }
+      userIdFromJwt = userData.user.id
     }
 
     const payload = (await req.json()) as SendPushBody
     if (!payload.userId || !payload.gameId || !payload.type || !payload.title || !payload.body) {
-      return new Response(JSON.stringify({ error: 'Missing fields' }), {
-        status: 400,
-        headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
-      })
+      return jsonResponse({ error: 'Missing fields' }, 400)
     }
 
-    // Solo service role o el propio usuario puede pedir push a sí mismo (tools internos usan service)
-    if (!isServiceRole && userData.user?.id !== payload.userId) {
-      return new Response(JSON.stringify({ error: 'Forbidden' }), {
-        status: 403,
-        headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
-      })
+    if (
+      !isCron
+      && !isServiceRole
+      && userIdFromJwt !== payload.userId
+    ) {
+      return jsonResponse({ error: 'Forbidden' }, 403)
     }
 
     const admin = createClient(supabaseUrl, serviceKey)
+
+    // Rate limit via nb_push_log
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+    const { data: sameTypeRows, error: sameErr } = await admin
+      .from('nb_push_log')
+      .select('created_at')
+      .eq('user_id', payload.userId)
+      .eq('game_id', payload.gameId)
+      .eq('type', payload.type)
+      .order('created_at', { ascending: false })
+      .limit(20)
+
+    if (sameErr) throw sameErr
+
+    let engagementWeekLogs: string[] = []
+    if (isEngagementType(payload.type)) {
+      const { data: engRows, error: engErr } = await admin
+        .from('nb_push_log')
+        .select('created_at, type')
+        .eq('user_id', payload.userId)
+        .eq('game_id', payload.gameId)
+        .gte('created_at', weekAgo)
+        .neq('type', RANK_OVERTAKEN_TYPE)
+
+      if (engErr) throw engErr
+      engagementWeekLogs = (engRows ?? []).map((r) => r.created_at as string)
+    }
+
+    const rate = evaluatePushRateLimit({
+      type: payload.type,
+      sameTypeLogs: (sameTypeRows ?? []).map((r) => r.created_at as string),
+      engagementWeekLogs,
+    })
+
+    if (!rate.allowed) {
+      return jsonResponse({ sent: 0, reason: rate.reason })
+    }
+
     const { data: tokens, error: tokenError } = await admin
       .from('nb_push_tokens')
       .select('fcm_token')
@@ -71,10 +124,7 @@ Deno.serve(async (req) => {
 
     if (tokenError) throw tokenError
     if (!tokens?.length) {
-      return new Response(JSON.stringify({ sent: 0, reason: 'no_tokens' }), {
-        status: 200,
-        headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
-      })
+      return jsonResponse({ sent: 0, reason: 'no_tokens' })
     }
 
     const saRaw = Deno.env.get('FCM_SERVICE_ACCOUNT')
@@ -84,6 +134,7 @@ Deno.serve(async (req) => {
 
     let sent = 0
     const errors: string[] = []
+    const channelId = channelForType(payload.type)
     for (const row of tokens) {
       try {
         await sendFcmMessage(sa, accessToken, {
@@ -94,6 +145,7 @@ Deno.serve(async (req) => {
             type: payload.type,
             ...(payload.data ?? {}),
           },
+          channelId,
         })
         sent += 1
       } catch (err) {
@@ -109,15 +161,9 @@ Deno.serve(async (req) => {
       })
     }
 
-    return new Response(JSON.stringify({ sent, errors }), {
-      status: 200,
-      headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
-    })
+    return jsonResponse({ sent, errors })
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
-    return new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
-    })
+    return jsonResponse({ error: message }, 500)
   }
 })

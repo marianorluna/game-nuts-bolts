@@ -3,6 +3,10 @@ import {
   buildMovesTiebreakKey,
   deriveRankingStats,
 } from '../../domain/progress'
+import {
+  nextDailyStreak,
+  utcDateString,
+} from '../../domain/push/streakAndMilestones'
 import { GAME_ID, SUPABASE_TABLES } from '../../config/game'
 import type {
   ProgressRepository,
@@ -47,7 +51,8 @@ function mapRow(row: ProgressRow): RemotePlayerProgress {
 
 function buildProgressRow(
   progress: PlayerProgress,
-  options?: UpsertProgressOptions,
+  options: UpsertProgressOptions | undefined,
+  streak: { currentStreak: number; lastStreakDate: string },
 ): Record<string, unknown> {
   const stats = deriveRankingStats(progress)
   const row: Record<string, unknown> = {
@@ -59,6 +64,8 @@ function buildProgressRow(
     moves_tiebreak_key: buildMovesTiebreakKey(progress),
     total_best_moves: stats.totalBestMoves,
     last_played_at: new Date().toISOString(),
+    current_streak: streak.currentStreak,
+    last_streak_date: streak.lastStreakDate,
   }
   if (options && 'rankSnapshotAt' in options) {
     row.rank_snapshot_at = options.rankSnapshotAt ?? null
@@ -86,7 +93,22 @@ export function createSupabaseProgressRepository(): ProgressRepository {
     },
 
     async upsert(userId, progress, options) {
-      const row = buildProgressRow(progress, options)
+      const { data: existing, error: fetchError } = await supabase
+        .from(SUPABASE_TABLES.progress)
+        .select('current_streak, last_streak_date')
+        .eq('user_id', userId)
+        .eq('game_id', GAME_ID)
+        .maybeSingle()
+
+      if (fetchError) throw fetchError
+
+      const streak = nextDailyStreak(
+        Number(existing?.current_streak) || 0,
+        (existing?.last_streak_date as string | null) ?? null,
+        utcDateString(),
+      )
+
+      const row = buildProgressRow(progress, options, streak)
       const { error } = await supabase.from(SUPABASE_TABLES.progress).upsert(
         {
           user_id: userId,

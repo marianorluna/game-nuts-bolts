@@ -51,6 +51,8 @@ create table public.nb_player_progress (
   total_best_moves integer not null default 0 check (total_best_moves >= 0),
   rank_snapshot_at timestamptz,
   last_played_at timestamptz,
+  current_streak integer not null default 0 check (current_streak >= 0),
+  last_streak_date date,
   updated_at timestamptz not null default now(),
   primary key (user_id, game_id),
   foreign key (user_id, game_id)
@@ -60,6 +62,10 @@ create table public.nb_player_progress (
 
 comment on column public.nb_player_progress.last_played_at is
   'Última sync exitosa de progreso. Alimenta push re-engagement (Prompt 8).';
+comment on column public.nb_player_progress.current_streak is
+  'Días consecutivos con sync exitosa (Prompt 8 daily_streak).';
+comment on column public.nb_player_progress.last_streak_date is
+  'Fecha UTC del último día contado en la racha.';
 
 comment on column public.nb_player_progress.levels is
   'Record<number, LevelProgress> — stars, bestMoves, completed por nivel.';
@@ -127,15 +133,22 @@ create index nb_push_tokens_user_game_idx
 create table public.nb_notification_preferences (
   user_id uuid not null references auth.users (id) on delete cascade,
   game_id text not null check (char_length(game_id) between 1 and 64),
-  push_enabled boolean not null default false,
-  rank_overtaken boolean not null default false,
+  push_enabled boolean not null default true,
+  rank_overtaken boolean not null default true,
+  re_engagement boolean not null default true,
+  app_updates boolean not null default true,
+  new_content boolean not null default true,
+  daily_streak boolean not null default true,
+  weekly_summary boolean not null default true,
+  milestones boolean not null default true,
+  sync_reminder boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   primary key (user_id, game_id)
 );
 
 comment on table public.nb_notification_preferences is
-  'Preferencias push. push_enabled=master; rank_overtaken requiere también show_in_leaderboard.';
+  'Preferencias push (opt-out). push_enabled=master; categorías on por defecto; desactivar en Ajustes.';
 
 create table public.nb_push_log (
   id uuid primary key default gen_random_uuid(),
@@ -150,6 +163,24 @@ comment on table public.nb_push_log is
 
 create index nb_push_log_rate_idx
   on public.nb_push_log (user_id, game_id, type, created_at desc);
+
+create table public.nb_content_announcements (
+  id uuid primary key default gen_random_uuid(),
+  game_id text not null check (char_length(game_id) between 1 and 64),
+  title text not null check (char_length(title) between 1 and 120),
+  body text not null check (char_length(body) between 1 and 500),
+  kind text not null check (kind in ('levels', 'seasonal', 'changelog')),
+  active boolean not null default true,
+  created_at timestamptz not null default now(),
+  notified_at timestamptz
+);
+
+comment on table public.nb_content_announcements is
+  'Anuncios para push new_content (Prompt 8).';
+
+create index nb_content_announcements_pending_idx
+  on public.nb_content_announcements (game_id, created_at desc)
+  where active = true and notified_at is null;
 
 -- ---------------------------------------------------------------------------
 -- updated_at automático
@@ -317,6 +348,12 @@ create policy "nb_notification_prefs_update_own"
 create policy "nb_push_log_select_own"
   on public.nb_push_log for select
   using (auth.uid() = user_id);
+
+alter table public.nb_content_announcements enable row level security;
+
+create policy "nb_content_announcements_select_active"
+  on public.nb_content_announcements for select
+  using (active = true);
 
 -- ---------------------------------------------------------------------------
 -- Realtime (Prompt 6) — leaderboard en vivo

@@ -1,0 +1,57 @@
+# Invoca Edge Functions de engagement push (Prompt 8).
+# Requiere secrets del repo: SUPABASE_URL, CRON_SECRET (mismo valor que en Supabase).
+name: Push engagement crons
+
+on:
+  schedule:
+    # UTC — alineado con docs/supabase/README.md
+    - cron: '0 10 * * *' # diario 10:00 → cron-inactive-players
+    - cron: '0 18 * * *' # diario 18:00 → cron-daily-streak
+    - cron: '0 9 * * 1' # lunes 09:00 → cron-weekly-ranking
+  workflow_dispatch:
+    inputs:
+      function:
+        description: Edge Function a invocar
+        required: true
+        type: choice
+        default: cron-inactive-players
+        options:
+          - cron-inactive-players
+          - cron-daily-streak
+          - cron-weekly-ranking
+
+jobs:
+  invoke-cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve function
+        id: fn
+        run: |
+          case "${{ github.event.schedule }}" in
+            '0 10 * * *') FN=cron-inactive-players ;;
+            '0 18 * * *') FN=cron-daily-streak ;;
+            '0 9 * * 1') FN=cron-weekly-ranking ;;
+            *) FN='${{ github.event.inputs.function }}' ;;
+          esac
+          if [ -z "$FN" ]; then
+            echo "No function resolved" >&2
+            exit 1
+          fi
+          echo "name=$FN" >> "$GITHUB_OUTPUT"
+          echo "Resolved: $FN"
+
+      - name: Call Edge Function
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          FN: ${{ steps.fn.outputs.name }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "Missing SUPABASE_URL or CRON_SECRET repo secrets" >&2
+            exit 1
+          fi
+          curl -fsS -X POST "${SUPABASE_URL%/}/functions/v1/${FN}" \
+            -H "x-cron-secret: ${CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d '{"gameId":"nuts-and-bolts"}'
+          echo

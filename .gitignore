@@ -113,3 +113,6 @@ pnpm-lock.yaml
 *.tar.gz
 *.rar
 exported-*
+
+# Ignorar google-services.json de Android
+android/app/google-services.json

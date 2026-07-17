@@ -7,5 +7,6 @@ export type {
 export type {
   PushRepository,
   NotificationPreferences,
+  NotificationPreferenceKey,
   PushPlatform,
 } from './PushRepository'

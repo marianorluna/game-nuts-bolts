@@ -11,6 +11,8 @@ export interface FcmMessage {
   title: string
   body: string
   data?: Record<string, string>
+  /** Android notification channel; default rank_alerts for backwards compat. */
+  channelId?: string
 }
 
 function pemToArrayBuffer(pem: string): ArrayBuffer {
@@ -95,6 +97,7 @@ export async function sendFcmMessage(
   accessToken: string,
   message: FcmMessage,
 ): Promise<void> {
+  const channelId = message.channelId ?? 'rank_alerts'
   const url = `https://fcm.googleapis.com/v1/projects/${sa.project_id}/messages:send`
   const res = await fetch(url, {
     method: 'POST',
@@ -113,8 +116,8 @@ export async function sendFcmMessage(
         android: {
           priority: 'HIGH',
           notification: {
-            channel_id: 'rank_alerts',
-            click_action: 'OPEN_LEADERBOARD',
+            channel_id: channelId,
+            click_action: 'FCM_PLUGIN_ACTIVITY',
           },
         },
       },
@@ -130,6 +133,6 @@ export function corsHeaders(origin = '*'): Record<string, string> {
   return {
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Headers':
-      'authorization, x-client-info, apikey, content-type',
+      'authorization, x-client-info, apikey, content-type, x-cron-secret',
   }
 }

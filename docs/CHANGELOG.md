@@ -93,22 +93,6 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Notification preferences in Settings
 - «Overtaken» push with 3/day rate limit
 
-### v1.5.0 (versionCode 7) — Notificaciones y recordatorios
-
-### Previsto
-
-**ES**
-
-- Recordatorio si llevas días sin jugar
-- Aviso de nueva versión y contenido
-- Preferencias granulares en Configuración
-
-**EN**
-
-- Reminder if you have not played in a few days
-- New version and content alerts
-- Granular preferences in Settings
-
 ### v1.6.0 (versionCode 8) — Audio y música ambiente
 
 ### Previsto
@@ -140,6 +124,56 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Different music for each workshop stage
 - Music and sound effect volume controls
 - Sounds when syncing your cloud progress
+
+---
+
+## [1.5.0] — 2026-07-17 — Notificaciones y recordatorios / Notifications and reminders
+
+**versionCode:** 7
+
+### Destacado (modal in-app)
+
+**ES**
+
+- Ranking global en vivo y aviso si te superan (opt-in)
+- Recordatorio si llevas días sin jugar
+- Preferencias granulares: engagement, ranking y contenido
+
+**EN**
+
+- Live leaderboard and overtaken alerts (opt-in)
+- Reminder if you have not played in a few days
+- Granular preferences: engagement, ranking, and content
+
+### Notas Play Console (copiar y pegar)
+
+**ES**
+
+- Ranking global en vivo (opt-in)
+- Notificaciones push opcionales: ranking, recordatorios y novedades
+- Controla cada categoría en Ajustes
+
+**EN**
+
+- Live global leaderboard (opt-in)
+- Optional push notifications: ranking, reminders, and updates
+- Control each category in Settings
+
+### Añadido
+
+**ES**
+
+- Preferencias push: re-engagement, racha, resumen semanal, hitos, sync, updates y contenido
+- Jobs programados (cron) y rate limit anti-spam
+- Racha diaria sincronizada con el progreso en la nube
+- Política de privacidad v1.5.0 (categorías granulares)
+
+**EN**
+
+- Push preferences: re-engagement, streak, weekly summary, milestones, sync, updates, and content
+- Scheduled jobs (cron) and anti-spam rate limits
+- Daily streak synced with cloud progress
+- Privacy policy v1.5.0 (granular categories)
 
 ---
 

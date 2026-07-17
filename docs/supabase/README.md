@@ -5,11 +5,12 @@ Proyecto Supabase **multi-juego** (`games`): tablas con prefijo `nb_` y columna 
 | Tabla                          | PK                            | Notas                                |
 | ------------------------------ | ----------------------------- | ------------------------------------ |
 | `nb_player_profiles`           | `(user_id, game_id)`          | Perfil y opt-in ranking              |
-| `nb_player_progress`           | `(user_id, game_id)`          | Progreso + columnas de ranking       |
+| `nb_player_progress`           | `(user_id, game_id)`          | Progreso + ranking + racha (`current_streak`) |
 | `nb_leaderboard_events`        | `id`                          | Feed por `game_id` (Prompt 6)        |
 | `nb_push_tokens`               | `(user_id, game_id, fcm_token)` | Tokens FCM (Prompt 7)              |
-| `nb_notification_preferences`  | `(user_id, game_id)`          | Opt-in push por categoría (Prompt 7) |
+| `nb_notification_preferences`  | `(user_id, game_id)`          | Opt-out push por categoría (on por defecto) |
 | `nb_push_log`                  | `id`                          | Rate limit de envíos (Prompt 7–8)    |
+| `nb_content_announcements`     | `id`                          | Anuncios para push `new_content` (Prompt 8) |
 
 **game_id de este juego:** `nuts-and-bolts` → `VITE_GAME_ID` en `.env.local`
 
@@ -43,21 +44,78 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
 
 1. Si el esquema anterior ya estaba aplicado: ejecutar [schema-push.sql](./schema-push.sql).
 2. Proyecto nuevo: [schema.sql](./schema.sql) ya incluye tablas push.
-3. **Firebase Console**
+3. Si ya tenías push con defaults off: ejecutar [schema-push-opt-out.sql](./schema-push-opt-out.sql) (defaults on).
+4. **Firebase Console**
    - Crear/vincular proyecto al package `com.nutsandbolts.puzzle`.
    - Descargar `google-services.json` → `android/app/` (gitignored).
    - Crear Service Account con rol Firebase Cloud Messaging Admin → JSON.
-4. **Supabase secrets** (Dashboard → Edge Functions → Secrets, o CLI):
+5. **Supabase secrets** (Dashboard → Edge Functions → Secrets, o CLI):
    ```
    supabase secrets set FCM_SERVICE_ACCOUNT="$(cat path/to/service-account.json)"
    ```
-5. **Deploy Edge Functions**:
+6. **Deploy Edge Functions**:
    ```
    supabase functions deploy send-push
    supabase functions deploy on-rank-change
    ```
-6. `.env.local`: `VITE_FEATURE_PUSH_NOTIFICATIONS=true`.
-7. Verificar en dispositivo real: permiso → token en `nb_push_tokens`; dos cuentas con opt-in ranking + toggle Ranking → A sube → B recibe push.
+7. `.env.local`: `VITE_FEATURE_PUSH_NOTIFICATIONS=true`.
+8. Verificar en dispositivo real: al iniciar sesión pide permiso → token en `nb_push_tokens`; dos cuentas con opt-in ranking → A sube → B recibe push (si no desactivó notificaciones).
+
+## Prompt 8 — Push engagement (v1.5.0)
+
+1. Si Prompt 7 ya estaba aplicado: ejecutar [schema-push-engagement.sql](./schema-push-engagement.sql).
+2. Proyecto nuevo: [schema.sql](./schema.sql) ya incluye columnas de engagement, racha y `nb_content_announcements`.
+3. **Secrets** (además de `FCM_SERVICE_ACCOUNT`):
+   ```
+   supabase secrets set CRON_SECRET="genera-un-secreto-largo"
+   ```
+4. **Deploy Edge Functions**:
+   ```
+   supabase functions deploy send-push
+   supabase functions deploy on-rank-change
+   supabase functions deploy cron-inactive-players
+   supabase functions deploy cron-daily-streak
+   supabase functions deploy cron-weekly-ranking
+   supabase functions deploy notify-app-update
+   supabase functions deploy notify-new-content
+   ```
+5. **Schedules** — el plan Free de Supabase no siempre muestra Schedules en el Dashboard.
+   Usa el workflow de GitHub Actions [`.github/workflows/push-cron.yml`](../../.github/workflows/push-cron.yml):
+
+   | Función | Cron (UTC) |
+   | -------- | ---------- |
+   | `cron-inactive-players` | `0 10 * * *` (diario 10:00) |
+   | `cron-daily-streak` | `0 18 * * *` (diario 18:00) |
+   | `cron-weekly-ranking` | `0 9 * * 1` (lunes 09:00) |
+
+   **Secrets del repo** (Settings → Secrets and variables → Actions):
+   - `SUPABASE_URL` — ej. `https://xxxx.supabase.co`
+   - `CRON_SECRET` — el mismo valor que en Supabase Edge Function secrets
+
+   Tras el push a `main`: Actions → **Push engagement crons** → **Run workflow** (prueba manual).
+   Body: `{ "gameId": "nuts-and-bolts" }` + header `x-cron-secret`.
+
+6. **Tras publicar un AAB** — aviso de nueva versión (manual / GH Action):
+   ```bash
+   curl -X POST "$SUPABASE_URL/functions/v1/notify-app-update" \
+     -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+     -H "x-cron-secret: $CRON_SECRET" \
+     -H "Content-Type: application/json" \
+     -d '{"gameId":"nuts-and-bolts","version":"1.5.0","title":"Nueva v1.5.0","body":"Recordatorios y más"}'
+   ```
+
+7. **Nuevo contenido** — insertar fila en `nb_content_announcements` y llamar:
+   ```bash
+   curl -X POST "$SUPABASE_URL/functions/v1/notify-new-content" \
+     -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+     -H "x-cron-secret: $CRON_SECRET" \
+     -H "Content-Type: application/json" \
+     -d '{"gameId":"nuts-and-bolts"}'
+   ```
+
+8. **Rate limits** (en `send-push`): ranking `rank_overtaken` máx. 3/día; resto engagement máx. 2/semana + ventanas por tipo.
+
+9. **Play Console → Seguridad de los datos** (manual al release): confirmar identificadores de dispositivo (FCM token), actividad en la app si aplica, y que las notificaciones se pueden desactivar (opt-out; permiso del sistema requerido).
 
 ## Verificación RLS
 

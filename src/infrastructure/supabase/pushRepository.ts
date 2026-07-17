@@ -14,9 +14,69 @@ import {
 } from '../push/capacitorPush'
 import { getSupabaseClient } from './client'
 
-const DEFAULT_PREFS: NotificationPreferences = {
+/** Opt-out: on by default; user can disable in Settings. */
+export const DEFAULT_NOTIFICATION_PREFS: NotificationPreferences = {
+  pushEnabled: true,
+  rankOvertaken: true,
+  reEngagement: true,
+  appUpdates: true,
+  newContent: true,
+  dailyStreak: true,
+  weeklySummary: true,
+  milestones: true,
+  syncReminder: true,
+}
+
+/** Forced state when master switch is off (must not reuse DEFAULT). */
+export const DISABLED_NOTIFICATION_PREFS: NotificationPreferences = {
   pushEnabled: false,
   rankOvertaken: false,
+  reEngagement: false,
+  appUpdates: false,
+  newContent: false,
+  dailyStreak: false,
+  weeklySummary: false,
+  milestones: false,
+  syncReminder: false,
+}
+
+const PREF_COLUMNS =
+  'push_enabled, rank_overtaken, re_engagement, app_updates, new_content, daily_streak, weekly_summary, milestones, sync_reminder'
+
+function mapPrefs(data: Record<string, unknown>): NotificationPreferences {
+  return {
+    pushEnabled: Boolean(data.push_enabled),
+    rankOvertaken: Boolean(data.rank_overtaken),
+    reEngagement: Boolean(data.re_engagement),
+    appUpdates: Boolean(data.app_updates),
+    newContent: Boolean(data.new_content),
+    dailyStreak: Boolean(data.daily_streak),
+    weeklySummary: Boolean(data.weekly_summary),
+    milestones: Boolean(data.milestones),
+    syncReminder: Boolean(data.sync_reminder),
+  }
+}
+
+function toRow(prefs: NotificationPreferences): Record<string, unknown> {
+  return {
+    push_enabled: prefs.pushEnabled,
+    rank_overtaken: prefs.rankOvertaken,
+    re_engagement: prefs.reEngagement,
+    app_updates: prefs.appUpdates,
+    new_content: prefs.newContent,
+    daily_streak: prefs.dailyStreak,
+    weekly_summary: prefs.weeklySummary,
+    milestones: prefs.milestones,
+    sync_reminder: prefs.syncReminder,
+  }
+}
+
+/** When master is off, all category toggles are forced off. */
+export function applyMasterGate(
+  prefs: NotificationPreferences,
+): NotificationPreferences {
+  if (prefs.pushEnabled) return prefs
+  return { ...DISABLED_NOTIFICATION_PREFS }
 }
 
 export function createSupabasePushRepository(): PushRepository {
@@ -65,26 +125,38 @@ export function createSupabasePushRepository(): PushRepository {
     async getPreferences(userId) {
       const { data, error } = await supabase
         .from(SUPABASE_TABLES.notificationPreferences)
-        .select('push_enabled, rank_overtaken')
+        .select(PREF_COLUMNS)
         .eq('user_id', userId)
         .eq('game_id', GAME_ID)
         .maybeSingle()
 
       if (error) throw error
-      if (!data) return { ...DEFAULT_PREFS }
+      if (data) return mapPrefs(data as Record<string, unknown>)
 
-      return {
-        pushEnabled: Boolean(data.push_enabled),
-        rankOvertaken: Boolean(data.rank_overtaken),
-      }
+      // First visit: persist opt-out defaults so crons/Edge Functions see the row.
+      const defaults = { ...DEFAULT_NOTIFICATION_PREFS }
+      const { error: upsertError } = await supabase
+        .from(SUPABASE_TABLES.notificationPreferences)
+        .upsert(
+          {
+            user_id: userId,
+            game_id: GAME_ID,
+            ...toRow(defaults),
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: 'user_id,game_id' },
+        )
+      if (upsertError) throw upsertError
+      return defaults
     },
 
     async setPreferences(userId, prefs) {
       const current = await this.getPreferences(userId)
-      const next: NotificationPreferences = {
-        pushEnabled: prefs.pushEnabled ?? current.pushEnabled,
-        rankOvertaken: prefs.rankOvertaken ?? current.rankOvertaken,
+      let next: NotificationPreferences = {
+        ...current,
+        ...prefs,
       }
+      next = applyMasterGate(next)
 
       const { error } = await supabase
         .from(SUPABASE_TABLES.notificationPreferences)
@@ -92,8 +164,7 @@ export function createSupabasePushRepository(): PushRepository {
           {
             user_id: userId,
             game_id: GAME_ID,
-            push_enabled: next.pushEnabled,
-            rank_overtaken: next.rankOvertaken,
+            ...toRow(next),
             updated_at: new Date().toISOString(),
           },
           { onConflict: 'user_id,game_id' },

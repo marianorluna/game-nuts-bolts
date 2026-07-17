@@ -4,7 +4,7 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 
 **Documentos relacionados:** [BACKEND_DECISION.md](./BACKEND_DECISION.md) · [MIGRATION_PLAYBOOK.md](./MIGRATION_PLAYBOOK.md) · [EXTENSION_PLAYBOOK.md](./EXTENSION_PLAYBOOK.md) · [PRIVACY_POLICY.md](./PRIVACY_POLICY.md) _(actualizar en Prompts 7–8)_ · [AUDIO_ROADMAP.md](./AUDIO_ROADMAP.md) _(v1.6.0 / v1.6.1 — Prompts 9–10, tras push)_
 
-**Producción actual:** **v1.2.1** (`versionCode` 4) — cuenta/sync + retos. **Código listo:** v1.4.0 push ranking (Prompt 7); v1.3.0 ranking pendiente de release.
+**Producción actual:** **v1.2.1** (`versionCode` 4) — cuenta/sync + retos. **Código listo:** **v1.5.0** ranking + push ranking + push engagement (Prompts 6–8); Firebase/`google-services.json` y deploy Edge Functions siguen siendo pasos manuales.
 
 ---
 
@@ -20,8 +20,8 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 | [5](#prompt-5--release-v120--migración-beta)  | **v1.2.1** | QA + Play Store (cuenta + retos)            | ✅ Completado    |
 | [6](#prompt-6--ranking-realtime)              | **v1.3.0** | Leaderboard en vivo                         | ✅ Completado    |
 | [7](#prompt-7--push-infraestructura--ranking) | **v1.4.0** | FCM + tokens + push «te superaron»          | ✅ Completado    |
-| [8](#prompt-8--push-engagement--contenido)    | v1.5.0     | Re-engagement, updates, racha, hitos        | ⬜ **Siguiente** |
-| [9](#prompt-9--audio-mvp-v160)                | v1.6.0     | Audio MVP: SFX ampliados + música + toggles | ⬜ Pendiente     |
+| [8](#prompt-8--push-engagement--contenido)    | **v1.5.0** | Re-engagement, updates, racha, hitos        | ✅ Completado    |
+| [9](#prompt-9--audio-mvp-v160)                | v1.6.0     | Audio MVP: SFX ampliados + música + toggles | ⬜ **Siguiente** |
 | [10](#prompt-10--ambiente-por-etapa-v161)     | v1.6.1     | Ambiente por etapa + volumen + SFX sync     | ⬜ Pendiente     |
 
 **Leyenda:** ⬜ Pendiente · 🔄 En curso · ✅ Completado
@@ -37,7 +37,7 @@ Plan incremental por **prompts** verificables. Cada prompt se ejecuta en el chat
 - [ ] Los ~20 jugadores beta **no pierden progreso** al actualizar
 - [ ] El dominio (`src/domain/`) **no importa** SDK de Supabase ni ningún backend
 - [ ] Ranking público solo con **opt-in** (`show_in_leaderboard`, default off)
-- [ ] Notificaciones push solo con **opt-in** explícito (permiso Android + toggles por categoría)
+- [ ] Notificaciones push con **opt-out** (on por defecto; permiso Android + toggles por categoría para desactivar)
 - [ ] Push personalizadas requieren **cuenta vinculada** (sin cuenta: no hay token en servidor)
 
 ### Regla de merge (dominio puro)
@@ -321,7 +321,7 @@ Funciones de dominio probadas + [RANKING_RULES.md](./RANKING_RULES.md); listas p
   - PK o unique en `(user_id, game_id, fcm_token)`; RLS: usuario solo escribe sus tokens
 - [x] Tabla `nb_notification_preferences`:
   - `user_id`, `game_id`
-  - `push_enabled` (master, default `false`)
+  - `push_enabled` (master, default `true` — opt-out)
   - `rank_overtaken` (default `false`; requiere `show_in_leaderboard = true`)
   - timestamps
 - [x] Migración SQL en `docs/supabase/schema.sql` (o archivo `schema-push.sql`)
@@ -383,7 +383,7 @@ Infraestructura push reutilizable (FCM + Supabase + Capacitor) + primer caso de 
 
 ### Requisitos técnicos adicionales
 
-- [ ] Columnas en `nb_notification_preferences`:
+- [x] Columnas en `nb_notification_preferences`:
   - `re_engagement` (default `false`)
   - `app_updates` (default `false`)
   - `new_content` (default `false`)
@@ -391,15 +391,15 @@ Infraestructura push reutilizable (FCM + Supabase + Capacitor) + primer caso de 
   - `weekly_summary` (default `false`)
   - `milestones` (default `false`)
   - `sync_reminder` (default `false`)
-- [ ] `last_played_at` actualizado en cada sync exitoso (`syncProgress.ts`)
-- [ ] Edge Function `cron-inactive-players` — usuarios con `last_played_at < now() - interval '2 days'` y `re_engagement = true`
-- [ ] Edge Function `notify-app-update` — script manual o GH Action al publicar AAB; topic FCM `app_updates` o broadcast filtrado
-- [ ] Tabla o flag `nb_content_announcements` (opcional) — niveles nuevos / changelog para push `new_content`
-- [ ] Tracking local de racha diaria (`localStorage` o columna `current_streak` en perfil) para `daily_streak`
-- [ ] Job semanal (`cron-weekly-ranking`) — resumen posición para usuarios con `weekly_summary` + opt-in ranking
-- [ ] Rate limit en `send-push`: máx. 2 push/semana/usuario (excepto transaccionales urgentes de ranking, máx. 3/día)
-- [ ] Toggles por categoría en `SettingsModal` (agrupados: Engagement / Ranking / Contenido)
-- [ ] Actualizar política de privacidad v1.5.0 y Seguridad de los datos en Play Console
+- [x] `last_played_at` actualizado en cada sync exitoso (`progressRepository` / upsert)
+- [x] Edge Function `cron-inactive-players` — usuarios con `last_played_at < now() - interval '2 days'` y `re_engagement = true`
+- [x] Edge Function `notify-app-update` — script manual o GH Action al publicar AAB; broadcast filtrado por prefs
+- [x] Tabla `nb_content_announcements` — niveles nuevos / changelog para push `new_content`
+- [x] Tracking de racha diaria (`current_streak` + `last_streak_date` en `nb_player_progress`) + `cron-daily-streak`
+- [x] Job semanal (`cron-weekly-ranking`) — resumen posición para usuarios con `weekly_summary` + opt-in ranking
+- [x] Rate limit en `send-push`: máx. 2 push/semana/usuario (excepto ranking, máx. 3/día)
+- [x] Toggles por categoría en `SettingsModal` (agrupados: Engagement / Ranking / Contenido)
+- [x] Actualizar política de privacidad v1.5.0 _(texto en PRIVACY_POLICY.md; publicar HTML + Play Console Data safety = manual)_
 
 ### Casos de uso (este prompt)
 
@@ -418,19 +418,20 @@ Infraestructura push reutilizable (FCM + Supabase + Capacitor) + primer caso de 
 
 ### Qué NO se hace (Prompt 8)
 
-- [ ] ~~Notificaciones locales sin servidor~~ (`@capacitor/local-notifications`) — no cubren ranking ni broadcast
-- [ ] ~~OneSignal / Pusher~~ — duplica FCM + Supabase ya elegidos
-- [ ] ~~Push a usuarios sin cuenta~~ — sin `user_id` no hay personalización server-side
+- [x] ~~Notificaciones locales sin servidor~~ (`@capacitor/local-notifications`) — no cubren ranking ni broadcast
+- [x] ~~OneSignal / Pusher~~ — duplica FCM + Supabase ya elegidos
+- [x] ~~Push a usuarios sin cuenta~~ — sin `user_id` no hay personalización server-side
 
 ### Verificación
 
-- [ ] Simular inactividad 2+ días → push de re-engagement (staging)
-- [ ] Publicar versión de prueba → push de actualización a quien tenga `app_updates`
-- [ ] Añadir niveles en changelog → push `new_content` solo a opt-in
-- [ ] Racha: día sin jugar → recordatorio único
-- [ ] Resumen semanal: job ejecuta solo para opt-in ranking
-- [ ] Usuario con todos los toggles off: cero push
-- [ ] Política de privacidad v1.5.0 publicada y verificada en URL pública
+- [ ] Simular inactividad 2+ días → push de re-engagement (staging) _(requiere Firebase + cron)_
+- [ ] Publicar versión de prueba → push de actualización a quien tenga `app_updates` _(manual)_
+- [ ] Añadir niveles en changelog → push `new_content` solo a opt-in _(manual)_
+- [ ] Racha: día sin jugar → recordatorio único _(requiere cron)_
+- [ ] Resumen semanal: job ejecuta solo para opt-in ranking _(requiere cron)_
+- [x] Usuario con master off: cero push _(master gate fuerza categorías off)_
+- [ ] Política de privacidad v1.5.0 publicada y verificada en URL pública _(copiar HTML a nuts-and-bolts-web)_
+- [x] `npm test` / `npm run build` / `validate:locales` OK
 - [ ] Revisión contigo → release v1.5.0
 
 ### Entregable
@@ -716,13 +717,12 @@ flowchart TB
 | 2026-07-16 | 6      | Ranking realtime: LeaderboardScreen, opt-in, Realtime, feed, `last_played_at`, hook `rank_up`. v1.3.0 lista. |
 | 2026-07-17 | —      | Replan: push primero (7→v1.4.0, 8→v1.5.0); audio al final como Prompts 9–10 (v1.6.0 / v1.6.1). Sin A1/A2. |
 | 2026-07-17 | 7      | Push FCM: tokens, prefs, Edge Functions, UI Ajustes, aviso «te superaron». v1.4.0 lista (Firebase manual pendiente). |
+| 2026-07-17 | 8      | Push engagement: prefs granulares, crons, rate limit, racha, anuncios, UI grupos, política v1.5.0. Código v1.5.0 listo. |
 
 ---
 
 ## Próximo paso
 
-**Prompt 8:** Push engagement + contenido (v1.5.0). Di: _"Ejecuta el Prompt 8"_ — o completa Firebase/`google-services.json` + deploy de Edge Functions y publica v1.4.0.
+**Antes de release v1.5.0 en Play:** aplicar `schema-push.sql` + `schema-push-engagement.sql`, secrets `FCM_SERVICE_ACCOUNT` + `CRON_SECRET`, `google-services.json`, deploy de todas las Edge Functions, schedules de cron, publicar política HTML en nuts-and-bolts-web, Data safety en Play Console.
 
 **Después:** [Prompt 9 audio MVP v1.6.0](#prompt-9--audio-mvp-v160) → [Prompt 10 ambiente v1.6.1](#prompt-10--ambiente-por-etapa-v161)
-
-**Antes de release v1.4.0:** aplicar `docs/supabase/schema-push.sql`, secret `FCM_SERVICE_ACCOUNT`, `google-services.json`, deploy `send-push` + `on-rank-change`, publicar política en nuts-and-bolts-web.

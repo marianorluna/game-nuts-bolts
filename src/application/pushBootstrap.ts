@@ -10,6 +10,7 @@ import { getCachedFcmToken } from '../infrastructure/push/capacitorPush'
 import { getSupabaseClient } from '../infrastructure/supabase/client'
 import { obtainNativeFcmToken } from '../infrastructure/supabase/pushRepository'
 import { useGameStore } from '../store/gameStore'
+import { maybeNotifySyncReminder } from './pushEngagement'
 import { onRankUp } from './rankUpHooks'
 
 let bootstrapped = false
@@ -97,7 +98,12 @@ export function initPushBootstrap(infrastructure: Infrastructure): () => void {
   })
 
   unsubAction = infrastructure.push.onNotificationAction((data) => {
-    if (data.type === 'rank_overtaken' || data.screen === 'leaderboard') {
+    const type = data.type ?? ''
+    if (
+      type === 'rank_overtaken'
+      || type === 'weekly_summary'
+      || data.screen === 'leaderboard'
+    ) {
       useGameStore.getState().openLeaderboard()
     }
   })
@@ -105,12 +111,14 @@ export function initPushBootstrap(infrastructure: Infrastructure): () => void {
   unsubAuth = infrastructure.auth.onAuthStateChange((user) => {
     if (user) {
       void syncPushRegistrationForUser(infrastructure, user.id)
+      void maybeNotifySyncReminder(infrastructure, user.id)
     }
   })
 
   const current = getCurrentAuthUser()
   if (current) {
     void syncPushRegistrationForUser(infrastructure, current.id)
+    void maybeNotifySyncReminder(infrastructure, current.id)
   }
 
   return () => {

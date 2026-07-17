@@ -3,7 +3,19 @@ export type PushPlatform = 'android' | 'ios' | 'web'
 export interface NotificationPreferences {
   pushEnabled: boolean
   rankOvertaken: boolean
+  reEngagement: boolean
+  appUpdates: boolean
+  newContent: boolean
+  dailyStreak: boolean
+  weeklySummary: boolean
+  milestones: boolean
+  syncReminder: boolean
 }
+
+export type NotificationPreferenceKey = Exclude<
+  keyof NotificationPreferences,
+  'pushEnabled'
+>
 
 export interface RegisterPushDeviceInput {
   userId: string

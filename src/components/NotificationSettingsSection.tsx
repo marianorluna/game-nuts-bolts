@@ -1,3 +1,4 @@
+import type { NotificationPreferenceKey } from '../infrastructure/contracts/PushRepository'
 import { useAuth } from '../hooks/useAuth'
 import { useLeaderboard } from '../hooks/useLeaderboard'
 import { usePush } from '../hooks/usePush'
@@ -50,6 +51,14 @@ function ToggleRow({
   )
 }
 
+function GroupLabel({ children }: { children: string }) {
+  return (
+    <p className="mb-2 mt-3 text-[10px] font-bold uppercase tracking-wider text-purple-300 first:mt-0">
+      {children}
+    </p>
+  )
+}
+
 export function NotificationSettingsSection({
   onOpenAuth,
   open,
@@ -57,7 +66,7 @@ export function NotificationSettingsSection({
 }: NotificationSettingsSectionProps) {
   const { t } = useTranslation()
   const { cloudSyncEnabled, user } = useAuth()
-  const { enabled: pushFeature, nativeSupported, prefs, busy, error, setPushEnabled, setRankOvertaken } =
+  const { enabled: pushFeature, nativeSupported, prefs, busy, error, setPushEnabled, setPreference } =
     usePush()
   const leaderboardEnabled = isLeaderboardEnabled()
   const { profile } = useLeaderboard()
@@ -84,13 +93,17 @@ export function NotificationSettingsSection({
   }
 
   const pushOn = prefs?.pushEnabled ?? false
-  const rankOn = prefs?.rankOvertaken ?? false
-  const rankDisabled = busy || !pushOn || !leaderboardEnabled || !showInLeaderboard
+  const categoryDisabled = busy || !pushOn || !nativeSupported
 
   let rankSubtitle = t('push.rankOff')
   if (!showInLeaderboard) rankSubtitle = t('push.rankNeedsLeaderboard')
   else if (!pushOn) rankSubtitle = t('push.rankNeedsMaster')
-  else if (rankOn) rankSubtitle = t('push.rankOn')
+  else if (prefs?.rankOvertaken) rankSubtitle = t('push.rankOn')
+
+  let weeklySubtitle = t('push.weeklySummaryOff')
+  if (!showInLeaderboard) weeklySubtitle = t('push.weeklyNeedsLeaderboard')
+  else if (!pushOn) weeklySubtitle = t('push.needsMaster')
+  else if (prefs?.weeklySummary) weeklySubtitle = t('push.weeklySummaryOn')
 
   let errorText: string | null = null
   if (error === 'push_permission_denied') errorText = t('push.permissionDenied')
@@ -98,6 +111,28 @@ export function NotificationSettingsSection({
   else if (error) errorText = error
 
   const collapsedSubtitle = pushOn ? t('push.masterOn') : t('push.masterOff')
+
+  const toggleCategory = (key: NotificationPreferenceKey, current: boolean) => {
+    void setPreference(key, !current)
+  }
+
+  const cat = (
+    key: NotificationPreferenceKey,
+    titleKey: string,
+    onKey: string,
+    offKey: string,
+  ) => {
+    const on = Boolean(prefs?.[key]) && pushOn
+    return (
+      <ToggleRow
+        title={t(titleKey)}
+        subtitle={!pushOn ? t('push.needsMaster') : on ? t(onKey) : t(offKey)}
+        on={on}
+        disabled={categoryDisabled}
+        onToggle={() => toggleCategory(key, Boolean(prefs?.[key]))}
+      />
+    )
+  }
 
   return (
     <SettingsCollapsible
@@ -121,13 +156,35 @@ export function NotificationSettingsSection({
         onToggle={() => void setPushEnabled(!pushOn)}
       />
 
+      <GroupLabel>{t('push.groupRanking')}</GroupLabel>
       <ToggleRow
         title={t('push.rank')}
         subtitle={rankSubtitle}
-        on={rankOn && pushOn && showInLeaderboard}
-        disabled={rankDisabled}
-        onToggle={() => void setRankOvertaken(!rankOn)}
+        on={Boolean(prefs?.rankOvertaken) && pushOn && showInLeaderboard}
+        disabled={
+          categoryDisabled || !leaderboardEnabled || !showInLeaderboard
+        }
+        onToggle={() => toggleCategory('rankOvertaken', Boolean(prefs?.rankOvertaken))}
       />
+      <ToggleRow
+        title={t('push.weeklySummary')}
+        subtitle={weeklySubtitle}
+        on={Boolean(prefs?.weeklySummary) && pushOn && showInLeaderboard}
+        disabled={
+          categoryDisabled || !leaderboardEnabled || !showInLeaderboard
+        }
+        onToggle={() => toggleCategory('weeklySummary', Boolean(prefs?.weeklySummary))}
+      />
+
+      <GroupLabel>{t('push.groupEngagement')}</GroupLabel>
+      {cat('reEngagement', 'push.reEngagement', 'push.reEngagementOn', 'push.reEngagementOff')}
+      {cat('dailyStreak', 'push.dailyStreak', 'push.dailyStreakOn', 'push.dailyStreakOff')}
+      {cat('syncReminder', 'push.syncReminder', 'push.syncReminderOn', 'push.syncReminderOff')}
+      {cat('milestones', 'push.milestones', 'push.milestonesOn', 'push.milestonesOff')}
+
+      <GroupLabel>{t('push.groupContent')}</GroupLabel>
+      {cat('appUpdates', 'push.appUpdates', 'push.appUpdatesOn', 'push.appUpdatesOff')}
+      {cat('newContent', 'push.newContent', 'push.newContentOn', 'push.newContentOff')}
 
       {errorText && (
         <p className="mt-1 text-xs text-rose-300" role="alert">

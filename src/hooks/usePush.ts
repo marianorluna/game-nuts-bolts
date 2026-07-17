@@ -4,12 +4,18 @@ import {
   clearPushOnSignOut,
   syncPushRegistrationForUser,
 } from '../application/pushBootstrap'
-import type { NotificationPreferences } from '../infrastructure/contracts/PushRepository'
+import type {
+  NotificationPreferenceKey,
+  NotificationPreferences,
+} from '../infrastructure/contracts/PushRepository'
 import {
   getRegisteredInfrastructure,
   isPushNotificationsEnabled,
 } from '../infrastructure'
-import { obtainNativeFcmToken } from '../infrastructure/supabase/pushRepository'
+import {
+  DEFAULT_NOTIFICATION_PREFS,
+  obtainNativeFcmToken,
+} from '../infrastructure/supabase/pushRepository'
 import { useAuth } from './useAuth'
 
 export interface UsePushResult {
@@ -19,13 +25,8 @@ export interface UsePushResult {
   busy: boolean
   error: string | null
   setPushEnabled: (enabled: boolean) => Promise<void>
-  setRankOvertaken: (enabled: boolean) => Promise<void>
+  setPreference: (key: NotificationPreferenceKey, enabled: boolean) => Promise<void>
   refresh: () => Promise<void>
-}
-
-const DEFAULT_PREFS: NotificationPreferences = {
-  pushEnabled: false,
-  rankOvertaken: false,
 }
 
 export function usePush(): UsePushResult {
@@ -78,6 +79,7 @@ export function usePush(): UsePushResult {
             return
           }
           const next = await push.setPreferences(user.id, {
+            ...DEFAULT_NOTIFICATION_PREFS,
             pushEnabled: true,
           })
           setPrefs(next)
@@ -86,7 +88,6 @@ export function usePush(): UsePushResult {
           await clearPushOnSignOut(infra, user.id)
           const next = await push.setPreferences(user.id, {
             pushEnabled: false,
-            rankOvertaken: false,
           })
           setPrefs(next)
         }
@@ -99,14 +100,14 @@ export function usePush(): UsePushResult {
     [push, user, infra],
   )
 
-  const setRankOvertaken = useCallback(
-    async (enabled: boolean) => {
+  const setPreference = useCallback(
+    async (key: NotificationPreferenceKey, enabled: boolean) => {
       if (!push || !user || !infra) return
       setBusy(true)
       setError(null)
       try {
         const next = await push.setPreferences(user.id, {
-          rankOvertaken: enabled,
+          [key]: enabled,
         })
         setPrefs(next)
         if (enabled && next.pushEnabled) {
@@ -132,11 +133,11 @@ export function usePush(): UsePushResult {
   return {
     enabled: featureEnabled,
     nativeSupported: push?.isNativeSupported() ?? false,
-    prefs: prefs ?? (user ? DEFAULT_PREFS : null),
+    prefs: prefs ?? (user ? DEFAULT_NOTIFICATION_PREFS : null),
     busy,
     error,
     setPushEnabled,
-    setRankOvertaken,
+    setPreference,
     refresh,
   }
 }

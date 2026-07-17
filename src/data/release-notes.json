@@ -360,22 +360,48 @@
     {
       "version": "1.5.0",
       "versionCode": 7,
-      "date": null,
-      "published": false,
+      "date": "2026-07-17",
+      "published": true,
       "title": {
         "es": "Notificaciones y recordatorios",
         "en": "Notifications and reminders"
       },
       "highlights": {
         "es": [
+          "Ranking global en vivo y aviso si te superan (opt-in)",
           "Recordatorio si llevas días sin jugar",
-          "Aviso de nueva versión y contenido",
-          "Preferencias granulares en Configuración"
+          "Preferencias granulares: engagement, ranking y contenido"
         ],
         "en": [
+          "Live leaderboard and overtaken alerts (opt-in)",
           "Reminder if you have not played in a few days",
-          "New version and content alerts",
-          "Granular preferences in Settings"
+          "Granular preferences: engagement, ranking, and content"
+        ]
+      },
+      "playStoreNotes": {
+        "es": [
+          "Ranking global en vivo (opt-in)",
+          "Notificaciones push opcionales: ranking, recordatorios y novedades",
+          "Controla cada categoría en Ajustes"
+        ],
+        "en": [
+          "Live global leaderboard (opt-in)",
+          "Optional push notifications: ranking, reminders, and updates",
+          "Control each category in Settings"
+        ]
+      },
+      "added": {
+        "es": [
+          "Preferencias push: re-engagement, racha, resumen semanal, hitos, sync, updates y contenido",
+          "Jobs programados (cron) y rate limit anti-spam",
+          "Racha diaria sincronizada con el progreso en la nube",
+          "Política de privacidad v1.5.0 (categorías granulares)"
+        ],
+        "en": [
+          "Push preferences: re-engagement, streak, weekly summary, milestones, sync, updates, and content",
+          "Scheduled jobs (cron) and anti-spam rate limits",
+          "Daily streak synced with cloud progress",
+          "Privacy policy v1.5.0 (granular categories)"
         ]
       }
     },

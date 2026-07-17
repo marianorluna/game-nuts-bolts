@@ -10,7 +10,9 @@ import type { Infrastructure } from '../infrastructure'
 import { getCurrentAuthUser } from '../infrastructure/authSession'
 import type { UpsertProgressOptions } from '../infrastructure/contracts/ProgressRepository'
 import { useGameStore } from '../store/gameStore'
+import { maybeNotifyMilestones, onSyncSuccess } from './pushEngagement'
 import { emitRankUp } from './rankUpHooks'
+import { markSyncFailed } from './syncFailureTracking'
 
 const SYNC_DEBOUNCE_MS = 800
 
@@ -107,9 +109,20 @@ async function upsertToCloud(
   try {
     await infrastructure.progress.upsert(userId, progress, options)
     pendingUpsert = null
+    onSyncSuccess()
   } catch {
     pendingUpsert = { progress, options }
+    markSyncFailed()
     return
+  }
+
+  if (eventContext) {
+    void maybeNotifyMilestones(
+      infrastructure,
+      userId,
+      eventContext.before,
+      eventContext.after,
+    )
   }
 
   if (!eventContext || !infrastructure.leaderboard) return
