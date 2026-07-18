@@ -137,12 +137,14 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 - Elige o cambia tu nombre en el ranking desde Ajustes (único, sin ofensas)
 - Si no tienes nombre, se asigna uno tipo Player_XXXXX en lugar de «Jugador»
+- Los retos pesan más en el ranking (10 pts por estrella) y el listado muestra niveles y estrellas
 - El aviso de nueva versión muestra semver (p. ej. v1.5.1 → v1.5.2), no el código interno de Play
 
 **EN**
 
 - Choose or change your leaderboard name in Settings (unique, no offensive words)
 - If you have no name, you get a Player_XXXXX nick instead of generic «Player»
+- Challenges weigh more on the ranking (10 pts per star) and entries show levels and stars
 - The update prompt shows semver (e.g. v1.5.1 → v1.5.2), not Play’s internal version code
 
 ### Notas Play Console (copiar y pegar)
@@ -150,11 +152,13 @@ Historial de **releases de la app** (semver + `versionCode`).
 **ES**
 
 - Novedad: elige tu nombre en el ranking desde Ajustes
+- Mejora: los retos cuentan más en el ranking; el listado muestra niveles y estrellas
 - Mejora: el aviso de actualización muestra la versión correctamente
 
 **EN**
 
 - New: choose your leaderboard name in Settings
+- Improvement: challenges weigh more on the ranking; entries show levels and stars
 - Improvement: the update prompt shows the version correctly
 
 ### Añadido
@@ -168,6 +172,18 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 - Editable leaderboard display name in Settings (unique per game, offensive-word filter)
 - Provisional Player_XXXXX name when the account has no display name (e.g. email)
+
+### Cambiado
+
+**ES**
+
+- Criterio 3 del ranking: niveles reto (20, 40, 60, 80, 100) suman 10 pts por estrella (30/20/10); normales siguen en 3/2/1
+- Cada entrada del ranking muestra niveles completados y estrellas totales (antes solo niveles)
+
+**EN**
+
+- Ranking criterion 3: challenge levels (20, 40, 60, 80, 100) score 10 pts per star (30/20/10); normal levels stay at 3/2/1
+- Each leaderboard entry shows completed levels and total stars (previously levels only)
 
 ### Corregido
 
