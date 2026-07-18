@@ -27,3 +27,4 @@ describe('appVersionDisplay', () => {
     expect(pickDisplayVersion(undefined, undefined)).toBe('')
   })
 })
+

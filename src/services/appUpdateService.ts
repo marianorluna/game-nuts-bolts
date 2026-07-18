@@ -4,7 +4,10 @@ import {
   AppUpdateAvailability,
   type AppUpdateInfo,
 } from '@capawesome/capacitor-app-update'
-import { pickDisplayVersion } from '../domain/releases/appVersionDisplay'
+import {
+  isDisplayableAppVersion,
+  pickDisplayVersion,
+} from '../domain/releases/appVersionDisplay'
 import { fetchAppReleaseVersionByCode } from '../infrastructure/supabase/appReleaseRepository'
 import { getReleaseByVersionCode } from './releaseNotesService'
 
@@ -19,22 +22,30 @@ export interface AppUpdateCheckResult {
   info?: AppUpdateInfo
 }
 
+/**
+ * Play often omits versionName. Resolve semver as:
+ * displayable name → remote catalog (always current) → local published only.
+ * Unpublished scaffolds must not win: an old install may still map the next
+ * versionCode to a future release (e.g. 1.5.1 mapped code 9 → 1.6.0).
+ */
 async function resolveSemver(
   versionName: string | undefined,
   versionCode: string | number | undefined,
 ): Promise<string> {
-  const localMapped = (() => {
-    if (versionCode === undefined || versionCode === '') return undefined
-    return getReleaseByVersionCode(versionCode)?.version
-  })()
-
-  const fromLocal = pickDisplayVersion(versionName, localMapped)
-  if (fromLocal) return fromLocal
+  if (isDisplayableAppVersion(versionName)) {
+    return versionName!.trim()
+  }
 
   if (versionCode === undefined || versionCode === '') return ''
 
   const remote = await fetchAppReleaseVersionByCode(versionCode)
-  return pickDisplayVersion(undefined, remote ?? undefined)
+  const fromRemote = pickDisplayVersion(undefined, remote ?? undefined)
+  if (fromRemote) return fromRemote
+
+  const localMapped = getReleaseByVersionCode(versionCode, {
+    publishedOnly: true,
+  })?.version
+  return pickDisplayVersion(undefined, localMapped)
 }
 
 function updateKeyFromInfo(info: AppUpdateInfo, availableVersion: string): string {

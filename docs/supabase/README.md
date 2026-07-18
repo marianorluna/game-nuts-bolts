@@ -73,7 +73,7 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
 
 1. Si Prompt 7 ya estaba aplicado: ejecutar [schema-push-engagement.sql](./schema-push-engagement.sql).
 2. Proyecto nuevo: [schema.sql](./schema.sql) ya incluye columnas de engagement, racha y `nb_content_announcements`.
-3. **Catálogo de versiones (modal update):** ejecutar [schema-app-releases.sql](./schema-app-releases.sql) si aún no está (lectura pública `nb_app_releases`).
+3. **Catálogo de versiones (modal update):** ejecutar [schema-app-releases.sql](./schema-app-releases.sql) si aún no está (lectura pública `nb_app_releases`). La app ≥ v1.5.2 consulta este catálogo **antes** del `release-notes.json` embebido, para que un scaffold futuro (p. ej. `1.6.0` con `versionCode` reasignado) no pinte mal el aviso en installs viejos.
 4. **Secrets** (además de `FCM_SERVICE_ACCOUNT`):
    ```
    supabase secrets set CRON_SECRET="genera-un-secreto-largo"

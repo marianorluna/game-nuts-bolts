@@ -25,10 +25,15 @@ export function getReleaseByVersion(version: string): ReleaseNote | undefined {
 
 export function getReleaseByVersionCode(
   versionCode: number | string,
+  options?: { publishedOnly?: boolean },
 ): ReleaseNote | undefined {
   const code = Number(versionCode)
   if (!Number.isFinite(code)) return undefined
-  return catalog.releases.find((release) => release.versionCode === code)
+  return catalog.releases.find(
+    (release) =>
+      release.versionCode === code &&
+      (!options?.publishedOnly || release.published),
+  )
 }
 
 export function getCurrentReleaseNotes(): ReleaseNote | undefined {
