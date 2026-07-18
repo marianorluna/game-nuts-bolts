@@ -6,6 +6,7 @@ import type {
   LeaderboardPlayer,
   LeaderboardRepository,
 } from '../contracts/LeaderboardRepository'
+import { DisplayNameTakenError } from '../contracts/LeaderboardRepository'
 import { getSupabaseClient } from './client'
 
 const DEFAULT_TOP = 50
@@ -126,6 +127,21 @@ export function createSupabaseLeaderboardRepository(): LeaderboardRepository {
         { onConflict: 'user_id,game_id' },
       )
       if (error) throw error
+    },
+
+    async updateDisplayName(userId, displayName) {
+      const { error } = await supabase.from(SUPABASE_TABLES.profiles).upsert(
+        {
+          user_id: userId,
+          game_id: GAME_ID,
+          display_name: displayName,
+        },
+        { onConflict: 'user_id,game_id' },
+      )
+      if (error) {
+        if (error.code === '23505') throw new DisplayNameTakenError()
+        throw error
+      }
     },
 
     async fetchLeaderboard(limit = DEFAULT_TOP) {

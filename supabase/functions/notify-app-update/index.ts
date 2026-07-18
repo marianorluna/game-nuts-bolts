@@ -8,6 +8,7 @@ import {
 interface NotifyAppUpdateBody {
   gameId?: string
   version: string
+  versionCode?: number
   title?: string
   body?: string
 }
@@ -35,6 +36,23 @@ Deno.serve(async (req) => {
       payload.body ?? `Hay una actualización disponible — mejora y más en Nuts & Bolts`
 
     const admin = adminClient()
+
+    if (
+      typeof payload.versionCode === 'number' &&
+      Number.isFinite(payload.versionCode) &&
+      payload.versionCode > 0
+    ) {
+      const { error: upsertError } = await admin.from('nb_app_releases').upsert(
+        {
+          game_id: gameId,
+          version_code: payload.versionCode,
+          version: payload.version,
+        },
+        { onConflict: 'game_id,version_code' },
+      )
+      if (upsertError) throw upsertError
+    }
+
     const { data: prefs, error: prefsError } = await admin
       .from('nb_notification_preferences')
       .select('user_id')
@@ -65,6 +83,7 @@ Deno.serve(async (req) => {
       notified,
       candidates: prefs?.length ?? 0,
       version: payload.version,
+      versionCode: payload.versionCode ?? null,
     })
   } catch (err) {
     return jsonResponse({ error: err instanceof Error ? err.message : String(err) }, 500)

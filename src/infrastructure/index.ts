@@ -71,6 +71,7 @@ export type {
   PlayerProfileSettings,
   RankUpPayload,
 } from './contracts/LeaderboardRepository'
+export { DisplayNameTakenError } from './contracts/LeaderboardRepository'
 export type {
   PushRepository,
   NotificationPreferences,

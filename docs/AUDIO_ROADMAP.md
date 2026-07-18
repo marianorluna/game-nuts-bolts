@@ -96,7 +96,7 @@ Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROA
 2. O copia el bloque **«Texto para copiar en el chat»** de [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md#prompt-9--audio-mvp-v160)
 3. Al terminar, marca las checkboxes del prompt
 4. Cambia el estado en la tabla de avance (⬜ → ✅) en ambos roadmaps
-5. Bump `package.json` → `1.6.0`, `versionCode` 8, scaffold en `release-notes.json`, `npm run release:prepare`
+5. Bump `package.json` → `1.6.0`, `versionCode` 10, scaffold en `release-notes.json`, `npm run release:prepare`
 6. Añade fecha en la sección **Historial** al final
 
 ---
@@ -105,7 +105,7 @@ Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROA
 
 **Comando en chat:** `Ejecuta el Prompt 9`
 
-**Versión:** v1.6.0 (`versionCode` 9)
+**Versión:** v1.6.0 (`versionCode` 10)
 
 **Prerequisito:** Push engagement v1.5.0 publicado (Prompt 8).
 
@@ -186,7 +186,7 @@ Extender `SoundType` y llamadas desde store/UI:
 
 **Comando en chat:** `Ejecuta el Prompt 10`
 
-**Versión:** v1.6.1 (`versionCode` 10)
+**Versión:** v1.6.1 (`versionCode` 11)
 
 **Prerequisito:** Prompt 9 completado (v1.6.0 publicada).
 

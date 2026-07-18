@@ -6,3 +6,4 @@ export {
   createSupabasePushRepository,
   obtainNativeFcmToken,
 } from './pushRepository'
+export { fetchAppReleaseVersionByCode } from './appReleaseRepository'

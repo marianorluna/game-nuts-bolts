@@ -1,8 +1,17 @@
+import {
+  DISPLAY_NAME_MAX_LENGTH,
+  generateProvisionalDisplayName,
+  isBlankDisplayName,
+  validateDisplayName,
+  type DisplayNameValidationError,
+  type DisplayNameValidationResult,
+} from '../domain/displayName'
 import type {
   LeaderboardEvent,
   LeaderboardSnapshot,
   PlayerProfileSettings,
 } from '../infrastructure/contracts/LeaderboardRepository'
+import { DisplayNameTakenError } from '../infrastructure/contracts/LeaderboardRepository'
 import { getRegisteredInfrastructure } from '../infrastructure'
 import { isLeaderboardEnabled } from '../infrastructure/config'
 import { getCurrentAuthUser } from '../infrastructure/authSession'
@@ -15,6 +24,10 @@ export interface CachedLeaderboard {
   snapshot: LeaderboardSnapshot
   events: LeaderboardEvent[]
 }
+
+export type UpdateDisplayNameResult =
+  | { ok: true; displayName: string }
+  | { ok: false; error: DisplayNameValidationError }
 
 type Listener = () => void
 
@@ -89,6 +102,87 @@ function ensureRealtime(): void {
   }
 }
 
+function pickEnsureCandidate(
+  userId: string,
+  authDisplayName: string | null,
+): string {
+  if (!isBlankDisplayName(authDisplayName)) {
+    const trimmed = authDisplayName!.trim().replace(/\s+/g, ' ')
+    if (trimmed.length > DISPLAY_NAME_MAX_LENGTH) {
+      return trimmed.slice(0, DISPLAY_NAME_MAX_LENGTH).trim()
+    }
+    if (trimmed.length >= 1) return trimmed
+  }
+  return generateProvisionalDisplayName(userId)
+}
+
+/**
+ * If the profile has no display_name, set auth name or Player_XXXXX.
+ */
+export async function ensureDisplayName(): Promise<PlayerProfileSettings | null> {
+  const infra = getRegisteredInfrastructure()
+  const user = getCurrentAuthUser()
+  if (!infra?.leaderboard || !user) return profile
+
+  let current = profile ?? (await infra.leaderboard.fetchProfile(user.id))
+  if (current && !isBlankDisplayName(current.displayName)) {
+    profile = current
+    return profile
+  }
+
+  let candidate = pickEnsureCandidate(user.id, user.displayName)
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      await infra.leaderboard.updateDisplayName(user.id, candidate)
+      current = {
+        displayName: candidate,
+        avatarUrl: current?.avatarUrl ?? user.avatarUrl,
+        showInLeaderboard: current?.showInLeaderboard ?? false,
+      }
+      profile = current
+      notify()
+      return profile
+    } catch (error) {
+      if (!(error instanceof DisplayNameTakenError)) throw error
+      candidate = `${generateProvisionalDisplayName(user.id).slice(0, 14)}_${attempt + 1}`
+    }
+  }
+
+  return profile
+}
+
+export async function updateDisplayName(
+  raw: string,
+): Promise<UpdateDisplayNameResult> {
+  const infra = getRegisteredInfrastructure()
+  const user = getCurrentAuthUser()
+  if (!infra?.leaderboard || !user) {
+    return { ok: false, error: 'too_short' }
+  }
+
+  const validation: DisplayNameValidationResult = validateDisplayName(raw)
+  if (!validation.ok) return validation
+
+  try {
+    await infra.leaderboard.updateDisplayName(user.id, validation.normalized)
+  } catch (error) {
+    if (error instanceof DisplayNameTakenError) {
+      return { ok: false, error: 'taken' }
+    }
+    throw error
+  }
+
+  profile = profile
+    ? { ...profile, displayName: validation.normalized }
+    : {
+        displayName: validation.normalized,
+        avatarUrl: user.avatarUrl,
+        showInLeaderboard: false,
+      }
+  notify()
+  return { ok: true, displayName: validation.normalized }
+}
+
 export async function refreshLeaderboard(): Promise<CachedLeaderboard | null> {
   if (!isLeaderboardEnabled()) return getCachedLeaderboard()
 
@@ -118,6 +212,10 @@ export async function refreshLeaderboard(): Promise<CachedLeaderboard | null> {
       },
       events,
     })
+
+    if (user && isBlankDisplayName(profile?.displayName)) {
+      await ensureDisplayName()
+    }
   } catch {
     cache = readCache()
   } finally {
@@ -132,6 +230,10 @@ export async function setShowInLeaderboard(show: boolean): Promise<void> {
   const infra = getRegisteredInfrastructure()
   const user = getCurrentAuthUser()
   if (!infra?.leaderboard || !user) return
+
+  if (isBlankDisplayName(profile?.displayName)) {
+    await ensureDisplayName()
+  }
 
   await infra.leaderboard.setShowInLeaderboard(user.id, show)
   if (show) {

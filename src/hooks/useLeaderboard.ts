@@ -5,8 +5,10 @@ import {
   isLeaderboardLoading,
   refreshLeaderboard,
   setShowInLeaderboard as setShowInLeaderboardService,
+  updateDisplayName as updateDisplayNameService,
   subscribeLeaderboard,
   type CachedLeaderboard,
+  type UpdateDisplayNameResult,
 } from '../application/leaderboardService'
 import { isLeaderboardEnabled } from '../infrastructure'
 import type { PlayerProfileSettings } from '../infrastructure/contracts/LeaderboardRepository'
@@ -19,6 +21,7 @@ export interface UseLeaderboardResult {
   profile: PlayerProfileSettings | null
   refresh: () => Promise<void>
   setShowInLeaderboard: (show: boolean) => Promise<void>
+  updateDisplayName: (raw: string) => Promise<UpdateDisplayNameResult>
 }
 
 export function useLeaderboard(): UseLeaderboardResult {
@@ -52,6 +55,15 @@ export function useLeaderboard(): UseLeaderboardResult {
     [syncLocal],
   )
 
+  const updateDisplayName = useCallback(
+    async (raw: string) => {
+      const result = await updateDisplayNameService(raw)
+      syncLocal()
+      return result
+    },
+    [syncLocal],
+  )
+
   useEffect(() => {
     if (!enabled) return
 
@@ -81,5 +93,6 @@ export function useLeaderboard(): UseLeaderboardResult {
     profile,
     refresh,
     setShowInLeaderboard,
+    updateDisplayName,
   }
 }

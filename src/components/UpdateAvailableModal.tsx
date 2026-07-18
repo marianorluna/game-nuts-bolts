@@ -17,8 +17,8 @@ type UpdatePhase = 'prompt' | 'downloading' | 'ready' | 'error'
 
 interface UpdateAvailableModalProps {
   open: boolean
-  currentVersion: string
-  availableVersion: string
+  currentVersion?: string
+  availableVersion?: string
   updateInfo: AppUpdateInfo
   onDismiss: () => void
 }
@@ -145,12 +145,22 @@ export function UpdateAvailableModal({
                 <p className="mb-1 text-sm text-purple-200">
                   {t('update.prompt')}
                 </p>
-                <p className="mb-6 text-sm text-purple-100">
-                  {t('update.versionRange', {
-                    current: currentVersion,
-                    available: availableVersion,
-                  })}
-                </p>
+                {currentVersion && availableVersion ? (
+                  <p className="mb-6 text-sm text-purple-100">
+                    {t('update.versionRange', {
+                      current: currentVersion,
+                      available: availableVersion,
+                    })}
+                  </p>
+                ) : availableVersion ? (
+                  <p className="mb-6 text-sm text-purple-100">
+                    {t('update.versionAvailable', {
+                      available: availableVersion,
+                    })}
+                  </p>
+                ) : (
+                  <div className="mb-6" />
+                )}
                 <div className="flex flex-col gap-3">
                   <button
                     type="button"

@@ -11,6 +11,7 @@ Proyecto Supabase **multi-juego** (`games`): tablas con prefijo `nb_` y columna 
 | `nb_notification_preferences`  | `(user_id, game_id)`          | Opt-out push por categoría (on por defecto) |
 | `nb_push_log`                  | `id`                          | Rate limit de envíos (Prompt 7–8)    |
 | `nb_content_announcements`     | `id`                          | Anuncios para push `new_content` (Prompt 8) |
+| `nb_app_releases`              | `(game_id, version_code)`     | Catálogo público versionCode → semver (modal update) |
 
 **game_id de este juego:** `nuts-and-bolts` → `VITE_GAME_ID` en `.env.local`
 
@@ -40,6 +41,12 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
 3. `.env.local`: `VITE_FEATURE_LEADERBOARD=true`.
 4. Verificar: dos cuentas con opt-in → completar nivel en una → la otra ve el cambio en <3 s.
 
+## Nickname único (v1.5.2)
+
+1. Si el esquema ya estaba aplicado: ejecutar [schema-display-name.sql](./schema-display-name.sql) (backfill `Player_XXXXX`, índice único case-insensitive, trigger actualizado).
+2. Proyecto nuevo: [schema.sql](./schema.sql) ya incluye el trigger con default y el índice único.
+3. Verificar: cuenta email sin metadata → perfil con `Player_…`; cambiar nick en Ajustes; duplicado / ofensivo rechazado.
+
 ## Prompt 7 — Push FCM (ranking)
 
 1. Si el esquema anterior ya estaba aplicado: ejecutar [schema-push.sql](./schema-push.sql).
@@ -66,11 +73,12 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
 
 1. Si Prompt 7 ya estaba aplicado: ejecutar [schema-push-engagement.sql](./schema-push-engagement.sql).
 2. Proyecto nuevo: [schema.sql](./schema.sql) ya incluye columnas de engagement, racha y `nb_content_announcements`.
-3. **Secrets** (además de `FCM_SERVICE_ACCOUNT`):
+3. **Catálogo de versiones (modal update):** ejecutar [schema-app-releases.sql](./schema-app-releases.sql) si aún no está (lectura pública `nb_app_releases`).
+4. **Secrets** (además de `FCM_SERVICE_ACCOUNT`):
    ```
    supabase secrets set CRON_SECRET="genera-un-secreto-largo"
    ```
-4. **Deploy Edge Functions**:
+5. **Deploy Edge Functions**:
    ```
    supabase functions deploy send-push
    supabase functions deploy on-rank-change
@@ -80,7 +88,7 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
    supabase functions deploy notify-app-update
    supabase functions deploy notify-new-content
    ```
-5. **Schedules** — el plan Free de Supabase no siempre muestra Schedules en el Dashboard.
+6. **Schedules** — el plan Free de Supabase no siempre muestra Schedules en el Dashboard.
    Usa el workflow de GitHub Actions [`.github/workflows/push-cron.yml`](../../.github/workflows/push-cron.yml):
 
    | Función | Cron (UTC) |
@@ -97,16 +105,18 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
    Tras el push a `main`: Actions → **Push engagement crons** → **Run workflow** (prueba manual).
    Headers: `Authorization: Bearer …` + `x-cron-secret` + body `{ "gameId": "nuts-and-bolts" }`.
 
-6. **Tras publicar un AAB** — aviso de nueva versión (manual / GH Action):
+7. **Tras publicar un AAB** — aviso de nueva versión (manual / GH Action):
    ```bash
    curl -X POST "$SUPABASE_URL/functions/v1/notify-app-update" \
      -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
      -H "x-cron-secret: $CRON_SECRET" \
      -H "Content-Type: application/json" \
-     -d '{"gameId":"nuts-and-bolts","version":"1.5.0","title":"Nueva v1.5.0","body":"Recordatorios y más"}'
+     -d '{"gameId":"nuts-and-bolts","version":"1.5.2","versionCode":9,"title":"Nueva v1.5.2","body":"Aviso de actualización con versiones claras"}'
    ```
+   Incluye `versionCode` para upsert en `nb_app_releases` (el modal in-app lo usa si Play no manda el nombre).
+   Si aún no aplicaste el esquema: ejecutar [schema-app-releases.sql](./schema-app-releases.sql).
 
-7. **Nuevo contenido** — insertar fila en `nb_content_announcements` y llamar:
+8. **Nuevo contenido** — insertar fila en `nb_content_announcements` y llamar:
    ```bash
    curl -X POST "$SUPABASE_URL/functions/v1/notify-new-content" \
      -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
@@ -115,9 +125,9 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
      -d '{"gameId":"nuts-and-bolts"}'
    ```
 
-8. **Rate limits** (en `send-push`): ranking `rank_overtaken` máx. 3/día; resto engagement máx. 2/semana + ventanas por tipo.
+9. **Rate limits** (en `send-push`): ranking `rank_overtaken` máx. 3/día; resto engagement máx. 2/semana + ventanas por tipo.
 
-9. **Play Console → Seguridad de los datos** (manual al release): confirmar identificadores de dispositivo (FCM token), actividad en la app si aplica, y que las notificaciones se pueden desactivar (opt-out; permiso del sistema requerido).
+10. **Play Console → Seguridad de los datos** (manual al release): confirmar identificadores de dispositivo (FCM token), actividad en la app si aplica, y que las notificaciones se pueden desactivar (opt-out; permiso del sistema requerido).
 
 ## Verificación RLS
 

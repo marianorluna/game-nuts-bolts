@@ -4,36 +4,44 @@ import {
   AppUpdateAvailability,
   type AppUpdateInfo,
 } from '@capawesome/capacitor-app-update'
+import { pickDisplayVersion } from '../domain/releases/appVersionDisplay'
+import { fetchAppReleaseVersionByCode } from '../infrastructure/supabase/appReleaseRepository'
 import { getReleaseByVersionCode } from './releaseNotesService'
 
 const DISMISSED_UPDATE_KEY = 'nuts-bolts-dismissed-update'
 
 export interface AppUpdateCheckResult {
   available: boolean
+  /** Stable id for dismiss (prefer Play versionCode). */
+  updateKey?: string
   currentVersion?: string
   availableVersion?: string
   info?: AppUpdateInfo
 }
 
-function resolveSemver(
+async function resolveSemver(
   versionName: string | undefined,
   versionCode: string | number | undefined,
-): string {
-  if (versionName) return versionName
+): Promise<string> {
+  const localMapped = (() => {
+    if (versionCode === undefined || versionCode === '') return undefined
+    return getReleaseByVersionCode(versionCode)?.version
+  })()
+
+  const fromLocal = pickDisplayVersion(versionName, localMapped)
+  if (fromLocal) return fromLocal
 
   if (versionCode === undefined || versionCode === '') return ''
 
-  const release = getReleaseByVersionCode(versionCode)
-  if (release) return release.version
-
-  return String(versionCode)
+  const remote = await fetchAppReleaseVersionByCode(versionCode)
+  return pickDisplayVersion(undefined, remote ?? undefined)
 }
 
-function formatVersion(info: AppUpdateInfo, kind: 'current' | 'available'): string {
-  if (kind === 'current') {
-    return resolveSemver(info.currentVersionName, info.currentVersionCode)
+function updateKeyFromInfo(info: AppUpdateInfo, availableVersion: string): string {
+  if (info.availableVersionCode !== undefined && info.availableVersionCode !== '') {
+    return String(info.availableVersionCode)
   }
-  return resolveSemver(info.availableVersionName, info.availableVersionCode)
+  return availableVersion
 }
 
 export async function checkForAppUpdate(): Promise<AppUpdateCheckResult> {
@@ -51,19 +59,27 @@ export async function checkForAppUpdate(): Promise<AppUpdateCheckResult> {
       return { available: false }
     }
 
-    const availableVersion = formatVersion(info, 'available')
-    if (!availableVersion) {
+    const availableVersion = await resolveSemver(
+      info.availableVersionName,
+      info.availableVersionCode,
+    )
+    const updateKey = updateKeyFromInfo(info, availableVersion)
+    if (!updateKey) {
       return { available: false }
     }
 
     const dismissed = localStorage.getItem(DISMISSED_UPDATE_KEY)
-    if (dismissed === availableVersion) {
+    if (dismissed === updateKey) {
       return { available: false }
     }
 
     return {
       available: true,
-      currentVersion: formatVersion(info, 'current'),
+      updateKey,
+      currentVersion: await resolveSemver(
+        info.currentVersionName,
+        info.currentVersionCode,
+      ),
       availableVersion,
       info,
     }
@@ -72,8 +88,8 @@ export async function checkForAppUpdate(): Promise<AppUpdateCheckResult> {
   }
 }
 
-export function dismissAppUpdate(availableVersion: string): void {
-  localStorage.setItem(DISMISSED_UPDATE_KEY, availableVersion)
+export function dismissAppUpdate(updateKey: string): void {
+  localStorage.setItem(DISMISSED_UPDATE_KEY, updateKey)
 }
 
 export async function openAppStoreListing(): Promise<void> {

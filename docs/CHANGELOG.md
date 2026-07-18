@@ -93,7 +93,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Notification preferences in Settings
 - «Overtaken» push with 3/day rate limit
 
-### v1.6.0 (versionCode 9) — Audio y música ambiente
+### v1.6.0 (versionCode 10) — Audio y música ambiente
 
 ### Previsto
 
@@ -109,7 +109,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Sound effects and music can be toggled separately in Settings
 - New effects: locked bolts, nut blocks, stars, and more
 
-### v1.6.1 (versionCode 10) — Ambiente por etapa
+### v1.6.1 (versionCode 11) — Ambiente por etapa
 
 ### Previsto
 
@@ -124,6 +124,60 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Different music for each workshop stage
 - Music and sound effect volume controls
 - Sounds when syncing your cloud progress
+
+---
+
+## [1.5.2] — 2026-07-18 — Nombre en el ranking y versiones claras / Leaderboard name and clear versions
+
+**versionCode:** 9
+
+### Destacado (modal in-app)
+
+**ES**
+
+- Elige o cambia tu nombre en el ranking desde Ajustes (único, sin ofensas)
+- Si no tienes nombre, se asigna uno tipo Player_XXXXX en lugar de «Jugador»
+- El aviso de nueva versión muestra semver (p. ej. v1.5.1 → v1.5.2), no el código interno de Play
+
+**EN**
+
+- Choose or change your leaderboard name in Settings (unique, no offensive words)
+- If you have no name, you get a Player_XXXXX nick instead of generic «Player»
+- The update prompt shows semver (e.g. v1.5.1 → v1.5.2), not Play’s internal version code
+
+### Notas Play Console (copiar y pegar)
+
+**ES**
+
+- Novedad: elige tu nombre en el ranking desde Ajustes
+- Mejora: el aviso de actualización muestra la versión correctamente
+
+**EN**
+
+- New: choose your leaderboard name in Settings
+- Improvement: the update prompt shows the version correctly
+
+### Añadido
+
+**ES**
+
+- Nombre visible en el ranking editable en Ajustes (único por juego, filtro de palabras ofensivas)
+- Nombre provisional Player_XXXXX cuando la cuenta no trae nombre (p. ej. email)
+
+**EN**
+
+- Editable leaderboard display name in Settings (unique per game, offensive-word filter)
+- Provisional Player_XXXXX name when the account has no display name (e.g. email)
+
+### Corregido
+
+**ES**
+
+- No mostrar versionCode crudo (p. ej. v8) en el modal de actualización; resolver semver local y remoto (nb_app_releases)
+
+**EN**
+
+- Do not show raw versionCode (e.g. v8) in the update modal; resolve semver locally and remotely (nb_app_releases)
 
 ---
 

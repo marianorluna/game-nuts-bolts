@@ -2,8 +2,8 @@
   "name": "nuts-and-bolts",
   "private": true,
   "license": "UNLICENSED",
-  "version": "1.5.1",
-  "versionCode": 8,
+  "version": "1.5.2",
+  "versionCode": 9,
   "type": "module",
   "scripts": {
     "dev": "vite",

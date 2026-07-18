@@ -53,9 +53,22 @@ export interface RankUpPayload {
 
 export type LeaderboardChangeListener = () => void
 
+export class DisplayNameTakenError extends Error {
+  readonly code = 'taken' as const
+
+  constructor(message = 'Display name already taken') {
+    super(message)
+    this.name = 'DisplayNameTakenError'
+  }
+}
+
 export interface LeaderboardRepository {
   fetchProfile(userId: string): Promise<PlayerProfileSettings | null>
   setShowInLeaderboard(userId: string, show: boolean): Promise<void>
+  /**
+   * Upsert `display_name` for the user/game. Throws `DisplayNameTakenError` on unique conflict.
+   */
+  updateDisplayName(userId: string, displayName: string): Promise<void>
   fetchLeaderboard(limit?: number): Promise<LeaderboardPlayer[]>
   /**
    * Posición 1-based entre jugadores con opt-in.

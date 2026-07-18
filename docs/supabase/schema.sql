@@ -209,6 +209,7 @@ create trigger nb_notification_preferences_set_updated_at
   for each row execute function public.set_updated_at();
 
 -- Perfil + progreso inicial al registrarse (solo este juego; Prompt 4 auth)
+-- Si no hay nombre OAuth → Player_XXXXX (v1.5.2). Índice único: schema-display-name.sql
 create or replace function public.nb_handle_new_user()
 returns trigger
 language plpgsql
@@ -217,12 +218,28 @@ set search_path = public
 as $$
 declare
   default_game_id constant text := 'nuts-and-bolts';
+  resolved_name text;
 begin
+  resolved_name := nullif(
+    btrim(
+      coalesce(
+        new.raw_user_meta_data ->> 'full_name',
+        new.raw_user_meta_data ->> 'name'
+      )
+    ),
+    ''
+  );
+
+  if resolved_name is null then
+    resolved_name :=
+      'Player_' || upper(substr(replace(new.id::text, '-', ''), 1, 5));
+  end if;
+
   insert into public.nb_player_profiles (user_id, game_id, display_name, avatar_url)
   values (
     new.id,
     default_game_id,
-    coalesce(new.raw_user_meta_data ->> 'full_name', new.raw_user_meta_data ->> 'name'),
+    resolved_name,
     new.raw_user_meta_data ->> 'avatar_url'
   );
 
@@ -232,6 +249,10 @@ begin
   return new;
 end;
 $$;
+
+create unique index if not exists nb_player_profiles_display_name_unique
+  on public.nb_player_profiles (game_id, lower(display_name))
+  where display_name is not null;
 
 create trigger nb_on_auth_user_created
   after insert on auth.users

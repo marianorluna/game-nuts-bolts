@@ -25,8 +25,8 @@ export function useAppUpdateCheck(enabled: boolean) {
   }, [enabled])
 
   const dismiss = () => {
-    if (!update?.availableVersion) return
-    dismissAppUpdate(update.availableVersion)
+    if (!update?.updateKey) return
+    dismissAppUpdate(update.updateKey)
     setUpdate(null)
   }
 

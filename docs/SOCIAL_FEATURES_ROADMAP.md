@@ -444,7 +444,7 @@ Suite completa de notificaciones push con preferencias granulares, cron jobs y p
 
 **Comando en chat:** `Ejecuta el Prompt 9`
 
-**Versión:** v1.6.0 (`versionCode` 9)
+**Versión:** v1.6.0 (`versionCode` 10)
 
 **Prerequisito:** Prompt 8 completado (push engagement v1.5.0 publicado). Audio **no** es prioridad antes del push.
 
@@ -467,7 +467,7 @@ Implementa:
 5. Música: menu en Home/Campaña; gameplay en LevelScreen; crossfade al cambiar pantalla
 6. SFX procedurales nuevos en soundService: uiTap, modalOpen, modalClose, reset, locked, moveBlock, shake, star1/2/3, stageUnlock
 7. gameStore: toggleSfx + toggleMusic; disparar locked/moveBlock/reset donde corresponda
-8. Bump package.json → 1.6.0, versionCode 9, release-notes.json, npm run release:prepare
+8. Bump package.json → 1.6.0, versionCode 10, release-notes.json, npm run release:prepare
 
 Principios: offline-first, solo audio CC0/royalty-free, SFX procedural cuando sea posible, peso audio < 2 MB, dominio sin imports de audio.
 
@@ -547,7 +547,7 @@ Verifica en dispositivo real (autoplay tras primer tap). Marca checkboxes del ro
 
 **Comando en chat:** `Ejecuta el Prompt 10`
 
-**Versión:** v1.6.1 (`versionCode` 10)
+**Versión:** v1.6.1 (`versionCode` 11)
 
 **Prerequisito:** Prompt 9 completado (v1.6.0 publicada).
 
@@ -571,7 +571,7 @@ Implementa:
 3. GameSettings: musicVolume + sfxVolume (0–1 o bajo/medio/alto) + UI en SettingsModal
 4. SFX procedurales: syncSuccess y syncError al completar sync / fallo
 5. Actualizar docs/AUDIO_CREDITS.md; peso total public/audio/ < 4 MB (OGG mono 64–96 kbps)
-6. Bump package.json → 1.6.1, versionCode 10; release-notes v1.6.1
+6. Bump package.json → 1.6.1, versionCode 11; release-notes v1.6.1
 
 Principios: offline-first, solo CC0/royalty-free, sin regresión en toggles Prompt 9, dominio sin imports de audio.
 

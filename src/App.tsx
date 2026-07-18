@@ -46,7 +46,7 @@ export default function App() {
         {screen === 'game' && <LevelScreen />}
         {screen === 'leaderboard' && <LeaderboardScreen />}
 
-        {update?.available && update.info && update.currentVersion && update.availableVersion && (
+        {update?.available && update.info && (
           <UpdateAvailableModal
             open
             currentVersion={update.currentVersion}
