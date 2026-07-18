@@ -93,7 +93,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Notification preferences in Settings
 - «Overtaken» push with 3/day rate limit
 
-### v1.6.0 (versionCode 8) — Audio y música ambiente
+### v1.6.0 (versionCode 9) — Audio y música ambiente
 
 ### Previsto
 
@@ -109,7 +109,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Sound effects and music can be toggled separately in Settings
 - New effects: locked bolts, nut blocks, stars, and more
 
-### v1.6.1 (versionCode 9) — Ambiente por etapa
+### v1.6.1 (versionCode 10) — Ambiente por etapa
 
 ### Previsto
 
@@ -124,6 +124,46 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Different music for each workshop stage
 - Music and sound effect volume controls
 - Sounds when syncing your cloud progress
+
+---
+
+## [1.5.1] — 2026-07-18 — Fix notificaciones de recordatorios / Reminder notifications fix
+
+**versionCode:** 8
+
+### Destacado (modal in-app)
+
+**ES**
+
+- Los recordatorios push (racha, volver a jugar, novedades) ya se muestran en Android
+- Canales de notificación Ranking y Recordatorios creados correctamente
+
+**EN**
+
+- Reminder pushes (streak, comeback, updates) now show on Android
+- Ranking and Reminders notification channels created correctly
+
+### Notas Play Console (copiar y pegar)
+
+**ES**
+
+- Corrección: las notificaciones de recordatorios vuelven a mostrarse
+- Canales Android Ranking y Recordatorios
+
+**EN**
+
+- Fix: reminder notifications now display correctly
+- Android Ranking and Reminders channels
+
+### Corregido
+
+**ES**
+
+- Crear canales Android rank_alerts y engagement antes de registrar FCM (las push de engagement no aparecían en bandeja)
+
+**EN**
+
+- Create Android rank_alerts and engagement channels before FCM registration (engagement pushes were not shown in the tray)
 
 ---
 

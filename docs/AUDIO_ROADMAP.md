@@ -105,7 +105,7 @@ Plan incremental por **prompts** verificables, alineado con [SOCIAL_FEATURES_ROA
 
 **Comando en chat:** `Ejecuta el Prompt 9`
 
-**Versión:** v1.6.0 (`versionCode` 8)
+**Versión:** v1.6.0 (`versionCode` 9)
 
 **Prerequisito:** Push engagement v1.5.0 publicado (Prompt 8).
 
@@ -186,7 +186,7 @@ Extender `SoundType` y llamadas desde store/UI:
 
 **Comando en chat:** `Ejecuta el Prompt 10`
 
-**Versión:** v1.6.1 (`versionCode` 9)
+**Versión:** v1.6.1 (`versionCode` 10)
 
 **Prerequisito:** Prompt 9 completado (v1.6.0 publicada).
 

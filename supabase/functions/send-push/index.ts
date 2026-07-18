@@ -27,6 +27,7 @@ function jsonResponse(body: unknown, status = 200): Response {
   })
 }
 
+/** Must match ANDROID_PUSH_CHANNEL_IDS in src/infrastructure/push/capacitorPush.ts */
 function channelForType(type: string): string {
   if (type === RANK_OVERTAKEN_TYPE || type === 'weekly_summary') {
     return 'rank_alerts'

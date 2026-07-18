@@ -406,8 +406,46 @@
       }
     },
     {
-      "version": "1.6.0",
+      "version": "1.5.1",
       "versionCode": 8,
+      "date": "2026-07-18",
+      "published": true,
+      "title": {
+        "es": "Fix notificaciones de recordatorios",
+        "en": "Reminder notifications fix"
+      },
+      "highlights": {
+        "es": [
+          "Los recordatorios push (racha, volver a jugar, novedades) ya se muestran en Android",
+          "Canales de notificación Ranking y Recordatorios creados correctamente"
+        ],
+        "en": [
+          "Reminder pushes (streak, comeback, updates) now show on Android",
+          "Ranking and Reminders notification channels created correctly"
+        ]
+      },
+      "playStoreNotes": {
+        "es": [
+          "Corrección: las notificaciones de recordatorios vuelven a mostrarse",
+          "Canales Android Ranking y Recordatorios"
+        ],
+        "en": [
+          "Fix: reminder notifications now display correctly",
+          "Android Ranking and Reminders channels"
+        ]
+      },
+      "fixed": {
+        "es": [
+          "Crear canales Android rank_alerts y engagement antes de registrar FCM (las push de engagement no aparecían en bandeja)"
+        ],
+        "en": [
+          "Create Android rank_alerts and engagement channels before FCM registration (engagement pushes were not shown in the tray)"
+        ]
+      }
+    },
+    {
+      "version": "1.6.0",
+      "versionCode": 9,
       "date": null,
       "published": false,
       "title": {
@@ -429,7 +467,7 @@
     },
     {
       "version": "1.6.1",
-      "versionCode": 9,
+      "versionCode": 10,
       "date": null,
       "published": false,
       "title": {

@@ -2,8 +2,37 @@ import { Capacitor } from '@capacitor/core'
 import { PushNotifications } from '@capacitor/push-notifications'
 import type { PushNotificationActionHandler } from '../contracts/PushRepository'
 
+/**
+ * Must match `channelForType` in supabase/functions/send-push/index.ts.
+ * Android 8+ drops (or hides) notifications whose channel_id was never created.
+ */
+export const ANDROID_PUSH_CHANNEL_IDS = {
+  rankAlerts: 'rank_alerts',
+  engagement: 'engagement',
+} as const
+
+const ANDROID_PUSH_CHANNELS = [
+  {
+    id: ANDROID_PUSH_CHANNEL_IDS.rankAlerts,
+    name: 'Ranking',
+    description: 'Avisos de ranking y resumen semanal',
+    importance: 4,
+    visibility: 1,
+    vibration: true,
+  },
+  {
+    id: ANDROID_PUSH_CHANNEL_IDS.engagement,
+    name: 'Recordatorios',
+    description: 'Racha, novedades, sync y volver a jugar',
+    importance: 4,
+    visibility: 1,
+    vibration: true,
+  },
+] as const
+
 let registrationToken: string | null = null
 let listenersReady = false
+let androidChannelsReady = false
 const actionHandlers = new Set<PushNotificationActionHandler>()
 
 export function isNativePushSupported(): boolean {
@@ -34,6 +63,23 @@ function emitAction(data: Record<string, string>): void {
   }
 }
 
+/** Creates FCM notification channels before any push can be displayed (Android O+). */
+export async function ensureAndroidPushChannels(): Promise<void> {
+  if (Capacitor.getPlatform() !== 'android' || androidChannelsReady) return
+
+  for (const channel of ANDROID_PUSH_CHANNELS) {
+    await PushNotifications.createChannel({
+      id: channel.id,
+      name: channel.name,
+      description: channel.description,
+      importance: channel.importance,
+      visibility: channel.visibility,
+      vibration: channel.vibration,
+    })
+  }
+  androidChannelsReady = true
+}
+
 export async function requestNativePushPermission(): Promise<boolean> {
   if (!isNativePushSupported()) return false
 
@@ -56,7 +102,7 @@ export async function ensureNativePushListeners(): Promise<void> {
   })
 
   await PushNotifications.addListener('pushNotificationReceived', () => {
-    // Foreground: bandeja nativa ya muestra en Android; no-op UI
+    // Foreground: Android system tray still shows notification payloads; no-op UI
   })
 
   await PushNotifications.addListener('pushNotificationActionPerformed', (event) => {
@@ -75,6 +121,7 @@ export async function ensureNativePushListeners(): Promise<void> {
 export async function registerForNativePush(): Promise<string | null> {
   if (!isNativePushSupported()) return null
 
+  await ensureAndroidPushChannels()
   await ensureNativePushListeners()
   await PushNotifications.register()
 
@@ -104,4 +151,5 @@ export async function clearNativePushState(): Promise<void> {
     // ignore
   }
   listenersReady = false
+  androidChannelsReady = false
 }

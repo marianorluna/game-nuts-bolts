@@ -4,6 +4,7 @@ import {
   AppUpdateAvailability,
   type AppUpdateInfo,
 } from '@capawesome/capacitor-app-update'
+import { getReleaseByVersionCode } from './releaseNotesService'
 
 const DISMISSED_UPDATE_KEY = 'nuts-bolts-dismissed-update'
 
@@ -14,11 +15,25 @@ export interface AppUpdateCheckResult {
   info?: AppUpdateInfo
 }
 
+function resolveSemver(
+  versionName: string | undefined,
+  versionCode: string | number | undefined,
+): string {
+  if (versionName) return versionName
+
+  if (versionCode === undefined || versionCode === '') return ''
+
+  const release = getReleaseByVersionCode(versionCode)
+  if (release) return release.version
+
+  return String(versionCode)
+}
+
 function formatVersion(info: AppUpdateInfo, kind: 'current' | 'available'): string {
   if (kind === 'current') {
-    return info.currentVersionName || info.currentVersionCode
+    return resolveSemver(info.currentVersionName, info.currentVersionCode)
   }
-  return info.availableVersionName || info.availableVersionCode || ''
+  return resolveSemver(info.availableVersionName, info.availableVersionCode)
 }
 
 export async function checkForAppUpdate(): Promise<AppUpdateCheckResult> {

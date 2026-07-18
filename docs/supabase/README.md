@@ -60,6 +60,7 @@ Otros juegos en el mismo proyecto Supabase pueden usar el mismo patrón (`xy_pla
    ```
 7. `.env.local`: `VITE_FEATURE_PUSH_NOTIFICATIONS=true`.
 8. Verificar en dispositivo real: al iniciar sesión pide permiso → token en `nb_push_tokens`; dos cuentas con opt-in ranking → A sube → B recibe push (si no desactivó notificaciones).
+9. **Canales Android** (app ≥ v1.5.1): la app crea `rank_alerts` y `engagement` al registrar FCM. Prueba manual `send-push` con `type: rank_overtaken` y `type: re_engagement` (body JSON en una sola línea en Git Bash/Windows). App cerrada → bandeja del sistema.
 
 ## Prompt 8 — Push engagement (v1.5.0)
 

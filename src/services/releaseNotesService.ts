@@ -23,6 +23,14 @@ export function getReleaseByVersion(version: string): ReleaseNote | undefined {
   return catalog.releases.find((release) => release.version === version)
 }
 
+export function getReleaseByVersionCode(
+  versionCode: number | string,
+): ReleaseNote | undefined {
+  const code = Number(versionCode)
+  if (!Number.isFinite(code)) return undefined
+  return catalog.releases.find((release) => release.versionCode === code)
+}
+
 export function getCurrentReleaseNotes(): ReleaseNote | undefined {
   return getReleaseByVersion(APP_VERSION)
 }
