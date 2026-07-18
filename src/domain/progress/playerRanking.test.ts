@@ -3,6 +3,7 @@ import {
   comparePlayerRank,
   computeRankingPointsThrough3,
   countCompletedLevels,
+  countTotalStars,
   deriveRankingStats,
   shouldUpdateRankSnapshot,
   sortRankingEntries,
@@ -47,11 +48,12 @@ describe('ranking points (criterios 1–3)', () => {
       levels: buildCompletedLevels(100, 3),
     }
 
+    // 95 niveles normales × 3 pts + 5 retos × 30 pts = 285 + 150
     const points = computeRankingPointsThrough3(progress)
     expect(points.completedLevels).toBe(100)
     expect(points.starPoints).toBe(300)
-    expect(points.weightedTierPoints).toBe(300)
-    expect(points.cumulativeThrough3).toBe(700)
+    expect(points.weightedTierPoints).toBe(435)
+    expect(points.cumulativeThrough3).toBe(835)
   })
 
   it('pondera 3★/2★/1★ en el criterio 3', () => {
@@ -66,6 +68,22 @@ describe('ranking points (criterios 1–3)', () => {
 
     expect(sumWeightedStarTierPoints(progress)).toBe(6)
     expect(deriveRankingStats(progress).cumulativePointsThrough3).toBe(3 + 6 + 6)
+  })
+
+  it('retos suman 10 pts por estrella (10 / 20 / 30)', () => {
+    const progress: PlayerProgress = {
+      unlockedLevel: 101,
+      levels: {
+        20: level(1, 12),
+        40: level(2, 14),
+        60: level(3, 10),
+      },
+    }
+
+    expect(sumWeightedStarTierPoints(progress)).toBe(10 + 20 + 30)
+    expect(deriveRankingStats(progress).cumulativePointsThrough3).toBe(
+      3 + (1 + 2 + 3) + (10 + 20 + 30),
+    )
   })
 })
 
@@ -125,6 +143,36 @@ describe('comparePlayerRank', () => {
     )
 
     expect(comparePlayerRank(a, b)).toBeLessThan(0)
+  })
+
+  it('criterio 3: un reto a 3★ gana a otro a 1★ a igualdad de estrellas totales', () => {
+    const masteredChallenge = entry(
+      {
+        unlockedLevel: 21,
+        levels: {
+          ...buildCompletedLevels(19, 1, 10),
+          20: level(3, 8),
+        },
+      },
+      '2026-01-01T00:00:00Z',
+    )
+    const approvedChallenge = entry(
+      {
+        unlockedLevel: 21,
+        levels: {
+          ...buildCompletedLevels(19, 1, 10),
+          20: level(1, 8),
+          // +2★ en nivel normal para empatar estrellas totales (22)
+          19: level(3, 10),
+        },
+      },
+      '2026-01-01T00:00:00Z',
+    )
+
+    expect(countTotalStars(masteredChallenge.progress)).toBe(
+      countTotalStars(approvedChallenge.progress),
+    )
+    expect(comparePlayerRank(masteredChallenge, approvedChallenge)).toBeLessThan(0)
   })
 
   it('criterio 4: compara movimientos del nivel más alto hacia abajo', () => {

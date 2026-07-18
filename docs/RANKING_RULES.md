@@ -16,7 +16,7 @@ Ejemplo (nivel máx. 100):
 |------|-----------|-----------|
 | 1. Niveles completados | 100 pts | 100 pts → empate |
 | 2. Estrellas (1 pt/★) | +290 → 390 | +290 → 390 → empate |
-| 3. Ponderado 3★/2★/1★ | +290 → 690 | +290 → 690 → empate |
+| 3. Ponderado (normal + retos ×10) | … | … → empate |
 | 4. Movimientos nivel 100 | 32 movs | 31 movs → **B gana** (+1) |
 
 ---
@@ -27,7 +27,7 @@ Ejemplo (nivel máx. 100):
 |---|---------|----------------|------------------------------|
 | 1 | **Niveles completados** | +1 por cada nivel con `completed === true` | — (siempre) |
 | 2 | **Estrellas totales** | +1 por cada estrella en cualquier nivel | Sí |
-| 3 | **Ponderado por nivel** | +3 si el nivel tiene 3★, +2 si 2★, +1 si 1★ | Sí |
+| 3 | **Ponderado por nivel** | Normal: +3 / +2 / +1 según ★. **Retos** (20, 40, 60, 80, 100): **+30 / +20 / +10** (10 pts por estrella) | Sí |
 | 4 | **Movimientos por nivel** | Del id **más alto al más bajo**, gana quien tenga menos `bestMoves` en cada nivel completado; si empatan en un nivel, se sigue con el siguiente | Sí |
 | 5 | **Movimientos totales** | Gana quien tenga menor suma de `bestMoves` en niveles completados | Sí |
 | 6 | **`rankSnapshotAt`** | Gana quien **antes** completó el nivel que llevó su avance al techo actual | Sí |
@@ -55,13 +55,17 @@ Mejorar estrellas en niveles viejos **no** cambia el snapshot.
 computeRankingPointsThrough3(progress)
 // {
 //   completedLevels: 100,      // criterio 1
-//   starPoints: 290,           // criterio 2
-//   weightedTierPoints: 290,   // criterio 3
-//   cumulativeThrough3: 680,   // suma para mostrar en leaderboard
+//   starPoints: 300,           // criterio 2
+//   weightedTierPoints: 435,   // criterio 3 (95×3 normales + 5×30 retos a 3★)
+//   cumulativeThrough3: 835,   // suma para mostrar en leaderboard
 // }
 ```
 
 Los criterios 4–6 son desempates entre pares; no se suman de forma lineal en un solo número global.
+
+### Retos y puntuación
+
+Un reto con *n* estrellas aporta **`n × 10`** puntos en el criterio 3 (además del +1 de completado y +*n* de estrellas de los criterios 1–2). Así un reto a 3★ pesa mucho más que un nivel normal a 3★.
 
 ---
 
@@ -105,3 +109,4 @@ Migración incremental si el esquema Prompt 1 ya estaba aplicado: [schema-prompt
 |-------|--------|
 | 2026-07-01 | Reglas iniciales: 6 criterios lexicográficos. |
 | 2026-07-01 | Sistema de puntos acumulativos 1–3; criterio 1 = niveles completados; snapshot al subir `unlockedLevel`. |
+| 2026-07-18 | Criterio 3: retos (20/40/60/80/100) valen 10 pts por estrella (10/20/30). |

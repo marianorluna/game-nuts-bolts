@@ -1,5 +1,9 @@
+import { isChallengeLevel } from '../content/campaignStructure'
 import { MAX_LEVEL_ID } from '../levels'
 import type { PlayerProgress, PlayerRankingEntry } from '../types'
+
+/** Puntos por estrella en niveles reto (criterio 3): 1★→10, 2★→20, 3★→30. */
+export const CHALLENGE_RANKING_POINTS_PER_STAR = 10
 
 /** Criterio 1: 1 punto por cada nivel completado. */
 export function countCompletedLevels(progress: PlayerProgress): number {
@@ -11,13 +15,20 @@ export function countTotalStars(progress: PlayerProgress): number {
   return Object.values(progress.levels).reduce((sum, level) => sum + level.stars, 0)
 }
 
-/** Criterio 3: 3 pts por nivel 3★, 2 por 2★, 1 por 1★. */
+function weightedTierPointsForLevel(levelId: number, stars: number): number {
+  if (stars < 1 || stars > 3) return 0
+  if (isChallengeLevel(levelId)) {
+    return stars * CHALLENGE_RANKING_POINTS_PER_STAR
+  }
+  return stars
+}
+
+/**
+ * Criterio 3: niveles normales 3/2/1 pts; retos 30/20/10 (10 pts por estrella).
+ */
 export function sumWeightedStarTierPoints(progress: PlayerProgress): number {
-  return Object.values(progress.levels).reduce((sum, level) => {
-    if (level.stars === 3) return sum + 3
-    if (level.stars === 2) return sum + 2
-    if (level.stars === 1) return sum + 1
-    return sum
+  return Object.entries(progress.levels).reduce((sum, [id, level]) => {
+    return sum + weightedTierPointsForLevel(Number(id), level.stars)
   }, 0)
 }
 
