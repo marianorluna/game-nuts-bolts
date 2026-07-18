@@ -198,9 +198,16 @@ export function LeaderboardScreen() {
                       {displayName(entry.displayName, anonymous)}
                       {isSelf ? ` · ${t('leaderboard.you')}` : ''}
                     </p>
-                    <span className="shrink-0 text-sm font-semibold text-purple-100">
-                      {t('leaderboard.levelsShort', {
+                    <span
+                      className="shrink-0 text-sm font-semibold tabular-nums text-purple-100"
+                      aria-label={t('leaderboard.entryStatsAria', {
                         levels: entry.completedLevels,
+                        stars: entry.totalStars,
+                      })}
+                    >
+                      {t('leaderboard.entryStats', {
+                        levels: entry.completedLevels,
+                        stars: entry.totalStars,
                       })}
                     </span>
                   </li>
