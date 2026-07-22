@@ -52,7 +52,8 @@ Alternativa por terminal (con keystore configurado):
 
 ```bash
 cd android
-./gradlew bundleRelease
+# Usar JDK 21 de Android Studio (el JDK del sistema es Java 25, incompatible con AGP 8.x)
+JAVA_HOME="/c/Program Files/Android/Android Studio/jbr" ./gradlew bundleRelease
 ```
 
 ## 5. Crear la app en Play Console

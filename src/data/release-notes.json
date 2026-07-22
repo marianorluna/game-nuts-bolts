@@ -508,8 +508,48 @@
       }
     },
     {
-      "version": "1.6.0",
+      "version": "1.5.3",
       "versionCode": 10,
+      "date": "2026-07-22",
+      "published": true,
+      "title": {
+        "es": "Compatibilidad con Android 16",
+        "en": "Android 16 compatibility"
+      },
+      "highlights": {
+        "es": [
+          "Compatible con Android 16 (API 36) — requerido por Google Play",
+          "Actualización interna de motor (Capacitor 8) sin cambios en el juego"
+        ],
+        "en": [
+          "Compatible with Android 16 (API 36) — required by Google Play",
+          "Internal engine update (Capacitor 8) with no gameplay changes"
+        ]
+      },
+      "playStoreNotes": {
+        "es": [
+          "Actualización de compatibilidad con Android 16 (API 36)",
+          "Sin cambios en el juego ni en las funciones existentes"
+        ],
+        "en": [
+          "Compatibility update for Android 16 (API 36)",
+          "No changes to gameplay or existing features"
+        ]
+      },
+      "changed": {
+        "es": [
+          "Motor actualizado a Capacitor 8 para cumplir requisitos de Google Play (targetSdk 36)",
+          "Mínimo Android requerido: Android 7 (API 24), antes Android 6 (API 23)"
+        ],
+        "en": [
+          "Engine updated to Capacitor 8 to meet Google Play requirements (targetSdk 36)",
+          "Minimum Android version raised to Android 7 (API 24), previously Android 6 (API 23)"
+        ]
+      }
+    },
+    {
+      "version": "1.6.0",
+      "versionCode": 11,
       "date": null,
       "published": false,
       "title": {
@@ -531,7 +571,7 @@
     },
     {
       "version": "1.6.1",
-      "versionCode": 11,
+      "versionCode": 12,
       "date": null,
       "published": false,
       "title": {

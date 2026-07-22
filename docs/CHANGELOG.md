@@ -93,7 +93,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Notification preferences in Settings
 - «Overtaken» push with 3/day rate limit
 
-### v1.6.0 (versionCode 10) — Audio y música ambiente
+### v1.6.0 (versionCode 11) — Audio y música ambiente
 
 ### Previsto
 
@@ -109,7 +109,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Sound effects and music can be toggled separately in Settings
 - New effects: locked bolts, nut blocks, stars, and more
 
-### v1.6.1 (versionCode 11) — Ambiente por etapa
+### v1.6.1 (versionCode 12) — Ambiente por etapa
 
 ### Previsto
 
@@ -124,6 +124,48 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Different music for each workshop stage
 - Music and sound effect volume controls
 - Sounds when syncing your cloud progress
+
+---
+
+## [1.5.3] — 2026-07-22 — Compatibilidad con Android 16 / Android 16 compatibility
+
+**versionCode:** 10
+
+### Destacado (modal in-app)
+
+**ES**
+
+- Compatible con Android 16 (API 36) — requerido por Google Play
+- Actualización interna de motor (Capacitor 8) sin cambios en el juego
+
+**EN**
+
+- Compatible with Android 16 (API 36) — required by Google Play
+- Internal engine update (Capacitor 8) with no gameplay changes
+
+### Notas Play Console (copiar y pegar)
+
+**ES**
+
+- Actualización de compatibilidad con Android 16 (API 36)
+- Sin cambios en el juego ni en las funciones existentes
+
+**EN**
+
+- Compatibility update for Android 16 (API 36)
+- No changes to gameplay or existing features
+
+### Cambiado
+
+**ES**
+
+- Motor actualizado a Capacitor 8 para cumplir requisitos de Google Play (targetSdk 36)
+- Mínimo Android requerido: Android 7 (API 24), antes Android 6 (API 23)
+
+**EN**
+
+- Engine updated to Capacitor 8 to meet Google Play requirements (targetSdk 36)
+- Minimum Android version raised to Android 7 (API 24), previously Android 6 (API 23)
 
 ---
 
