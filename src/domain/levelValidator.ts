@@ -3,6 +3,7 @@ import {
   canMove,
   CLASSIC_PLAY_CONTEXT,
   cloneBolts,
+  getBoltCapacity,
   isSolved,
   moveNuts,
 } from './gameEngine'
@@ -13,12 +14,15 @@ function serializeBolts(bolts: Bolt[]): string {
 
 export function validateLevelStructure(
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): { valid: boolean; error?: string } {
   const colorCounts = new Map<string, number>()
 
-  for (const bolt of bolts) {
-    if (bolt.length > capacity) {
+  for (let i = 0; i < bolts.length; i += 1) {
+    const bolt = bolts[i]
+    const cap = getBoltCapacity(i, defaultCapacity, ctx)
+    if (bolt.length > cap) {
       return { valid: false, error: 'Bolt exceeds capacity' }
     }
     for (const color of bolt) {
@@ -31,11 +35,16 @@ export function validateLevelStructure(
     return { valid: false, error: 'No colors found' }
   }
 
-  const expected = capacity
-  if (!counts.every((c) => c === expected)) {
-    return {
-      valid: false,
-      error: `Invalid color distribution: ${JSON.stringify(Object.fromEntries(colorCounts))}`,
+  const hasVariableCapacity = ctx.boltConfigs.some(
+    (config) => config.maxCapacity !== undefined,
+  )
+  if (!hasVariableCapacity) {
+    const expected = counts[0]
+    if (!counts.every((c) => c === expected)) {
+      return {
+        valid: false,
+        error: `Invalid color distribution: ${JSON.stringify(Object.fromEntries(colorCounts))}`,
+      }
     }
   }
 
@@ -48,9 +57,10 @@ export function minSplitColorsForLevel(colorCount: number): number {
 
 export function isLevelScrambled(
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): boolean {
-  if (isSolved(bolts, capacity)) return false
+  if (isSolved(bolts, defaultCapacity, ctx)) return false
 
   const hasMixedBolt = bolts.some(
     (bolt) => bolt.length > 1 && new Set(bolt).size > 1,
@@ -71,23 +81,24 @@ export function isLevelScrambled(
     if (boltsWithColor >= 2) splitColors += 1
   }
 
-  const hasPartialBolt = bolts.some(
-    (bolt) => bolt.length > 0 && bolt.length < capacity,
-  )
+  const hasPartialBolt = bolts.some((bolt, index) => {
+    const cap = getBoltCapacity(index, defaultCapacity, ctx)
+    return bolt.length > 0 && bolt.length < cap
+  })
 
   return splitColors >= 1 && hasPartialBolt
 }
 
 export function hasSolutionWithin(
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
   maxMoves: number,
   maxStates = 2_000_000,
   ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): boolean {
   if (maxMoves < 0) return false
   const start = cloneBolts(bolts)
-  if (isSolved(start, capacity)) return true
+  if (isSolved(start, defaultCapacity, ctx)) return true
 
   const queue: { bolts: Bolt[]; depth: number }[] = [
     { bolts: start, depth: 0 },
@@ -102,12 +113,12 @@ export function hasSolutionWithin(
 
     for (let from = 0; from < current.length; from += 1) {
       for (let to = 0; to < current.length; to += 1) {
-        if (!canMove(current, from, to, capacity, ctx)) continue
+        if (!canMove(current, from, to, defaultCapacity, ctx)) continue
 
-        const result = moveNuts(current, from, to, capacity, ctx)
+        const result = moveNuts(current, from, to, defaultCapacity, ctx)
         if (!result) continue
 
-        if (isSolved(result.bolts, capacity)) return true
+        if (isSolved(result.bolts, defaultCapacity, ctx)) return true
 
         const key = serializeBolts(result.bolts)
         if (visited.has(key) || visited.size >= maxStates) continue
@@ -123,12 +134,12 @@ export function hasSolutionWithin(
 
 export function isLevelSolvable(
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
   maxStates = 2_000_000,
   ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): boolean {
   const start = cloneBolts(bolts)
-  if (isSolved(start, capacity)) return true
+  if (isSolved(start, defaultCapacity, ctx)) return true
 
   const queue: Bolt[][] = [start]
   const visited = new Set<string>([serializeBolts(start)])
@@ -139,12 +150,12 @@ export function isLevelSolvable(
 
     for (let from = 0; from < current.length; from += 1) {
       for (let to = 0; to < current.length; to += 1) {
-        if (!canMove(current, from, to, capacity, ctx)) continue
+        if (!canMove(current, from, to, defaultCapacity, ctx)) continue
 
-        const result = moveNuts(current, from, to, capacity, ctx)
+        const result = moveNuts(current, from, to, defaultCapacity, ctx)
         if (!result) continue
 
-        if (isSolved(result.bolts, capacity)) return true
+        if (isSolved(result.bolts, defaultCapacity, ctx)) return true
 
         const key = serializeBolts(result.bolts)
         if (visited.has(key) || visited.size >= maxStates) continue
@@ -175,23 +186,29 @@ export function countSplitColors(bolts: Bolt[]): number {
   return splitColors
 }
 
-export function countCompleteBolts(bolts: Bolt[], capacity: number): number {
-  return bolts.filter(
-    (bolt) =>
-      bolt.length === capacity &&
+export function countCompleteBolts(
+  bolts: Bolt[],
+  defaultCapacity: number,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
+): number {
+  return bolts.filter((bolt, index) => {
+    const cap = getBoltCapacity(index, defaultCapacity, ctx)
+    return (
+      bolt.length === cap &&
       bolt.length > 0 &&
-      bolt.every((nut) => nut === bolt[0]),
-  ).length
+      bolt.every((nut) => nut === bolt[0])
+    )
+  }).length
 }
 
 export function getMinSolutionMoves(
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
   maxStates = 2_000_000,
   ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): number | null {
   const start = cloneBolts(bolts)
-  if (isSolved(start, capacity)) return 0
+  if (isSolved(start, defaultCapacity, ctx)) return 0
 
   const queue: { bolts: Bolt[]; depth: number }[] = [
     { bolts: start, depth: 0 },
@@ -205,12 +222,12 @@ export function getMinSolutionMoves(
 
     for (let from = 0; from < current.length; from += 1) {
       for (let to = 0; to < current.length; to += 1) {
-        if (!canMove(current, from, to, capacity, ctx)) continue
+        if (!canMove(current, from, to, defaultCapacity, ctx)) continue
 
-        const result = moveNuts(current, from, to, capacity, ctx)
+        const result = moveNuts(current, from, to, defaultCapacity, ctx)
         if (!result) continue
 
-        if (isSolved(result.bolts, capacity)) return depth + 1
+        if (isSolved(result.bolts, defaultCapacity, ctx)) return depth + 1
 
         const key = serializeBolts(result.bolts)
         if (visited.has(key) || visited.size >= maxStates) continue
@@ -232,13 +249,18 @@ export interface LevelQualityCriteria {
 
 export function meetsLevelQuality(
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
   criteria: LevelQualityCriteria,
   maxStates = 2_000_000,
   ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): { ok: boolean; reason?: string } {
-  if (!isLevelScrambled(bolts, capacity)) {
+  if (!isLevelScrambled(bolts, defaultCapacity, ctx)) {
     return { ok: false, reason: 'not scrambled' }
+  }
+
+  const structure = validateLevelStructure(bolts, defaultCapacity, ctx)
+  if (!structure.valid) {
+    return { ok: false, reason: structure.error }
   }
 
   const splitColors = countSplitColors(bolts)
@@ -249,7 +271,7 @@ export function meetsLevelQuality(
     }
   }
 
-  const completeBolts = countCompleteBolts(bolts, capacity)
+  const completeBolts = countCompleteBolts(bolts, defaultCapacity, ctx)
   if (completeBolts > criteria.maxCompleteBolts) {
     return {
       ok: false,
@@ -260,7 +282,7 @@ export function meetsLevelQuality(
   const minMoves = criteria.minSolutionMoves
   if (
     minMoves > 1 &&
-    hasSolutionWithin(bolts, capacity, minMoves - 1, maxStates, ctx)
+    hasSolutionWithin(bolts, defaultCapacity, minMoves - 1, maxStates, ctx)
   ) {
     return {
       ok: false,
@@ -268,7 +290,7 @@ export function meetsLevelQuality(
     }
   }
 
-  if (getMinSolutionMoves(bolts, capacity, maxStates, ctx) === null) {
+  if (getMinSolutionMoves(bolts, defaultCapacity, maxStates, ctx) === null) {
     return { ok: false, reason: 'not solvable within limit' }
   }
 
@@ -277,13 +299,18 @@ export function meetsLevelQuality(
 
 export function meetsLevelQualityForGeneration(
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
   criteria: LevelQualityCriteria,
   maxStates = 2_000_000,
   ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): { ok: boolean; reason?: string } {
-  if (!isLevelScrambled(bolts, capacity)) {
+  if (!isLevelScrambled(bolts, defaultCapacity, ctx)) {
     return { ok: false, reason: 'not scrambled' }
+  }
+
+  const structure = validateLevelStructure(bolts, defaultCapacity, ctx)
+  if (!structure.valid) {
+    return { ok: false, reason: structure.error }
   }
 
   const splitColors = countSplitColors(bolts)
@@ -294,7 +321,7 @@ export function meetsLevelQualityForGeneration(
     }
   }
 
-  const completeBolts = countCompleteBolts(bolts, capacity)
+  const completeBolts = countCompleteBolts(bolts, defaultCapacity, ctx)
   if (completeBolts > criteria.maxCompleteBolts) {
     return {
       ok: false,
@@ -305,7 +332,7 @@ export function meetsLevelQualityForGeneration(
   const minMoves = criteria.minSolutionMoves
   if (
     minMoves > 1 &&
-    hasSolutionWithin(bolts, capacity, minMoves - 1, maxStates, ctx)
+    hasSolutionWithin(bolts, defaultCapacity, minMoves - 1, maxStates, ctx)
   ) {
     return {
       ok: false,
@@ -313,7 +340,7 @@ export function meetsLevelQualityForGeneration(
     }
   }
 
-  if (!isLevelSolvable(bolts, capacity, maxStates, ctx)) {
+  if (!isLevelSolvable(bolts, defaultCapacity, maxStates, ctx)) {
     return { ok: false, reason: 'not solvable within limit' }
   }
 

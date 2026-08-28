@@ -50,7 +50,6 @@ export function CreditsModal({ open, onClose }: CreditsModalProps) {
               </div>
               <h3 className="text-lg font-bold text-white">{AUTHOR.name}</h3>
               <p className="mt-1 text-sm font-medium text-amber-300">{t('author.role')}</p>
-              <p className="mt-3 text-sm leading-relaxed text-purple-200">{t('author.bio')}</p>
             </div>
 
             <div className="mb-6">

@@ -93,7 +93,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Notification preferences in Settings
 - «Overtaken» push with 3/day rate limit
 
-### v1.6.0 (versionCode 11) — Audio y música ambiente
+### v1.7.0 (versionCode 12) — Audio y música ambiente
 
 ### Previsto
 
@@ -109,7 +109,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Sound effects and music can be toggled separately in Settings
 - New effects: locked bolts, nut blocks, stars, and more
 
-### v1.6.1 (versionCode 12) — Ambiente por etapa
+### v1.7.1 (versionCode 13) — Ambiente por etapa
 
 ### Previsto
 
@@ -124,6 +124,80 @@ Historial de **releases de la app** (semver + `versionCode`).
 - Different music for each workshop stage
 - Music and sound effect volume controls
 - Sounds when syncing your cloud progress
+
+---
+
+## [1.6.0] — 2026-08-28 — El mostrador de ferretería / The hardware counter
+
+**versionCode:** 11
+
+### Destacado (modal in-app)
+
+**ES**
+
+- 100 niveles nuevos (101–200): la Sección 2 del taller
+- Dos mecánicas nuevas: bulones de distinta altura y pedidos de color fijo
+- 5 retos nuevos con medallas coleccionables (120, 140, 160, 180, 200)
+- Tema visual de ferretería en tres etapas nuevas
+- Tu progreso y estrellas de niveles 1–100 se conservan
+
+**EN**
+
+- 100 new levels (101–200): Section 2 of the workshop
+- Two new mechanics: bolts of different heights and fixed-color orders
+- 5 new challenges with collectible medals (120, 140, 160, 180, 200)
+- Hardware-store visual theme across three new stages
+- Your progress and stars for levels 1–100 are preserved
+
+### Notas Play Console (copiar y pegar)
+
+**ES**
+
+- 100 niveles nuevos: el mostrador de ferretería (101–200)
+- Bulones de distinta altura y pedidos de color fijo
+- 5 retos nuevos con medallas (120, 140, 160, 180, 200)
+- Sin perder progreso ni estrellas de niveles anteriores
+
+**EN**
+
+- 100 new levels: the hardware counter (101–200)
+- Variable-height bolts and fixed-color orders
+- 5 new challenges with medals (120, 140, 160, 180, 200)
+- No loss of progress or stars from earlier levels
+
+### Añadido
+
+**ES**
+
+- Sección 2: El mostrador de ferretería (niveles 101–200)
+- Mecánica variableCapacity: bulones con altura 3, 4 o 5
+- Mecánica fixedColorBolt: bulones que solo aceptan un color
+- Etapas 4–6 con tema hardware y coach marks en niveles 131 y 166
+- Retos 120, 140, 160, 180 y 200 con medallas en el medallero
+- Modal de fin de contenido actualizado al nivel 200
+
+**EN**
+
+- Section 2: The hardware counter (levels 101–200)
+- variableCapacity mechanic: bolts with height 3, 4, or 5
+- fixedColorBolt mechanic: bolts that only accept one color
+- Stages 4–6 with hardware theme and coach marks at levels 131 and 166
+- Challenges 120, 140, 160, 180 and 200 with medals in the gallery
+- End-of-content modal updated for level 200
+
+### Compatibilidad
+
+**ES**
+
+- Layouts de niveles 1–100 sin cambios (checksum de hornado)
+- Saves existentes conservan unlockedLevel y estrellas
+- Jugadores que completaron el nivel 100 ven el nuevo fin de contenido al llegar al 200
+
+**EN**
+
+- Level layouts 1–100 unchanged (bake checksum)
+- Existing saves keep unlockedLevel and stars
+- Players who finished level 100 see the updated end-of-content at level 200
 
 ---
 

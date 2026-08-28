@@ -1,16 +1,18 @@
 import { motion } from 'framer-motion'
 import { getMovableCount } from '../domain/gameEngine'
-import type { Bolt } from '../domain/types'
+import type { Bolt, NutColor } from '../domain/types'
+import { NUT_STYLES } from '../domain/types'
 import { useTranslation } from '../i18n/useTranslation'
 import { NUT_H, NUT_LIFT_CLEARANCE, NutPiece } from './NutPiece'
 
 interface BoltStackProps {
   bolt: Bolt
-  capacity: number
+  boltCapacity: number
   index: number
   isSelected: boolean
   isShaking: boolean
   isLocked?: boolean
+  fixedColor?: NutColor
   multiNut?: boolean
   onSelect: (index: number) => void
 }
@@ -32,17 +34,18 @@ const SHAFT_THREAD_LOCKED =
 
 export function BoltStack({
   bolt,
-  capacity,
+  boltCapacity,
   index,
   isSelected,
   isShaking,
   isLocked = false,
+  fixedColor,
   multiNut = false,
   onSelect,
 }: BoltStackProps) {
   const { t } = useTranslation()
-  const emptySlots = capacity - bolt.length
-  const nutsStackH = capacity * NUT_H
+  const emptySlots = boltCapacity - bolt.length
+  const nutsStackH = boltCapacity * NUT_H
   const nutsAreaH = nutsStackH + SHAFT_TOP_OVERHANG
   const movableCount = isSelected ? getMovableCount(bolt, multiNut) : 0
   const movableFromIndex = bolt.length - movableCount
@@ -52,7 +55,10 @@ export function BoltStack({
   const lockCenterY = NUT_LIFT_CLEARANCE + SHAFT_TOP_OVERHANG + nutsStackH / 2
   const boltLabel =
     t('level.bolt', { number: index + 1 }) +
-    (isLocked ? t('level.boltLocked') : '')
+    (isLocked ? t('level.boltLocked') : '') +
+    (fixedColor ? t('level.boltFixedColor') : '')
+
+  const fixedRingColor = fixedColor ? NUT_STYLES[fixedColor].glowColor : undefined
 
   return (
     <motion.button
@@ -172,9 +178,11 @@ export function BoltStack({
           background: isLocked
             ? 'linear-gradient(180deg, #d4d4d4 0%, #b8b8b8 52%, #989898 100%)'
             : 'linear-gradient(180deg, #7a8c9e 0%, #506070 52%, #384858 100%)',
-          boxShadow: isLocked
-            ? '0 4px 8px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.2)'
-            : '0 6px 12px rgba(0,0,0,0.55), inset 0 1px 2px rgba(255,255,255,0.12)',
+          boxShadow: fixedRingColor
+            ? `0 0 0 2px ${fixedRingColor}, 0 6px 12px rgba(0,0,0,0.55), inset 0 1px 2px rgba(255,255,255,0.12)`
+            : isLocked
+              ? '0 4px 8px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.2)'
+              : '0 6px 12px rgba(0,0,0,0.55), inset 0 1px 2px rgba(255,255,255,0.12)',
           position: 'relative',
           zIndex: 3,
         }}

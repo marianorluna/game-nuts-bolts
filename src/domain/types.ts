@@ -16,13 +16,17 @@ export type MechanicId =
   | 'variableCapacity'
   | 'fixedColorBolt'
 
-export type ThemeId = 'workshop' | 'garage' | 'factory'
+export type ThemeId = 'workshop' | 'garage' | 'factory' | 'hardware'
 
 export type Bolt = NutColor[]
 
 export interface BoltConfig {
   locked?: boolean
   unlockWhenColor?: NutColor
+  /** Capacidad máxima del bulón (variableCapacity). */
+  maxCapacity?: number
+  /** Solo acepta tuercas de este color (fixedColorBolt). */
+  fixedColor?: NutColor
 }
 
 export interface GamePlayContext {

@@ -86,6 +86,19 @@ export const CAMPAIGN_CARD_THEMES: Record<ThemeId, CampaignCardTheme> = {
     patternClass: 'campaign-pattern-factory',
     badgeClass: 'bg-amber-950/50 text-amber-100',
   },
+  hardware: {
+    cardGradient: 'bg-gradient-to-br from-[#4a3028] via-[#3d2818] to-[#2a1c10]',
+    borderActive: 'border-orange-400/55 shadow-[0_8px_32px_rgba(251,146,60,0.2)]',
+    borderLocked: 'border-amber-800/35',
+    glowColor: 'bg-orange-400/25',
+    titleText: 'text-orange-100',
+    taglineText: 'text-amber-100/85',
+    progressTrack: 'bg-stone-950/40',
+    progressFrom: 'from-orange-400',
+    progressTo: 'to-amber-500',
+    patternClass: 'campaign-pattern-hardware',
+    badgeClass: 'bg-amber-950/55 text-amber-100',
+  },
 }
 
 export function getCampaignCardTheme(themeId: ThemeId): CampaignCardTheme {
@@ -96,6 +109,7 @@ export const THEME_BACKGROUNDS: Record<ThemeId, string> = {
   workshop: 'bg-gradient-to-b from-[#3d2a6b] to-[#2d1b4e]',
   garage: 'bg-gradient-to-b from-[#2a3d4a] to-[#1a2830]',
   factory: 'bg-gradient-to-b from-[#3d3520] to-[#2a2518]',
+  hardware: 'bg-gradient-to-b from-[#3d2818] to-[#2a1c10]',
 }
 
 const STAGE_1: StageMeta = {
@@ -130,12 +144,44 @@ export const SECTION_1_FUNDAMENTOS: SectionMeta = {
   stages: [STAGE_1, STAGE_2, STAGE_3],
 }
 
+const STAGE_4: StageMeta = {
+  id: 'stage-4-turno-mostrador',
+  levelFrom: 101,
+  levelTo: 130,
+  themeId: 'hardware',
+  mechanicIds: ['multiNut', 'lockedBolt'],
+}
+
+const STAGE_5: StageMeta = {
+  id: 'stage-5-bulones-medidas',
+  levelFrom: 131,
+  levelTo: 165,
+  themeId: 'hardware',
+  mechanicIds: ['multiNut', 'lockedBolt', 'variableCapacity'],
+}
+
+const STAGE_6: StageMeta = {
+  id: 'stage-6-pedidos-especiales',
+  levelFrom: 166,
+  levelTo: 200,
+  themeId: 'hardware',
+  mechanicIds: ['multiNut', 'lockedBolt', 'variableCapacity', 'fixedColorBolt'],
+}
+
+export const SECTION_2_MOSTRADOR: SectionMeta = {
+  id: 'section-2-mostrador',
+  campaignId: 'campaign-1-taller',
+  levelFrom: 101,
+  levelTo: 200,
+  stages: [STAGE_4, STAGE_5, STAGE_6],
+}
+
 export const CAMPAIGN_1_TALLER: CampaignMeta = {
   id: 'campaign-1-taller',
   emoji: '🔧',
   themeId: 'workshop',
   available: true,
-  sections: [SECTION_1_FUNDAMENTOS],
+  sections: [SECTION_1_FUNDAMENTOS, SECTION_2_MOSTRADOR],
 }
 
 export const CAMPAIGN_2_OBRA: CampaignMeta = {
@@ -179,7 +225,9 @@ export function getCampaignProgress(
   return { completed, total }
 }
 
-export const CHALLENGE_LEVEL_IDS = new Set([20, 40, 60, 80, 100])
+export const CHALLENGE_LEVEL_IDS = new Set([
+  20, 40, 60, 80, 100, 120, 140, 160, 180, 200,
+])
 
 const MILESTONES: MilestoneMeta[] = [
   { levelId: 20, emoji: '⚡' },
@@ -188,7 +236,16 @@ const MILESTONES: MilestoneMeta[] = [
   { levelId: 60, emoji: '🔩' },
   { levelId: 80, emoji: '⚡' },
   { levelId: 100, emoji: '🏆' },
+  { levelId: 120, emoji: '⚡' },
+  { levelId: 140, emoji: '⚡' },
+  { levelId: 160, emoji: '⚡' },
+  { levelId: 180, emoji: '⚡' },
+  { levelId: 200, emoji: '🏆' },
 ]
+
+export function getFlattenedStages(campaign: CampaignMeta): StageMeta[] {
+  return campaign.sections.flatMap((section) => section.stages)
+}
 
 export function getStageForLevel(levelId: number): StageMeta | undefined {
   for (const section of CAMPAIGN_1_TALLER.sections) {
@@ -224,17 +281,17 @@ export function isChallengeLevel(levelId: number): boolean {
 
 export function enrichLevelMetadata(level: LevelDefinition): LevelDefinition {
   const stage = getStageForLevel(level.id)
-  let mechanics = level.mechanics
-  if (!mechanics?.length) {
-    if (level.id >= 81) mechanics = ['multiNut', 'lockedBolt']
-    else if (level.id >= 61) mechanics = ['multiNut']
-    else if (stage?.mechanicIds.length) mechanics = [...stage.mechanicIds]
-  }
+  const mechanics =
+    level.mechanics?.length
+      ? level.mechanics
+      : stage?.mechanicIds.length
+        ? [...stage.mechanicIds]
+        : undefined
   return {
     ...level,
     stageId: stage?.id,
     isChallenge: isChallengeLevel(level.id),
-    mechanics: mechanics?.length ? mechanics : undefined,
+    mechanics,
   }
 }
 
@@ -313,28 +370,50 @@ export function getUnlockedStageIndices(
     .filter((index) => isStageUnlocked(index, section, isCompleted))
 }
 
-export function getDefaultHomeStageId(
-  section: SectionMeta,
+export function isCampaignStageUnlocked(
+  stageIndex: number,
+  stages: StageMeta[],
+  isCompleted: (id: number) => boolean,
+): boolean {
+  if (stageIndex <= 0) return true
+  const previous = stages[stageIndex - 1]
+  if (!previous) return false
+  return isStageComplete(previous, isCompleted)
+}
+
+export function getUnlockedCampaignStageIndices(
+  campaign: CampaignMeta,
+  isCompleted: (id: number) => boolean,
+): number[] {
+  const stages = getFlattenedStages(campaign)
+  return stages
+    .map((_, index) => index)
+    .filter((index) => isCampaignStageUnlocked(index, stages, isCompleted))
+}
+
+export function getDefaultHomeStageIdForCampaign(
+  campaign: CampaignMeta,
   isCompleted: (id: number) => boolean,
   unlockedLevel: number,
 ): string {
-  const unlockedIndices = getUnlockedStageIndices(section, isCompleted)
-  if (unlockedIndices.length === 0) return section.stages[0]!.id
+  const stages = getFlattenedStages(campaign)
+  const unlockedIndices = getUnlockedCampaignStageIndices(campaign, isCompleted)
+  if (unlockedIndices.length === 0) return stages[0]!.id
 
   const continueStage = getStageForLevel(unlockedLevel)
   if (continueStage) {
-    const continueIndex = section.stages.findIndex((s) => s.id === continueStage.id)
+    const continueIndex = stages.findIndex((s) => s.id === continueStage.id)
     if (continueIndex >= 0 && unlockedIndices.includes(continueIndex)) {
-      if (!isStageComplete(section.stages[continueIndex]!, isCompleted)) {
+      if (!isStageComplete(stages[continueIndex]!, isCompleted)) {
         return continueStage.id
       }
     }
   }
 
   for (const index of unlockedIndices) {
-    const stage = section.stages[index]!
+    const stage = stages[index]!
     if (!isStageComplete(stage, isCompleted)) return stage.id
   }
 
-  return section.stages[unlockedIndices[unlockedIndices.length - 1]!]!.id
+  return stages[unlockedIndices[unlockedIndices.length - 1]!]!.id
 }

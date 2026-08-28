@@ -3,8 +3,9 @@ import { APP_VERSION } from '../config/version'
 import type { Locale } from '../i18n/types'
 import type { ReleaseNote, ReleaseNotesCatalog } from '../domain/releases/releaseNotes'
 import {
-  getLocalizedList,
   getLocalizedTitle,
+  resolveWhatsNewSummary,
+  shouldShowReleaseWhatsNew,
 } from '../domain/releases/releaseNotes'
 
 const SEEN_KEY_PREFIX = 'nuts-bolts-release-notes-seen-'
@@ -58,8 +59,7 @@ export function markReleaseNotesSeen(version: string): void {
 
 export function shouldShowWhatsNewForVersion(version: string): boolean {
   const release = getReleaseByVersion(version)
-  if (!release?.published) return false
-  if (!release.highlights.es.length && !release.highlights.en.length) return false
+  if (!release || !shouldShowReleaseWhatsNew(release)) return false
   return !hasSeenReleaseNotes(version)
 }
 
@@ -70,20 +70,22 @@ export function shouldShowWhatsNew(): boolean {
 export interface WhatsNewContent {
   version: string
   title: string
-  highlights: string[]
+  summaryKey: string
+  summaryParams: Record<string, number>
 }
 
 export function getWhatsNewContent(locale: Locale): WhatsNewContent | null {
   const release = getCurrentReleaseNotes()
-  if (!release?.published) return null
+  if (!release || !shouldShowReleaseWhatsNew(release)) return null
 
-  const highlights = getLocalizedList(release.highlights, locale)
-  if (highlights.length === 0) return null
+  const summary = resolveWhatsNewSummary(release.userSummary)
+  if (!summary) return null
 
   return {
     version: release.version,
     title: getLocalizedTitle(release.title, locale),
-    highlights,
+    summaryKey: summary.key,
+    summaryParams: summary.params,
   }
 }
 

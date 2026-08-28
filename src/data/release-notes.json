@@ -134,6 +134,7 @@
       "versionCode": 4,
       "date": "2026-07-03",
       "published": true,
+      "showWhatsNew": false,
       "title": {
         "es": "Cuenta en la nube y retos con medallas",
         "en": "Cloud save and challenge medals"
@@ -226,6 +227,10 @@
       "versionCode": 2,
       "date": "2026-06-26",
       "published": true,
+      "userSummary": {
+        "newLevels": 70,
+        "newStages": 2
+      },
       "title": {
         "es": "100 niveles y nuevas mecánicas",
         "en": "100 levels and new mechanics"
@@ -286,6 +291,9 @@
       "versionCode": 1,
       "date": "2026-06-16",
       "published": true,
+      "userSummary": {
+        "newLevels": 30
+      },
       "title": {
         "es": "Lanzamiento inicial",
         "en": "Initial release"
@@ -362,6 +370,7 @@
       "versionCode": 7,
       "date": "2026-07-17",
       "published": true,
+      "showWhatsNew": false,
       "title": {
         "es": "Notificaciones y recordatorios",
         "en": "Notifications and reminders"
@@ -410,6 +419,7 @@
       "versionCode": 8,
       "date": "2026-07-18",
       "published": true,
+      "showWhatsNew": false,
       "title": {
         "es": "Fix notificaciones de recordatorios",
         "en": "Reminder notifications fix"
@@ -448,6 +458,7 @@
       "versionCode": 9,
       "date": "2026-07-18",
       "published": true,
+      "showWhatsNew": false,
       "title": {
         "es": "Nombre en el ranking y versiones claras",
         "en": "Leaderboard name and clear versions"
@@ -512,6 +523,7 @@
       "versionCode": 10,
       "date": "2026-07-22",
       "published": true,
+      "showWhatsNew": false,
       "title": {
         "es": "Compatibilidad con Android 16",
         "en": "Android 16 compatibility"
@@ -550,6 +562,80 @@
     {
       "version": "1.6.0",
       "versionCode": 11,
+      "date": "2026-08-28",
+      "published": true,
+      "userSummary": {
+        "newLevels": 100,
+        "newStages": 3
+      },
+      "title": {
+        "es": "El mostrador de ferretería",
+        "en": "The hardware counter"
+      },
+      "highlights": {
+        "es": [
+          "100 niveles nuevos (101–200): la Sección 2 del taller",
+          "Dos mecánicas nuevas: bulones de distinta altura y pedidos de color fijo",
+          "5 retos nuevos con medallas coleccionables (120, 140, 160, 180, 200)",
+          "Tema visual de ferretería en tres etapas nuevas",
+          "Tu progreso y estrellas de niveles 1–100 se conservan"
+        ],
+        "en": [
+          "100 new levels (101–200): Section 2 of the workshop",
+          "Two new mechanics: bolts of different heights and fixed-color orders",
+          "5 new challenges with collectible medals (120, 140, 160, 180, 200)",
+          "Hardware-store visual theme across three new stages",
+          "Your progress and stars for levels 1–100 are preserved"
+        ]
+      },
+      "playStoreNotes": {
+        "es": [
+          "100 niveles nuevos: el mostrador de ferretería (101–200)",
+          "Bulones de distinta altura y pedidos de color fijo",
+          "5 retos nuevos con medallas (120, 140, 160, 180, 200)",
+          "Sin perder progreso ni estrellas de niveles anteriores"
+        ],
+        "en": [
+          "100 new levels: the hardware counter (101–200)",
+          "Variable-height bolts and fixed-color orders",
+          "5 new challenges with medals (120, 140, 160, 180, 200)",
+          "No loss of progress or stars from earlier levels"
+        ]
+      },
+      "added": {
+        "es": [
+          "Sección 2: El mostrador de ferretería (niveles 101–200)",
+          "Mecánica variableCapacity: bulones con altura 3, 4 o 5",
+          "Mecánica fixedColorBolt: bulones que solo aceptan un color",
+          "Etapas 4–6 con tema hardware y coach marks en niveles 131 y 166",
+          "Retos 120, 140, 160, 180 y 200 con medallas en el medallero",
+          "Modal de fin de contenido actualizado al nivel 200"
+        ],
+        "en": [
+          "Section 2: The hardware counter (levels 101–200)",
+          "variableCapacity mechanic: bolts with height 3, 4, or 5",
+          "fixedColorBolt mechanic: bolts that only accept one color",
+          "Stages 4–6 with hardware theme and coach marks at levels 131 and 166",
+          "Challenges 120, 140, 160, 180 and 200 with medals in the gallery",
+          "End-of-content modal updated for level 200"
+        ]
+      },
+      "compatibility": {
+        "es": [
+          "Layouts de niveles 1–100 sin cambios (checksum de hornado)",
+          "Saves existentes conservan unlockedLevel y estrellas",
+          "Jugadores que completaron el nivel 100 ven el nuevo fin de contenido al llegar al 200"
+        ],
+        "en": [
+          "Level layouts 1–100 unchanged (bake checksum)",
+          "Existing saves keep unlockedLevel and stars",
+          "Players who finished level 100 see the updated end-of-content at level 200"
+        ]
+      }
+    },
+    {
+      "version": "1.7.0",
+      "versionCode": 12,
       "date": null,
       "published": false,
       "title": {
@@ -570,8 +656,8 @@
       }
     },
     {
-      "version": "1.6.1",
-      "versionCode": 12,
+      "version": "1.7.1",
+      "versionCode": 13,
       "date": null,
       "published": false,
       "title": {

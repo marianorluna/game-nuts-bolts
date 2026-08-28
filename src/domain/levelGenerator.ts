@@ -1,11 +1,13 @@
 import type { Bolt, BoltConfig, LevelDefinition, MechanicId, NutColor } from './types'
-import { buildBoltConfigs, canMove, cloneBolts, getTopColor, moveNuts } from './gameEngine'
+import { buildBoltConfigs, canMove, cloneBolts, getTopColor, moveNuts, CLASSIC_PLAY_CONTEXT } from './gameEngine'
 import type { GamePlayContext } from './types'
 import {
   getHandCraftedLevel,
 } from './handCraftedLevels'
+import { SECTION_2_LEVEL_SPECS } from './section2LevelSpecs'
 import {
   meetsLevelQualityForGeneration,
+  isLevelSolvable,
   type LevelQualityCriteria,
 } from './levelValidator'
 
@@ -13,10 +15,16 @@ function createSolvedBolts(
   colors: NutColor[],
   capacity: number,
   emptyBolts: number,
+  filledCapacities?: number[],
+  boltConfigs?: BoltConfig[],
 ): Bolt[] {
-  const filled = colors.map((color) =>
-    Array.from({ length: capacity }, () => color),
-  )
+  const filled = colors.map((color, index) => {
+    const boltCapacity =
+      filledCapacities?.[index] ??
+      boltConfigs?.[index]?.maxCapacity ??
+      capacity
+    return Array.from({ length: boltCapacity }, () => color)
+  })
   const empty = Array.from({ length: emptyBolts }, () => [] as Bolt)
   return [...filled, ...empty]
 }
@@ -42,6 +50,8 @@ export function fisherYatesScramble(
   bolts: Bolt[],
   capacity: number,
   seed: number,
+  filledCapacities?: number[],
+  shuffleBoltOrder = true,
 ): Bolt[] {
   const allNuts: NutColor[] = []
   for (const bolt of bolts) {
@@ -60,14 +70,23 @@ export function fisherYatesScramble(
     shuffled[j] = tmp
   }
 
+  const caps =
+    filledCapacities?.slice(0, filledCount) ??
+    Array.from({ length: filledCount }, () => capacity)
+
   const result: Bolt[] = []
   let idx = 0
   for (let i = 0; i < filledCount; i += 1) {
-    result.push(shuffled.slice(idx, idx + capacity))
-    idx += capacity
+    const cap = caps[i] ?? capacity
+    result.push(shuffled.slice(idx, idx + cap))
+    idx += cap
   }
   for (let i = 0; i < emptyCount; i += 1) {
     result.push([])
+  }
+
+  if (!shuffleBoltOrder) {
+    return result
   }
 
   const boltsWithIndex = result.map((bolt, i) => ({ bolt, i }))
@@ -124,12 +143,12 @@ function pickWeightedMove(
   return moves[moves.length - 1]
 }
 
-/** Scramble inverso: ideal para tutorial con varios bulones vacíos. */
 export function reverseScramble(
   bolts: Bolt[],
   capacity: number,
   numMoves: number,
   seed: number,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): Bolt[] {
   const nextRandom = createSeededRandom(seed)
   let current = cloneBolts(bolts)
@@ -139,7 +158,7 @@ export function reverseScramble(
     const validMoves: { from: number; to: number }[] = []
     for (let from = 0; from < current.length; from += 1) {
       for (let to = 0; to < current.length; to += 1) {
-        if (!canMove(current, from, to, capacity)) continue
+        if (!canMove(current, from, to, capacity, ctx)) continue
         if (lastMove && from === lastMove.to && to === lastMove.from) continue
         validMoves.push({ from, to })
       }
@@ -151,7 +170,7 @@ export function reverseScramble(
         ? validMoves[0]
         : pickWeightedMove(current, validMoves, capacity, nextRandom)
 
-    const result = moveNuts(current, pick.from, pick.to, capacity)
+    const result = moveNuts(current, pick.from, pick.to, capacity, ctx)
     if (!result) break
     current = result.bolts
     lastMove = pick
@@ -183,6 +202,7 @@ export interface GenerateLevelParams {
   boltConfigs?: BoltConfig[]
   handCraftedId?: number
   lockedBolt?: { boltIndex: number; unlockWhenColor: NutColor }
+  filledCapacities?: number[]
 }
 
 function playContextFromSpec(
@@ -210,19 +230,55 @@ function playContextFromSpec(
 
 const MAX_GENERATION_ATTEMPTS = 3_000
 
+function filledCapacitiesFromContext(
+  defaultCapacity: number,
+  ctx: GamePlayContext,
+  colorsCount: number,
+): number[] | undefined {
+  const hasVariable = ctx.boltConfigs.some(
+    (config) => config.maxCapacity !== undefined,
+  )
+  if (!hasVariable) return undefined
+
+  return Array.from({ length: colorsCount }, (_, index) =>
+    ctx.boltConfigs[index]?.maxCapacity ?? defaultCapacity,
+  )
+}
+
+function hasIndexSpecificBoltRules(ctx: GamePlayContext): boolean {
+  return ctx.boltConfigs.some(
+    (config) =>
+      config.maxCapacity !== undefined || config.fixedColor !== undefined,
+  )
+}
+
 function scrambleLevel(
   solved: Bolt[],
   params: GenerateLevelParams,
   seed: number,
+  ctx: GamePlayContext,
 ): Bolt[] {
+  const filledCaps =
+    params.filledCapacities ??
+    filledCapacitiesFromContext(params.capacity, ctx, params.colors.length)
+  const preserveBoltOrder =
+    filledCaps !== undefined || hasIndexSpecificBoltRules(ctx)
+
   if (params.scrambleMethod === 'random') {
-    return fisherYatesScramble(solved, params.capacity, seed)
+    return fisherYatesScramble(
+      solved,
+      params.capacity,
+      seed,
+      filledCaps,
+      !preserveBoltOrder,
+    )
   }
   return reverseScramble(
     solved,
     params.capacity,
     params.shuffleMoves,
     seed,
+    ctx,
   )
 }
 
@@ -240,7 +296,10 @@ export function generateLevel(
     const ctx = playContextFromSpec(
       {
         ...params,
-        mechanics: params.mechanics ?? ['multiNut', 'lockedBolt'],
+        mechanics:
+          params.mechanics ??
+          crafted.mechanics ??
+          ['multiNut', 'lockedBolt'],
         boltConfigs: crafted.boltConfigs,
       },
       crafted.bolts.length,
@@ -249,16 +308,15 @@ export function generateLevel(
     if (usedLayouts.has(layoutKey)) {
       throw new Error(`Layout duplicado en nivel hand-crafted ${params.id}`)
     }
-    const quality = meetsLevelQualityForGeneration(
+    const quality = isLevelSolvable(
       crafted.bolts,
       crafted.capacity,
-      params.quality,
       maxStates,
       ctx,
     )
-    if (!quality.ok) {
+    if (!quality) {
       throw new Error(
-        `Nivel hand-crafted ${params.id} no cumple calidad: ${quality.reason}`,
+        `Nivel hand-crafted ${params.id} no es soluble con sus reglas`,
       )
     }
     return {
@@ -268,7 +326,10 @@ export function generateLevel(
       minMoves: 0,
       parMoves: params.parMoves,
       bolts: crafted.bolts,
-      mechanics: params.mechanics ?? ['multiNut', 'lockedBolt'],
+      mechanics:
+        params.mechanics ??
+        crafted.mechanics ??
+        ['multiNut', 'lockedBolt'],
       boltConfigs: ctx.boltConfigs,
     }
   }
@@ -277,13 +338,15 @@ export function generateLevel(
     params.colors,
     params.capacity,
     params.emptyBolts,
+    params.filledCapacities,
+    params.boltConfigs,
   )
   const solvedBoltCount = solved.length
   const ctx = playContextFromSpec(params, solvedBoltCount)
 
   for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt += 1) {
     const seed = params.seed + attempt * 17
-    const bolts = scrambleLevel(solved, params, seed)
+    const bolts = scrambleLevel(solved, params, seed, ctx)
 
     const layoutKey = serializeBolts(bolts)
     if (usedLayouts.has(layoutKey)) continue
@@ -445,4 +508,6 @@ export const LEVEL_SPECS: GenerateLevelParams[] = [
   { id: 98, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 44, seed: 5098, scrambleMethod: 'random',  quality: q(19, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'orange' } },
   { id: 99, difficulty: 'hard',   colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 46, seed: 5099, scrambleMethod: 'random',  quality: q(19, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'blue' } },
   { id: 100, difficulty: 'hard',  colors: ['orange', 'blue', 'pink', 'green', 'yellow', 'red', 'purple'],  capacity: 4, emptyBolts: 1, shuffleMoves: 0,   parMoves: 52, seed: 5100, scrambleMethod: 'random',  quality: q(20, 6, 0),  mechanics: ['multiNut', 'lockedBolt'], lockedBolt: { boltIndex: 7, unlockWhenColor: 'pink' } },
+
+  ...SECTION_2_LEVEL_SPECS,
 ]

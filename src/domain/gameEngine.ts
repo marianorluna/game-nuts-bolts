@@ -28,29 +28,52 @@ export function getTopColor(bolt: Bolt): NutColor | null {
   return bolt[bolt.length - 1]
 }
 
+export function getBoltCapacity(
+  boltIndex: number,
+  defaultCapacity: number,
+  ctx: GamePlayContext,
+): number {
+  return ctx.boltConfigs[boltIndex]?.maxCapacity ?? defaultCapacity
+}
+
+export function getMaxBoardCapacity(
+  boltCount: number,
+  defaultCapacity: number,
+  ctx: GamePlayContext,
+): number {
+  let max = defaultCapacity
+  for (let i = 0; i < boltCount; i += 1) {
+    max = Math.max(max, getBoltCapacity(i, defaultCapacity, ctx))
+  }
+  return max
+}
+
 export function hasCompletedColor(
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
   color: NutColor,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): boolean {
-  return bolts.some(
-    (bolt) =>
-      bolt.length === capacity &&
+  return bolts.some((bolt, index) => {
+    const cap = getBoltCapacity(index, defaultCapacity, ctx)
+    return (
+      bolt.length === cap &&
       bolt.length > 0 &&
-      bolt.every((nut) => nut === color),
-  )
+      bolt.every((nut) => nut === color)
+    )
+  })
 }
 
 export function isBoltUsable(
   boltIndex: number,
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
   ctx: GamePlayContext,
 ): boolean {
   const config = ctx.boltConfigs[boltIndex]
   if (!config?.locked) return true
   if (!config.unlockWhenColor) return false
-  return hasCompletedColor(bolts, capacity, config.unlockWhenColor)
+  return hasCompletedColor(bolts, defaultCapacity, config.unlockWhenColor, ctx)
 }
 
 export function getMovableCount(bolt: Bolt, multiNut: boolean): number {
@@ -66,19 +89,36 @@ export function getMovableCount(bolt: Bolt, multiNut: boolean): number {
   return count
 }
 
+function acceptsNutOnBolt(
+  target: Bolt,
+  topColor: NutColor,
+  boltIndex: number,
+  _defaultCapacity: number,
+  ctx: GamePlayContext,
+): boolean {
+  const targetTop = getTopColor(target)
+  const fixedColor = ctx.boltConfigs[boltIndex]?.fixedColor
+  if (fixedColor !== undefined) {
+    if (target.length === 0) return topColor === fixedColor
+    return targetTop === topColor
+  }
+  if (targetTop !== null && targetTop !== topColor) return false
+  return true
+}
+
 export function canMove(
   bolts: Bolt[],
   fromIndex: number,
   toIndex: number,
-  capacity: number,
+  defaultCapacity: number,
   ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): boolean {
   if (fromIndex === toIndex) return false
   if (fromIndex < 0 || toIndex < 0) return false
   if (fromIndex >= bolts.length || toIndex >= bolts.length) return false
 
-  if (!isBoltUsable(fromIndex, bolts, capacity, ctx)) return false
-  if (!isBoltUsable(toIndex, bolts, capacity, ctx)) return false
+  if (!isBoltUsable(fromIndex, bolts, defaultCapacity, ctx)) return false
+  if (!isBoltUsable(toIndex, bolts, defaultCapacity, ctx)) return false
 
   const source = bolts[fromIndex]
   const target = bolts[toIndex]
@@ -87,10 +127,12 @@ export function canMove(
 
   const movableCount = getMovableCount(source, ctx.multiNut)
   const topColor = source[source.length - 1]
-  const targetTop = getTopColor(target)
+  const destCapacity = getBoltCapacity(toIndex, defaultCapacity, ctx)
 
-  if (target.length + movableCount > capacity) return false
-  if (targetTop !== null && targetTop !== topColor) return false
+  if (target.length + movableCount > destCapacity) return false
+  if (!acceptsNutOnBolt(target, topColor, toIndex, defaultCapacity, ctx)) {
+    return false
+  }
 
   return true
 }
@@ -99,10 +141,10 @@ export function moveNuts(
   bolts: Bolt[],
   fromIndex: number,
   toIndex: number,
-  capacity: number,
+  defaultCapacity: number,
   ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
 ): { bolts: Bolt[]; record: MoveRecord } | null {
-  if (!canMove(bolts, fromIndex, toIndex, capacity, ctx)) return null
+  if (!canMove(bolts, fromIndex, toIndex, defaultCapacity, ctx)) return null
 
   const nextBolts = cloneBolts(bolts)
   const movableCount = getMovableCount(nextBolts[fromIndex], ctx.multiNut)
@@ -129,15 +171,21 @@ export function undoMove(bolts: Bolt[], record: MoveRecord): Bolt[] {
   return nextBolts
 }
 
-export function isBoltComplete(bolt: Bolt, capacity: number): boolean {
+export function isBoltComplete(bolt: Bolt, boltCapacity: number): boolean {
   if (bolt.length === 0) return true
-  if (bolt.length !== capacity) return false
+  if (bolt.length !== boltCapacity) return false
   const first = bolt[0]
   return bolt.every((nut) => nut === first)
 }
 
-export function isSolved(bolts: Bolt[], capacity: number): boolean {
-  return bolts.every((bolt) => isBoltComplete(bolt, capacity))
+export function isSolved(
+  bolts: Bolt[],
+  defaultCapacity: number,
+  ctx: GamePlayContext = CLASSIC_PLAY_CONTEXT,
+): boolean {
+  return bolts.every((bolt, index) =>
+    isBoltComplete(bolt, getBoltCapacity(index, defaultCapacity, ctx)),
+  )
 }
 
 export function getStarThresholds(minMoves: number): {
@@ -183,12 +231,12 @@ export function countColors(bolts: Bolt[]): number {
 export function isBoltLocked(
   boltIndex: number,
   bolts: Bolt[],
-  capacity: number,
+  defaultCapacity: number,
   ctx: GamePlayContext,
 ): boolean {
   const config = ctx.boltConfigs[boltIndex]
   if (!config?.locked) return false
-  return !isBoltUsable(boltIndex, bolts, capacity, ctx)
+  return !isBoltUsable(boltIndex, bolts, defaultCapacity, ctx)
 }
 
 export function buildBoltConfigs(
@@ -199,6 +247,7 @@ export function buildBoltConfigs(
   for (const lock of locks) {
     if (lock.boltIndex >= 0 && lock.boltIndex < boltCount) {
       configs[lock.boltIndex] = {
+        ...configs[lock.boltIndex],
         locked: true,
         unlockWhenColor: lock.unlockWhenColor,
       }

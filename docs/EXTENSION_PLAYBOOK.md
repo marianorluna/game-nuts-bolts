@@ -38,7 +38,7 @@ Usar cuando se agregan niveles dentro de una sección ya definida (ej. 31–60 e
 
 - [ ] Confirmar rango de ids libres en [CONTENT_ARCHITECTURE.md](./CONTENT_ARCHITECTURE.md)
 - [ ] Si la etapa supera ~40 niveles, crear **nueva etapa** en metadata
-- [ ] Añadir specs **solo para ids nuevos** en `src/domain/levelGenerator.ts` (`LEVEL_SPECS`)
+- [ ] Añadir specs **solo para ids nuevos** en `src/domain/levelGenerator.ts` (`LEVEL_SPECS`) o módulo dedicado (ej. `section2LevelSpecs.ts` con patrón ola)
 - [ ] Asignar `difficulty` siguiendo patrón ola de la etapa
 - [ ] Marcar retos con `isChallenge: true` en metadata (Fase 1+)
 - [ ] Hornear con append: `npm run bake:levels` (flag `--from=N` cuando exista)

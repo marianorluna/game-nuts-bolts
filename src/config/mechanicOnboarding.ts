@@ -8,6 +8,8 @@ import type { MechanicId } from '../domain/types'
 export const MECHANIC_COACH_INTRO_LEVEL: Partial<Record<MechanicId, number>> = {
   multiNut: 61,
   lockedBolt: 81,
+  variableCapacity: 131,
+  fixedColorBolt: 166,
 }
 
 export function getMechanicIntroLevel(mechanic: MechanicId): number | undefined {

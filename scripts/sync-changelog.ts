@@ -16,6 +16,11 @@ interface LocalizedText {
   en: string
 }
 
+interface ReleaseUserSummary {
+  newLevels?: number
+  newStages?: number
+}
+
 interface ReleaseNote {
   version: string
   versionCode: number
@@ -24,6 +29,8 @@ interface ReleaseNote {
   mergedInto?: string
   title: LocalizedText
   highlights: LocalizedStrings
+  userSummary?: ReleaseUserSummary
+  showWhatsNew?: boolean
   playStoreNotes?: LocalizedStrings
   added?: LocalizedStrings
   changed?: LocalizedStrings
@@ -83,6 +90,15 @@ function getMergedVersions(
   return catalog.releases.filter((r) => r.mergedInto === version)
 }
 
+function sectionUserSummary(summary: ReleaseUserSummary | undefined): string {
+  if (!summary) return ''
+  const parts: string[] = []
+  if (summary.newLevels) parts.push(`${summary.newLevels} niveles`)
+  if (summary.newStages) parts.push(`${summary.newStages} etapas`)
+  if (parts.length === 0) return ''
+  return `### Modal in-app (resumen jugador)\n\n- ${parts.join(', ')}\n\n`
+}
+
 function renderRelease(
   release: ReleaseNote,
   catalog: ReleaseNotesCatalog,
@@ -99,7 +115,8 @@ function renderRelease(
     body += `> **Play Store:** publicación única en esta versión. Incluye ${labels} — no publicadas por separado en Play.\n\n`
   }
 
-  body += sectionEsEn('Destacado (modal in-app)', release.highlights)
+  body += sectionUserSummary(release.userSummary)
+  body += sectionEsEn('Destacado (Play Store / changelog)', release.highlights)
   body += sectionEsEn('Notas Play Console (copiar y pegar)', release.playStoreNotes)
   body += sectionEsEn('Añadido', release.added)
   body += sectionEsEn('Cambiado', release.changed)
@@ -119,7 +136,7 @@ function generateChangelog(catalog: ReleaseNotesCatalog): string {
 
   let md = `# Changelog — Nuts & Bolts\n\n`
   md += `Historial de **releases de la app** (semver + \`versionCode\`).\n\n`
-  md += `**Fuente de verdad:** \`src/data/release-notes.json\` — el modal «Novedades» y este archivo se generan desde ahí.\n\n`
+  md += `**Fuente de verdad:** \`src/data/release-notes.json\` — el modal «Novedades» usa \`userSummary\`; este archivo y Play Store usan \`highlights\`.\n\n`
   md += `**Documentos relacionados:** [CONTENT_CHANGELOG.md](./CONTENT_CHANGELOG.md) (solo contenido/niveles) · [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md)\n\n`
   md += `## Comandos\n\n`
   md += `| Comando | Descripción |\n`
@@ -131,7 +148,7 @@ function generateChangelog(catalog: ReleaseNotesCatalog): string {
   md += `### Flujo antes de publicar en Play Store\n\n`
   md += `1. Sube \`version\` y \`versionCode\` en \`package.json\`\n`
   md += `2. \`npm run changelog:scaffold\` (si la versión nueva no existe aún)\n`
-  md += `3. Edita \`src/data/release-notes.json\` — \`highlights\`, secciones y \`published: true\`\n`
+  md += `3. Edita \`src/data/release-notes.json\` — \`userSummary\` (modal), \`highlights\`, secciones y \`published: true\`\n`
   md += `4. \`npm run release:prepare\`\n`
   md += `5. Copia \`playStoreNotes\` (ES/EN) de [CHANGELOG.md](./CHANGELOG.md) a las notas de la versión en Play Console\n\n`
   md += `---\n\n`
@@ -176,9 +193,17 @@ function checkCatalog(catalog: ReleaseNotesCatalog, pkg: PackageJson): void {
   }
   if (current.highlights.es.length === 0 || current.highlights.en.length === 0) {
     console.error(
-      `✗ La versión ${pkg.version} necesita highlights en ES y EN (modal in-app)`,
+      `✗ La versión ${pkg.version} necesita highlights en ES y EN (Play Store / changelog)`,
     )
     process.exit(1)
+  }
+  const hasUserSummary =
+    (current.userSummary?.newLevels ?? 0) > 0 ||
+    (current.userSummary?.newStages ?? 0) > 0
+  if (current.showWhatsNew !== false && !hasUserSummary) {
+    console.warn(
+      `⚠ La versión ${pkg.version} no tiene userSummary — el modal in-app no se mostrará (ok para hotfixes)`,
+    )
   }
   console.log(`✓ release-notes.json OK para v${pkg.version} (versionCode ${pkg.versionCode})`)
 }
@@ -208,6 +233,11 @@ function scaffoldEntry(catalog: ReleaseNotesCatalog, pkg: PackageJson): void {
       es: ['Primer cambio visible para el jugador'],
       en: ['First player-facing change'],
     },
+    userSummary: {
+      newLevels: 0,
+      newStages: 0,
+    },
+    showWhatsNew: false,
     added: {
       es: [],
       en: [],
@@ -217,7 +247,7 @@ function scaffoldEntry(catalog: ReleaseNotesCatalog, pkg: PackageJson): void {
   catalog.releases.unshift(entry)
   saveCatalog(catalog)
   console.log(`✓ Plantilla creada para v${pkg.version} en src/data/release-notes.json`)
-  console.log('  Edita highlights, secciones y published:true antes de release:prepare')
+  console.log('  Edita userSummary, highlights, secciones y published:true antes de release:prepare')
 }
 
 const catalog = loadCatalog()

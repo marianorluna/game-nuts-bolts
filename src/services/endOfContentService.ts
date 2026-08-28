@@ -1,4 +1,4 @@
-const END_OF_CONTENT_KEY = 'nuts-bolts-end-of-content-seen'
+const END_OF_CONTENT_KEY = 'nuts-bolts-end-of-content-seen-v2'
 
 export function hasSeenEndOfContentModal(): boolean {
   try {

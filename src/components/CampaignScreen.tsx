@@ -4,11 +4,11 @@ import { ALL_LEVELS } from '../domain/levels'
 import {
   CAMPAIGN_1_TALLER,
   countCompletedInRange,
-  getDefaultHomeStageId,
+  getDefaultHomeStageIdForCampaign,
+  getFlattenedStages,
   getLevelsByStage,
   getStageProgressStats,
-  getUnlockedStageIndices,
-  SECTION_1_FUNDAMENTOS,
+  getUnlockedCampaignStageIndices,
 } from '../domain/content/campaignStructure'
 import { CHALLENGE_LEVEL_ORDER } from '../domain/challenges/challengeConstants'
 import { countEarnedMedals } from '../domain/challenges'
@@ -62,31 +62,29 @@ export function CampaignScreen() {
   }, [])
 
   const campaign = CAMPAIGN_1_TALLER
-  const section = SECTION_1_FUNDAMENTOS
-  const publishedLevels = ALL_LEVELS.filter(
-    (l) => l.id >= section.levelFrom && l.id <= section.levelTo,
-  )
+  const campaignStages = getFlattenedStages(campaign)
+  const publishedLevels = ALL_LEVELS
   const publishedCount = publishedLevels.length
 
   const isCompleted = (id: number) => (progress.levels[id]?.completed ?? false)
   const sectionCompleted = countCompletedInRange(
     publishedLevels,
-    section.levelFrom,
-    section.levelTo,
+    1,
+    MAX_LEVEL_ID,
     isCompleted,
   )
 
   const unlockedStageIndices = useMemo(
     () =>
       DEV_UNLOCK_ALL_LEVELS
-        ? section.stages.map((_, index) => index)
-        : getUnlockedStageIndices(section, isCompleted),
-    [section, progress.levels],
+        ? campaignStages.map((_, index) => index)
+        : getUnlockedCampaignStageIndices(campaign, isCompleted),
+    [campaign, progress.levels],
   )
 
   const stage =
-    section.stages.find((s) => s.id === homeStageId) ?? section.stages[0]!
-  const stageIndex = section.stages.findIndex((s) => s.id === stage.id)
+    campaignStages.find((s) => s.id === homeStageId) ?? campaignStages[0]!
+  const stageIndex = campaignStages.findIndex((s) => s.id === stage.id)
   const visibleStageIndex = unlockedStageIndices.includes(stageIndex)
     ? unlockedStageIndices.indexOf(stageIndex)
     : 0
@@ -98,9 +96,9 @@ export function CampaignScreen() {
   useEffect(() => {
     if (unlockedStageIndices.includes(stageIndex)) return
     setHomeStageId(
-      getDefaultHomeStageId(section, isCompleted, progress.unlockedLevel),
+      getDefaultHomeStageIdForCampaign(campaign, isCompleted, progress.unlockedLevel),
     )
-  }, [progress.levels, progress.unlockedLevel, stageIndex, unlockedStageIndices, setHomeStageId, section])
+  }, [progress.levels, progress.unlockedLevel, stageIndex, unlockedStageIndices, setHomeStageId, campaign])
 
   useEffect(() => {
     const justCompletedLast =
@@ -155,13 +153,13 @@ export function CampaignScreen() {
   const goToPrevStage = () => {
     if (!canGoPrev) return
     const prevIndex = unlockedStageIndices[visibleStageIndex - 1]!
-    setHomeStageId(section.stages[prevIndex]!.id)
+    setHomeStageId(campaignStages[prevIndex]!.id)
   }
 
   const goToNextStage = () => {
     if (!canGoNext) return
     const nextIndex = unlockedStageIndices[visibleStageIndex + 1]!
-    setHomeStageId(section.stages[nextIndex]!.id)
+    setHomeStageId(campaignStages[nextIndex]!.id)
   }
 
   const dismissEndOfContent = () => {
@@ -275,7 +273,7 @@ export function CampaignScreen() {
         {unlockedStageIndices.length > 1 && (
           <div className="mb-3 flex justify-center gap-2">
             {unlockedStageIndices.map((index) => {
-              const dotStage = section.stages[index]!
+              const dotStage = campaignStages[index]!
               return (
               <button
                 key={dotStage.id}

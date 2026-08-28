@@ -8,6 +8,33 @@ Entradas más recientes arriba. Cada fase o release de contenido debe añadir un
 
 ---
 
+## [Fase 1.6] — 2026-08-28 — Sección 2: El mostrador de ferretería (101–200)
+
+### Añadido
+
+- 100 niveles nuevos (ids 101–200), Sección 2 «El mostrador de ferretería»
+- Etapas 4–6: Turno en el mostrador (101–130), Bulones de medidas (131–165), Pedidos especiales (166–200)
+- Mecánicas `variableCapacity` (Etapa 5) y `fixedColorBolt` (Etapa 6)
+- Tema visual `hardware` en las tres etapas nuevas
+- Retos 120, 140, 160, 180 y 200 con medallas en el medallero (10 slots total)
+- Coach marks en niveles 131 (`variableCapacity`) y 166 (`fixedColorBolt`)
+- Specs paramétricos en `src/domain/section2LevelSpecs.ts` con patrón ola
+- Modal fin de contenido v2 (nivel 200); clave localStorage `nuts-bolts-end-of-content-seen-v2`
+
+### Compatibilidad
+
+- Layouts de niveles 1–100 preservados (checksum append-only en bake)
+- Saves existentes sin migración; `unlockedLevel` y estrellas conservados
+- Jugadores que vieron el modal en nivel 100 lo vuelven a ver al completar el 200
+
+### Decisiones
+
+- Tutoriales 131–134 y 166–169: mayoría procedural con `boltConfigs`; solo 131 hand-crafted
+- `qualityMinMoves` capado en specs (`6 + colors.length`) para acelerar hornado
+- Specs con triple restricción (capacidad + color fijo + candado) simplificadas para generación fiable
+
+---
+
 ## [Fase 1.2] — 2026-07-03 — Modo reto jugable y medallas
 
 ### Añadido

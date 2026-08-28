@@ -12,12 +12,13 @@ import {
 import { DEV_UNLOCK_ALL_LEVELS } from '../config/dev'
 import {
   CAMPAIGN_1_TALLER,
+  getFlattenedStages,
+  getSectionForLevel,
   getStageForLevel,
+  isCampaignStageUnlocked,
   isChallengeLevel,
   isStageComplete,
-  isStageUnlocked,
   isStageUnlockedForLevel,
-  SECTION_1_FUNDAMENTOS,
 } from '../domain/content/campaignStructure'
 import {
   canStartChallenge,
@@ -152,7 +153,7 @@ export const useGameStore = create<GameStore>()(
       session: null,
       progress: defaultProgress,
       settings: defaultSettings,
-      homeStageId: SECTION_1_FUNDAMENTOS.stages[0]!.id,
+      homeStageId: getFlattenedStages(CAMPAIGN_1_TALLER)[0]!.id,
       selectedCampaignId: CAMPAIGN_1_TALLER.id,
 
       setScreen: (screen) =>
@@ -256,7 +257,7 @@ export const useGameStore = create<GameStore>()(
 
         const nextMoves = workingSession.moves + 1
         const nextHistory = [...workingSession.history, result.record]
-        const won = isSolved(result.bolts, capacity)
+        const won = isSolved(result.bolts, capacity, workingSession.playContext)
 
         let nextProgress = workingProgress
         let nextHomeStageId = get().homeStageId
@@ -308,13 +309,14 @@ export const useGameStore = create<GameStore>()(
             nextProgress.levels[id]?.completed ?? false
           const completedStage = getStageForLevel(session.levelId)
           if (completedStage && isStageComplete(completedStage, isCompleted)) {
-            const stageIndex = SECTION_1_FUNDAMENTOS.stages.findIndex(
+            const allStages = getFlattenedStages(CAMPAIGN_1_TALLER)
+            const stageIndex = allStages.findIndex(
               (s) => s.id === completedStage.id,
             )
-            const nextStage = SECTION_1_FUNDAMENTOS.stages[stageIndex + 1]
+            const nextStage = allStages[stageIndex + 1]
             if (
               nextStage
-              && isStageUnlocked(stageIndex + 1, SECTION_1_FUNDAMENTOS, isCompleted)
+              && isCampaignStageUnlocked(stageIndex + 1, allStages, isCompleted)
             ) {
               nextHomeStageId = nextStage.id
             }
@@ -424,11 +426,9 @@ export const useGameStore = create<GameStore>()(
         const { progress } = get()
         if (levelId > progress.unlockedLevel) return false
         const isCompleted = (id: number) => progress.levels[id]?.completed ?? false
-        return isStageUnlockedForLevel(
-          levelId,
-          SECTION_1_FUNDAMENTOS,
-          isCompleted,
-        )
+        const section = getSectionForLevel(levelId)
+        if (!section) return false
+        return isStageUnlockedForLevel(levelId, section, isCompleted)
       },
 
       replaceProgress: (progress) => {

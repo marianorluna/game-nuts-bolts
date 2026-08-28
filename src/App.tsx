@@ -11,7 +11,7 @@ import { GameSessionGuard } from './components/GameSessionGuard'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { useAppUpdateCheck } from './hooks/useAppUpdateCheck'
 import { useWhatsNew } from './hooks/useWhatsNew'
-import { getThemeBackground, SECTION_1_FUNDAMENTOS } from './domain/content/campaignStructure'
+import { CAMPAIGN_1_TALLER, getFlattenedStages, getThemeBackground } from './domain/content/campaignStructure'
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true)
@@ -22,15 +22,15 @@ export default function App() {
   const whatsNew = useWhatsNew(!showSplash)
   const { update, dismiss } = useAppUpdateCheck(!showSplash && !whatsNew.open)
 
+  const campaignStages = getFlattenedStages(CAMPAIGN_1_TALLER)
   const homeStage =
-    SECTION_1_FUNDAMENTOS.stages.find((s) => s.id === homeStageId) ??
-    SECTION_1_FUNDAMENTOS.stages[0]!
+    campaignStages.find((s) => s.id === homeStageId) ?? campaignStages[0]!
   const themeLevelId =
     screen === 'game' && session
       ? session.levelId
       : screen === 'campaign'
         ? homeStage.levelFrom
-        : SECTION_1_FUNDAMENTOS.stages[0]!.levelFrom
+        : campaignStages[0]!.levelFrom
   const themeClass = getThemeBackground(themeLevelId)
 
   if (showSplash) {

@@ -35,7 +35,7 @@ export function GameModal({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.85, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-            className="max-h-[90dvh] w-full max-w-sm overflow-y-auto rounded-2xl bg-gradient-to-b from-[#3d2a6b] to-[#2d1b4e] p-6 shadow-2xl"
+            className="scrollbar-hidden max-h-[90dvh] w-full max-w-sm overflow-x-hidden overflow-y-auto rounded-2xl bg-gradient-to-b from-[#3d2a6b] to-[#2d1b4e] p-6 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-5 flex items-center justify-between">

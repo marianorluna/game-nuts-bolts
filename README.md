@@ -3,7 +3,7 @@
 **Puzzle de ordenar tuercas por color** — disponible en Android.
 
 [![Versión](https://img.shields.io/badge/versión-1.2.1-blue)](docs/CHANGELOG.md)
-[![Niveles](https://img.shields.io/badge/niveles-100-orange)](docs/LEVELS.md)
+[![Niveles](https://img.shields.io/badge/niveles-200-orange)](docs/LEVELS.md)
 
 <p align="center">
   <img src="public/logo.png" alt="Nuts & Bolts" width="120" />

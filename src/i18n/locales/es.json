@@ -65,6 +65,18 @@
       "stage-3-nuevas-reglas": {
         "name": "La línea de montaje",
         "blurb": "Encargos grandes: cadenas de tuercas y bulones que hay que liberar."
+      },
+      "stage-4-turno-mostrador": {
+        "name": "Turno en el mostrador",
+        "blurb": "El mostrador abre: dominá multiNut y candados con la curva del taller."
+      },
+      "stage-5-bulones-medidas": {
+        "name": "Bulones de medidas",
+        "blurb": "Cada bulón tiene su altura. Encaja las tuercas en el espacio correcto."
+      },
+      "stage-6-pedidos-especiales": {
+        "name": "Pedidos especiales",
+        "blurb": "Bulones de color fijo y encargos que mezclan todas las reglas."
       }
     },
     "challenges": {
@@ -72,7 +84,12 @@
       "40": "Prueba de torque",
       "60": "Cierre del garaje",
       "80": "Control de calidad",
-      "100": "Graduación de aprendiz"
+      "100": "Graduación de aprendiz",
+      "120": "Apertura del mostrador",
+      "140": "Corte a medida",
+      "160": "Inventario de alturas",
+      "180": "Pedido urgente",
+      "200": "Entrega al cliente"
     },
     "milestones": {
       "20": {
@@ -98,6 +115,26 @@
       "100": {
         "title": "¡Graduación de aprendiz!",
         "message": "Completaste la primera sección del taller. El banco es tuyo."
+      },
+      "120": {
+        "title": "¡Mostrador abierto!",
+        "message": "Superaste el primer reto del mostrador. Siguen encargos más exigentes."
+      },
+      "140": {
+        "title": "¡Corte a medida!",
+        "message": "Dominas bulones de distintas alturas. El almacén te espera."
+      },
+      "160": {
+        "title": "¡Inventario listo!",
+        "message": "Cada medida en su sitio. Quedan los pedidos especiales."
+      },
+      "180": {
+        "title": "¡Pedido urgente!",
+        "message": "Bulones de color fijo bajo presión. Falta poco para el cierre."
+      },
+      "200": {
+        "title": "¡Entrega al cliente!",
+        "message": "Completaste el mostrador de ferretería. El taller entero es tuyo."
       }
     }
   },
@@ -109,6 +146,7 @@
     "movesAria": "{{moves}} movimientos. Toca para ver cómo ganar estrellas.",
     "bolt": "Bulón {{number}}",
     "boltLocked": ", bloqueado",
+    "boltFixedColor": ", solo acepta un color",
     "movesTitle": "Movimientos",
     "movesThreeStarsPrefix": "Para ganar",
     "movesThreeStarsHighlight": "3 estrellas ⭐⭐⭐",
@@ -120,6 +158,8 @@
     "coachMoves": "Toca aquí para ver cómo ganar estrellas según tus movimientos.",
     "coachMultiNut": "Nueva regla: las tuercas del mismo color en la cima se mueven juntas.",
     "coachLockedBolt": "Nueva regla: algunos bulones están bloqueados. Completa un bulón del color indicado para desbloquearlos.",
+    "coachVariableCapacity": "Nueva regla: cada bulón tiene una altura distinta. Solo caben las tuercas que quepan.",
+    "coachFixedColorBolt": "Nueva regla: algunos bulones solo aceptan tuercas de un color concreto.",
     "challengeTitle": "{{name}}",
     "challengeAttempts": "Intentos: {{available}}/{{max}}",
     "challengeNoUndo": "Sin deshacer en retos",
@@ -155,12 +195,16 @@
   "medals": {
     "galleryTitle": "Medallero",
     "gallerySubtitle": "{{earned}} de {{total}} medallas conseguidas",
+    "galleryTabsLabel": "Etapas del medallero",
+    "galleryStageSubtitle": "{{earned}} de {{total}} en esta etapa",
+    "prevStageTab": "Etapa anterior",
+    "nextStageTab": "Etapa siguiente",
     "locked": "Por conseguir",
     "unknown": "Medalla"
   },
   "endOfContent": {
     "title": "¡Llegaste al final del taller!",
-    "message": "Completaste todos los niveles disponibles. Mientras preparamos más encargos en el taller, podés volver a jugar los niveles que ya hiciste y sumar estrellas."
+    "message": "Completaste los 200 niveles del mostrador. Mientras preparamos más encargos, podés volver a jugar y sumar estrellas."
   },
   "settings": {
     "title": "Configuración",
@@ -223,12 +267,14 @@
     "stack": "React · TypeScript · Tailwind · Framer Motion"
   },
   "author": {
-    "role": "Desarrollador de software",
-    "bio": "Desarrollo software y disfruto explorar ideas en formato mobile. Nuts & Bolts nació como un puzzle de lógica y color, pensado para partidas cortas."
+    "role": "Desarrollador de software"
   },
   "whatsNew": {
     "versionBadge": "Novedades v{{version}}",
-    "subtitle": "Qué hay de nuevo en esta actualización:",
+    "summaryLevelsAndStages": "Se han añadido {{countLevels}} niveles nuevos y {{countStages}} etapas nuevas.",
+    "summaryLevelsOnly": "Se han añadido {{count}} niveles nuevos.",
+    "summaryStagesOnly": "Se han añadido {{count}} etapas nuevas.",
+    "hint": "¡Descúbrelos jugando!",
     "continue": "¡Genial!"
   },
   "update": {

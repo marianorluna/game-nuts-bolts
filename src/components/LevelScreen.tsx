@@ -9,6 +9,8 @@ import { MovesInfoModal } from './MovesInfoModal'
 import { MovesCoachMark } from './MovesCoachMark'
 import { MultiNutCoachMark } from './MultiNutCoachMark'
 import { LockedBoltCoachMark } from './LockedBoltCoachMark'
+import { VariableCapacityCoachMark } from './VariableCapacityCoachMark'
+import { FixedColorBoltCoachMark } from './FixedColorBoltCoachMark'
 import { SettingsModal } from './SettingsModal'
 import { BackArrowIcon, UndoArrowIcon, LevelHomeIcon, InfoCircleIcon } from './icons/GameIcons'
 import { getStarThresholds } from '../domain/gameEngine'
@@ -47,9 +49,13 @@ export function LevelScreen() {
     movesCoachVisible,
     multiNutCoachVisible,
     lockedBoltCoachVisible,
+    variableCapacityCoachVisible,
+    fixedColorBoltCoachVisible,
     dismissMovesCoach,
     dismissMultiNutCoach,
     dismissLockedBoltCoach,
+    dismissVariableCapacityCoach,
+    dismissFixedColorBoltCoach,
   } = useMechanicCoachMarks(level?.id)
 
   useEffect(() => {
@@ -249,6 +255,12 @@ export function LevelScreen() {
         </div>
 
         <div className="relative overflow-visible">
+          {fixedColorBoltCoachVisible && (
+            <FixedColorBoltCoachMark onDismiss={dismissFixedColorBoltCoach} />
+          )}
+          {variableCapacityCoachVisible && (
+            <VariableCapacityCoachMark onDismiss={dismissVariableCapacityCoach} />
+          )}
           {lockedBoltCoachVisible && (
             <LockedBoltCoachMark onDismiss={dismissLockedBoltCoach} />
           )}

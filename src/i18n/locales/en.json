@@ -65,6 +65,18 @@
       "stage-3-nuevas-reglas": {
         "name": "The assembly line",
         "blurb": "Big jobs: nut chains and bolts you need to free up."
+      },
+      "stage-4-turno-mostrador": {
+        "name": "Counter shift",
+        "blurb": "The counter opens: master multiNut and locks with a proper curve."
+      },
+      "stage-5-bulones-medidas": {
+        "name": "Sized bolts",
+        "blurb": "Each bolt has its own height. Fit the nuts in the right space."
+      },
+      "stage-6-pedidos-especiales": {
+        "name": "Special orders",
+        "blurb": "Fixed-color bolts and jobs that mix every rule you've learned."
       }
     },
     "challenges": {
@@ -72,7 +84,12 @@
       "40": "Torque test",
       "60": "Garage closing",
       "80": "Quality control",
-      "100": "Apprentice graduation"
+      "100": "Apprentice graduation",
+      "120": "Counter opening",
+      "140": "Custom cut",
+      "160": "Height inventory",
+      "180": "Rush order",
+      "200": "Customer delivery"
     },
     "milestones": {
       "20": {
@@ -98,6 +115,26 @@
       "100": {
         "title": "Apprentice graduation!",
         "message": "You completed the workshop's first section. The bench is yours."
+      },
+      "120": {
+        "title": "Counter open!",
+        "message": "You passed the counter's first challenge. Tougher jobs ahead."
+      },
+      "140": {
+        "title": "Custom cut!",
+        "message": "You handle different bolt heights. The stockroom awaits."
+      },
+      "160": {
+        "title": "Inventory done!",
+        "message": "Every size in its place. Special orders are next."
+      },
+      "180": {
+        "title": "Rush order!",
+        "message": "Fixed-color bolts under pressure. The finale is close."
+      },
+      "200": {
+        "title": "Customer delivery!",
+        "message": "You completed the hardware counter. The whole workshop is yours."
       }
     }
   },
@@ -109,6 +146,7 @@
     "movesAria": "{{moves}} moves. Tap to see how to earn stars.",
     "bolt": "Bolt {{number}}",
     "boltLocked": ", locked",
+    "boltFixedColor": ", accepts one color only",
     "movesTitle": "Moves",
     "movesThreeStarsPrefix": "To earn",
     "movesThreeStarsHighlight": "3 stars ⭐⭐⭐",
@@ -120,6 +158,8 @@
     "coachMoves": "Tap here to see how to earn stars based on your moves.",
     "coachMultiNut": "New rule: same-color nuts on top move together.",
     "coachLockedBolt": "New rule: some bolts are locked. Complete a full stack of the shown color to unlock them.",
+    "coachVariableCapacity": "New rule: each bolt has a different height. Only so many nuts will fit.",
+    "coachFixedColorBolt": "New rule: some bolts only accept nuts of a specific color.",
     "challengeTitle": "{{name}}",
     "challengeAttempts": "Attempts: {{available}}/{{max}}",
     "challengeNoUndo": "No undo on challenges",
@@ -155,12 +195,16 @@
   "medals": {
     "galleryTitle": "Medal Gallery",
     "gallerySubtitle": "{{earned}} of {{total}} medals earned",
+    "galleryTabsLabel": "Medal gallery stages",
+    "galleryStageSubtitle": "{{earned}} of {{total}} in this stage",
+    "prevStageTab": "Previous stage",
+    "nextStageTab": "Next stage",
     "locked": "Not yet earned",
     "unknown": "Medal"
   },
   "endOfContent": {
     "title": "You reached the end of the workshop!",
-    "message": "You completed all available levels. While we prepare more jobs in the workshop, you can replay levels you've already done and earn more stars."
+    "message": "You completed all 200 counter levels. While we prepare more jobs, you can replay and earn more stars."
   },
   "settings": {
     "title": "Settings",
@@ -223,12 +267,14 @@
     "stack": "React · TypeScript · Tailwind · Framer Motion"
   },
   "author": {
-    "role": "Software Developer",
-    "bio": "I build software and enjoy exploring ideas in mobile form. Nuts & Bolts started as a logic and color puzzle, designed for short play sessions."
+    "role": "Software Developer"
   },
   "whatsNew": {
     "versionBadge": "What's new in v{{version}}",
-    "subtitle": "Here's what's new in this update:",
+    "summaryLevelsAndStages": "{{countLevels}} new levels and {{countStages}} new stages have been added.",
+    "summaryLevelsOnly": "{{count}} new levels have been added.",
+    "summaryStagesOnly": "{{count}} new stages have been added.",
+    "hint": "Discover them as you play!",
     "continue": "Great!"
   },
   "update": {

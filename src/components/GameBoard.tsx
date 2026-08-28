@@ -1,4 +1,4 @@
-import { isBoltLocked } from '../domain/gameEngine'
+import { getBoltCapacity, getMaxBoardCapacity, isBoltLocked } from '../domain/gameEngine'
 import { BoltStack } from './BoltStack'
 import type { GameSession } from '../domain/types'
 import {
@@ -15,9 +15,14 @@ interface GameBoardProps {
 export function GameBoard({ session, onSelectBolt, boardBounds }: GameBoardProps) {
   const { bolts, capacity, selectedBoltIndex, shakeBoltIndex, playContext } =
     session
-  const { rows, scale, width, height } = useBoardLayout(
+  const displayCapacity = getMaxBoardCapacity(
     bolts.length,
     capacity,
+    playContext,
+  )
+  const { rows, scale, width, height } = useBoardLayout(
+    bolts.length,
+    displayCapacity,
     boardBounds,
   )
 
@@ -46,7 +51,7 @@ export function GameBoard({ session, onSelectBolt, boardBounds }: GameBoardProps
               key={boltIndex}
               index={boltIndex}
               bolt={bolts[boltIndex]}
-              capacity={capacity}
+              boltCapacity={getBoltCapacity(boltIndex, capacity, playContext)}
               isSelected={selectedBoltIndex === boltIndex}
               isShaking={shakeBoltIndex === boltIndex}
               isLocked={isBoltLocked(
@@ -55,6 +60,7 @@ export function GameBoard({ session, onSelectBolt, boardBounds }: GameBoardProps
                 capacity,
                 playContext,
               )}
+              fixedColor={playContext.boltConfigs[boltIndex]?.fixedColor}
               multiNut={playContext.multiNut}
               onSelect={onSelectBolt}
             />

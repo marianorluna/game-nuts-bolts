@@ -14,8 +14,8 @@ Actualizar este archivo **antes** de implementar una mecánica nueva y marcarla 
 | Puzzle clásico | `classic` | **activa** | 1–100 (base) | Nivel 1 |
 | Movimiento en bloque | `multiNut` | **activa** | 61–100 | Etapa 3, niveles 61–64 |
 | Bulón bloqueado | `lockedBolt` | **activa** | 81–100 | Etapa 3, niveles 81–84 |
-| Capacidad variable | `variableCapacity` | planificada | — | Sección 2 |
-| Bulón color fijo | `fixedColorBolt` | planificada | — | Sección 2 |
+| Capacidad variable | `variableCapacity` | **activa** | 131–165 | Etapa 5, niveles 131–134 |
+| Bulón color fijo | `fixedColorBolt` | **activa** | 166–200 | Etapa 6, niveles 166–169 |
 | Tuerca oculta | `hiddenNut` | planificada | — | Sección 2–3 |
 | Tuerca pegajosa | `stickyNut` | planificada | — | Campaña 2 |
 | Modo reto | `challengeMode` | **activa** | 20, 40, 60, 80, 100 | Retos de etapa |
@@ -91,25 +91,24 @@ interface BoltConfig {
 
 ### variableCapacity — Capacidad variable por bulón
 
-- **Estado:** planificada
-- **Introducida en:** Sección 2, Etapa 1 (niveles 101+)
+- **Estado:** activa
+- **Introducida en:** Sección 2, Etapa 5, niveles 131–134 (tutorial)
 - **Reglas:** cada bulón puede tener `maxCapacity` distinto (3, 4 o 5)
-- **Motor:** `canMove` usa capacidad del bulón destino, no solo `level.capacity`
-- **Validación:** BFS con capacidades por índice de bulón
-- **UI:** altura visual distinta en `BoltStack`
+- **Motor:** `getBoltCapacity`, `canMove` usa capacidad del bulón destino; `isSolved` por capacidad individual
+- **Validación:** BFS con capacidades por índice; conteo de tuercas por color según suma de capacidades
+- **UI:** altura visual distinta en `BoltStack`; coach mark en nivel 131 (`VariableCapacityCoachMark.tsx`)
 - **Flag:** `boltConfigs[i].maxCapacity` o `level.capacity` como default
-- **Notas:** no mezclar en la misma etapa que se introduce multiNut por primera vez
 
 ---
 
 ### fixedColorBolt — Bulón de color fijo
 
-- **Estado:** planificada
-- **Introducida en:** Sección 2
+- **Estado:** activa
+- **Introducida en:** Sección 2, Etapa 6, niveles 166–169 (tutorial)
 - **Reglas:** bulón solo acepta tuercas de un color específico (aunque esté vacío)
-- **Motor:** check adicional en `canMove` para destino con color fijo
+- **Motor:** check adicional en `canMove` para destino con `fixedColor`
 - **Validación:** BFS estándar con regla extra
-- **UI:** indicador de color en el bulón (borde o fondo teñido)
+- **UI:** indicador de color en el bulón (borde teñido); coach mark en nivel 166 (`FixedColorBoltCoachMark.tsx`)
 - **Flag:** `boltConfigs[i].fixedColor?: NutColor`
 
 ---
@@ -181,5 +180,6 @@ interface BoltConfig {
 
 | Fecha | Cambio |
 |-------|--------|
+| 2026-08-28 | `variableCapacity` y `fixedColorBolt` activas en Sección 2 (101–200). |
 | 2026-07-03 | Modo reto (`challengeMode`) activo en niveles 20/40/60/80/100. |
 | 2026-06-26 | Creación inicial (Fase 0). 8 mecánicas catalogadas. |

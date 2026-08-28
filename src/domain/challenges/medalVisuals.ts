@@ -39,6 +39,36 @@ const MEDAL_VISUALS: Record<number, MedalVisual> = {
     innerClass: 'bg-amber-950/80',
     icon: '⭐',
   },
+  120: {
+    themeId: 'hardware',
+    ringClass: 'from-orange-300 to-amber-700',
+    innerClass: 'bg-stone-900/80',
+    icon: '🛒',
+  },
+  140: {
+    themeId: 'hardware',
+    ringClass: 'from-orange-400 to-amber-800',
+    innerClass: 'bg-stone-950/80',
+    icon: '📏',
+  },
+  160: {
+    themeId: 'hardware',
+    ringClass: 'from-amber-300 to-orange-700',
+    innerClass: 'bg-stone-900/80',
+    icon: '🔧',
+  },
+  180: {
+    themeId: 'hardware',
+    ringClass: 'from-lime-300 to-amber-700',
+    innerClass: 'bg-stone-950/80',
+    icon: '🎯',
+  },
+  200: {
+    themeId: 'hardware',
+    ringClass: 'from-yellow-300 to-orange-600',
+    innerClass: 'bg-amber-950/80',
+    icon: '🏅',
+  },
 }
 
 export function getMedalVisual(levelId: number): MedalVisual {

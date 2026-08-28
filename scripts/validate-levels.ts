@@ -34,14 +34,15 @@ for (const level of ALL_LEVELS) {
   }
   seenLayouts.set(layoutKey, level.id)
 
-  const structure = validateLevelStructure(level.bolts, level.capacity)
+  const ctx = getPlayContext(level)
+  const structure = validateLevelStructure(level.bolts, level.capacity, ctx)
   if (!structure.valid) {
     console.error(`Level ${level.id}: STRUCTURE FAIL - ${structure.error}`)
     failed += 1
     continue
   }
 
-  const scrambled = isLevelScrambled(level.bolts, level.capacity)
+  const scrambled = isLevelScrambled(level.bolts, level.capacity, ctx)
   if (!scrambled) {
     console.error(`Level ${level.id} (${level.difficulty}): NOT SCRAMBLED`)
     failed += 1
@@ -49,7 +50,6 @@ for (const level of ALL_LEVELS) {
   }
 
   const maxStates = MAX_STATES[level.difficulty] ?? 2_000_000
-  const ctx = getPlayContext(level)
   const solvable = isLevelSolvable(level.bolts, level.capacity, maxStates, ctx)
   if (!solvable) {
     console.error(`Level ${level.id} (${level.difficulty}): NOT SOLVABLE`)
@@ -99,7 +99,7 @@ for (const level of ALL_LEVELS) {
   }
 
   const split = countSplitColors(level.bolts)
-  const complete = countCompleteBolts(level.bolts, level.capacity)
+  const complete = countCompleteBolts(level.bolts, level.capacity, ctx)
   console.log(
     `Level ${level.id} (${level.difficulty}): OK — min ${minMoves} moves, ${split} split colors, ${complete} complete bolts`,
   )

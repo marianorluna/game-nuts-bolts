@@ -37,17 +37,19 @@ flowchart TB
 
 ---
 
-## Estado actual (v1.2.1 — Fase 2 + retos)
+## Estado actual (v1.6.0 — Sección 2)
 
 | Métrica              | Valor                                                            |
 | -------------------- | ---------------------------------------------------------------- |
-| Niveles publicados   | **100** (ids 1–100)                                              |
-| Sección 1            | **Completa**                                                     |
-| Mecánicas activas    | clásico, multiNut (61+), lockedBolt (81+)                        |
-| Organización en UI   | Por etapas (Caja de herramientas / El garaje apretado)           |
+| Niveles publicados   | **200** (ids 1–200)                                              |
+| Sección 1            | **Completa** (1–100)                                             |
+| Sección 2            | **Completa** (101–200) — El mostrador de ferretería              |
+| Mecánicas activas    | clásico, multiNut (61+), lockedBolt (81+), variableCapacity (131+), fixedColorBolt (166+) |
+| Organización en UI   | Por etapas en dos secciones de Campaña 1                         |
 | Progreso del jugador | `unlockedLevel` lineal en `localStorage` (`nuts-bolts-progress`) |
 | Fuente de niveles    | `src/domain/levels/bakedLevels.ts`                               |
 | Metadata ejecutable  | `src/domain/content/campaignStructure.ts`                        |
+| Specs Sección 2      | `src/domain/section2LevelSpecs.ts`                               |
 
 ---
 
@@ -95,7 +97,7 @@ Los slugs técnicos pueden conservar nombres antiguos (`fundamentos`, `presion`)
 
 Tema: taller mecánico, tuercas y bulones. Primera campaña del juego.
 
-### Sección 1: Aprendiz de banco (niveles 1–100) — en implementación
+### Sección 1: Aprendiz de banco (niveles 1–100) — completa
 
 Primer arco: del primer día en el taller hasta dominar el banco principal.
 
@@ -154,6 +156,26 @@ Ejemplo Etapa 2 (31–60):
 - 53–58: medium → hard
 - 59–60: hard + reto 60
 
+### Sección 2: El mostrador de ferretería (niveles 101–200) — completa
+
+Segundo arco: atender pedidos en el mostrador con bulones de medidas distintas y encargos de color fijo.
+
+| Etapa | id                           | Niveles | Nombre (UI)          | Tema       | Mecánicas                                              | Estado        |
+| ----- | ---------------------------- | ------- | -------------------- | ---------- | ------------------------------------------------------ | ------------- |
+| 4     | `stage-4-turno-mostrador`    | 101–130 | Turno en el mostrador | `hardware` | multiNut, lockedBolt                                   | **Publicada** |
+| 5     | `stage-5-bulones-medidas`      | 131–165 | Bulones de medidas   | `hardware` | + variableCapacity                                     | **Publicada** |
+| 6     | `stage-6-pedidos-especiales`   | 166–200 | Pedidos especiales   | `hardware` | + fixedColorBolt (mezcla total)                        | **Publicada** |
+
+#### Retos especiales (Sección 2)
+
+| Nivel | Tipo              |
+| ----- | ----------------- |
+| 120   | Reto Etapa 4      |
+| 140   | Reto Etapa 5      |
+| 160   | Cierre Etapa 5    |
+| 180   | Reto Etapa 6      |
+| 200   | Cierre Sección 2  |
+
 ---
 
 ## Rangos reservados (futuro)
@@ -164,8 +186,8 @@ Ids **secuenciales globales**. Nunca reutilizar un id publicado.
 
 | Sección | Niveles | Nombre jugable                | designLabel / mecánicas                    | Notas                                          |
 | ------- | ------- | ----------------------------- | ------------------------------------------ | ---------------------------------------------- |
-| 1       | 1–100   | Aprendiz de banco             | Clásico → escalado → multiNut + lockedBolt | **En implementación**                          |
-| 2       | 101–200 | El mostrador de ferretería    | `variableCapacity`, `fixedColorBolt`       | Atender clientes; bulones de medidas distintas |
+| 1       | 1–100   | Aprendiz de banco             | Clásico → escalado → multiNut + lockedBolt | **Completa**                                   |
+| 2       | 101–200 | El mostrador de ferretería    | `variableCapacity`, `fixedColorBolt`       | **Completa**                                   |
 | 3       | 201–300 | El almacén trasero            | `hiddenNut`                                | Piezas tapadas bajo otras tuercas              |
 | 4       | 301–400 | Proyectos especiales          | Combinaciones                              | Mezcla de mecánicas ya aprendidas              |
 | 5       | 401–500 | Temporada alta                | Dificultad + retos                         | Rush de pedidos; `moveLimit` en retos          |
@@ -200,7 +222,7 @@ Al abrir Campaña 2, evaluar `campaignProgress` en save (ver [EXTENSION_PLAYBOOK
 - **Etapa:** `stage-{n}-{slug}` — slug estable; el `name` jugable puede cambiar
 - **Sección:** `section-{n}-{slug}` (ej. `section-1-fundamentos`)
 - **Campaña:** `campaign-{n}-{slug}` (ej. `campaign-1-taller`)
-- **Tema visual:** `workshop` | `garage` | `factory` | (extensible)
+- **Tema visual:** `workshop` | `garage` | `factory` | `hardware` | (extensible)
 - **Retos:** `CHALLENGE_LABELS` en `campaignStructure.ts`
 
 ### Temas visuales
