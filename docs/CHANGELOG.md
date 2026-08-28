@@ -2,7 +2,7 @@
 
 Historial de **releases de la app** (semver + `versionCode`).
 
-**Fuente de verdad:** `src/data/release-notes.json` — el modal «Novedades» y este archivo se generan desde ahí.
+**Fuente de verdad:** `src/data/release-notes.json` — el modal «Novedades» usa `userSummary`; este archivo y Play Store usan `highlights`.
 
 **Documentos relacionados:** [CONTENT_CHANGELOG.md](./CONTENT_CHANGELOG.md) (solo contenido/niveles) · [SOCIAL_FEATURES_ROADMAP.md](./SOCIAL_FEATURES_ROADMAP.md)
 
@@ -19,7 +19,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 1. Sube `version` y `versionCode` en `package.json`
 2. `npm run changelog:scaffold` (si la versión nueva no existe aún)
-3. Edita `src/data/release-notes.json` — `highlights`, secciones y `published: true`
+3. Edita `src/data/release-notes.json` — `userSummary` (modal), `highlights`, secciones y `published: true`
 4. `npm run release:prepare`
 5. Copia `playStoreNotes` (ES/EN) de [CHANGELOG.md](./CHANGELOG.md) a las notas de la versión en Play Console
 
@@ -131,7 +131,11 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 **versionCode:** 11
 
-### Destacado (modal in-app)
+### Modal in-app (resumen jugador)
+
+- 100 niveles, 3 etapas
+
+### Destacado (Play Store / changelog)
 
 **ES**
 
@@ -205,7 +209,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 **versionCode:** 10
 
-### Destacado (modal in-app)
+### Destacado (Play Store / changelog)
 
 **ES**
 
@@ -247,7 +251,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 **versionCode:** 9
 
-### Destacado (modal in-app)
+### Destacado (Play Store / changelog)
 
 **ES**
 
@@ -317,7 +321,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 **versionCode:** 8
 
-### Destacado (modal in-app)
+### Destacado (Play Store / changelog)
 
 **ES**
 
@@ -357,7 +361,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 **versionCode:** 7
 
-### Destacado (modal in-app)
+### Destacado (Play Store / changelog)
 
 **ES**
 
@@ -409,7 +413,7 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 > **Play Store:** publicación única en esta versión. Incluye v1.2.0 (versionCode 3) — no publicadas por separado en Play.
 
-### Destacado (modal in-app)
+### Destacado (Play Store / changelog)
 
 **ES**
 
@@ -505,7 +509,11 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 **versionCode:** 2
 
-### Destacado (modal in-app)
+### Modal in-app (resumen jugador)
+
+- 70 niveles, 2 etapas
+
+### Destacado (Play Store / changelog)
 
 **ES**
 
@@ -569,7 +577,11 @@ Historial de **releases de la app** (semver + `versionCode`).
 
 **versionCode:** 1
 
-### Destacado (modal in-app)
+### Modal in-app (resumen jugador)
+
+- 30 niveles
+
+### Destacado (Play Store / changelog)
 
 **ES**
 
